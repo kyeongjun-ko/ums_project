@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    
+    
+	<!-- sql db schema name setting -->
+    <properties>
+        <property name="umsdb" value="umsdb_test"/>
+    </properties>
+    
+	<settings>
+		<setting name="defaultStatementTimeout" value="5000" />   <!-- 데이터베이스로의 응답을 얼마나 오래 기다릴지를 판단하는 타임아웃을 셋팅 -->
+		<setting name="callSettersOnNulls" value="true" />
+	</settings>
+	
+
+	<!-- type alias 설정 -->
+	<typeAliases> 
+	   <typeAlias alias="simpleVO"		type="com.bccns.umsserviceweb.api.vo.SimpleVO" />
+	   <typeAlias alias="umsUserVO"		type="com.bccns.umsserviceweb.common.vo.UmsUserVO" />
+	   <typeAlias alias="callBackVO"	type="com.bccns.umsserviceweb.common.vo.CallBackVO" />
+	   <typeAlias alias="usrGrpVO"		type="com.bccns.umsserviceweb.common.vo.UsrGrpVO" />
+	   <typeAlias alias="commCodeVO"	type="com.bccns.umsserviceweb.common.vo.CommCodeVO" />
+	   <typeAlias alias="usrLogVO"		type="com.bccns.umsserviceweb.common.vo.UsrLogVO" />
+	   <typeAlias alias="searchUmsUserVO"		type="com.bccns.umsserviceweb.common.vo.SearchUmsUserVO" />
+	   <typeAlias alias="mobileVO"      type="com.bccns.umsserviceweb.common.vo.MobileVO"/>
+	    
+	   <!--notice management  -->
+	   <typeAlias alias="searchNoticeVO"	type="com.bccns.umsserviceweb.notice.vo.SearchNoticeVO" />
+	   <typeAlias alias="noticeVO"			type="com.bccns.umsserviceweb.notice.vo.NoticeVO" />
+	   
+	   <!--mgr.trans management  -->
+	   <typeAlias alias="searchTransHisVO"		type="com.bccns.umsserviceweb.mgr.vo.SearchTransHisVO" />
+	   <typeAlias alias="searchTransStatVO"		type="com.bccns.umsserviceweb.mgr.vo.SearchTransStatVO" />
+	   <typeAlias alias="searchTransRsltVO"		type="com.bccns.umsserviceweb.mgr.vo.SearchTransRsltVO"/>
+	   <typeAlias alias="searchRsltDetVO"		type="com.bccns.umsserviceweb.mgr.vo.SearchRsltDetVO" />
+	   <typeAlias alias="searchTransResvVO"		type="com.bccns.umsserviceweb.mgr.vo.SearchTransResvVO" />
+	   <typeAlias alias="searchResvDetVO"		type="com.bccns.umsserviceweb.mgr.vo.SearchResvDetVO" />
+	   <typeAlias alias="transHisVO"			type="com.bccns.umsserviceweb.mgr.vo.TransHisVO" />
+	   <typeAlias alias="transStatVO"			type="com.bccns.umsserviceweb.mgr.vo.TransStatVO" />
+	   <typeAlias alias="transRsltVO"			type="com.bccns.umsserviceweb.mgr.vo.TransRsltVO"/>
+	   <typeAlias alias="rsltDetTopVO"			type="com.bccns.umsserviceweb.mgr.vo.RsltDetTopVO"/>
+	   <typeAlias alias="rsltDetBottomVO"		type="com.bccns.umsserviceweb.mgr.vo.RsltDetBottomVO"/>
+	   <typeAlias alias="rsltDetMiddleVO"		type="com.bccns.umsserviceweb.mgr.vo.RsltDetMiddleVO"/>
+	   <typeAlias alias="transResvVO"			type="com.bccns.umsserviceweb.mgr.vo.TransResvVO"/>
+	   <typeAlias alias="resvDetTopVO"			type="com.bccns.umsserviceweb.mgr.vo.ResvDetTopVO"/>
+	   <typeAlias alias="resvDetBottomVO"		type="com.bccns.umsserviceweb.mgr.vo.ResvDetBottomVO"/>
+	   
+	   <typeAlias alias="searchTransUseListVO"	type="com.bccns.umsserviceweb.mgr.vo.SearchTransUseListVO" />
+	   <typeAlias alias="transUseListVO"		type="com.bccns.umsserviceweb.mgr.vo.TransUseListVO" />
+	   <typeAlias alias="searchMySvcVO"			type="com.bccns.umsserviceweb.mgr.vo.SearchMySvcVO" />
+	   <typeAlias alias="mySvcVO"				type="com.bccns.umsserviceweb.mgr.vo.MySvcVO" />
+	   <typeAlias alias="yyyyMmVO"				type="com.bccns.umsserviceweb.mgr.vo.YyyyMmVO" />
+	   
+	   
+	   <!--mgr.addr management  -->
+	   <typeAlias alias="searchAddrVO" 		type="com.bccns.umsserviceweb.mgr.vo.SearchAddrVO" />
+	   <typeAlias alias="addrVO" 			type="com.bccns.umsserviceweb.mgr.vo.AddrVO" />
+	   <!--mgr.grp management  -->
+	   <typeAlias alias="searchGrpVO"		type="com.bccns.umsserviceweb.mgr.vo.SearchGrpVO" />
+	   <typeAlias alias="grpVO"				type="com.bccns.umsserviceweb.mgr.vo.GrpVO" />
+	   
+	   <!--mgr.msgBox management  -->
+	   <typeAlias alias="searchMsgBoxVO"	type="com.bccns.umsserviceweb.mgr.vo.SearchMsgBoxVO" />
+	   <typeAlias alias="msgBoxVO"			type="com.bccns.umsserviceweb.mgr.vo.MsgBoxVO" />
+	   
+	   <!--mgr.attachFile management  -->
+	   <typeAlias alias="searchAttachFileVO"	type="com.bccns.umsserviceweb.mgr.vo.SearchAttachFileVO" />
+	   <typeAlias alias="attachFileVO"			type="com.bccns.umsserviceweb.mgr.vo.AttachFileVO" />
+	   
+	   <!--ums management  -->
+	   <typeAlias alias="smsVO"         type="com.bccns.umsserviceweb.ums.vo.SmsVO" />
+	   <typeAlias alias="mmsVO"         type="com.bccns.umsserviceweb.ums.vo.MmsVO" />
+	   <typeAlias alias="vmsVO"         type="com.bccns.umsserviceweb.ums.vo.VmsVO" />
+	   <typeAlias alias="fmsVO"         type="com.bccns.umsserviceweb.ums.vo.FmsVO" />
+	   
+	   <typeAlias alias="addrExcelVO"			type="com.bccns.umsserviceweb.ums.vo.AddrExcelVO" />
+	   <typeAlias alias="umsExcelVO"			type="com.bccns.umsserviceweb.ums.vo.UmsExcelVO" />
+	   <typeAlias alias="umsImportResultVO"		type="com.bccns.umsserviceweb.ums.vo.UmsImportResultVO" />
+	   
+	   <!--smart management  -->
+	   <typeAlias alias="smartModListVO"		type="com.bccns.umsserviceweb.smart.vo.SmartModListVO" />
+	   
+	   <!-- push management -->
+	   <typeAlias alias="reqBodyPUSH0100VO"		type="com.bccns.umsserviceweb.push.vo.PUSH0100.ReqBodyPUSH0100VO" />
+	   <typeAlias alias="pmsSendVO"		type="com.bccns.umsserviceweb.push.vo.PmsSendVO" />
+	   <typeAlias alias="pmsPointMsgVO"		type="com.bccns.umsserviceweb.push.vo.PmsPointMsgVO" />
+	   
+	   
+	   <!-- push management -->
+	   <typeAlias alias="String" type="java.lang.String"/>
+	   <typeAlias alias="Long" type="java.lang.Long"/>
+	   <typeAlias alias="Map" type="java.util.Map"/>
+	   <typeAlias alias="List" type="java.util.List"/>
+	   <typeAlias alias="Param" type="com.bccns.umsserviceweb.common.vo.Param"/>
+	   <typeAlias alias="reqBodyPUSH0100VO"		type="com.bccns.umsserviceweb.push.vo.PUSH0100.ReqBodyPUSH0100VO" />
+	   <typeAlias alias="searchPmsTransStatVO"		type="com.bccns.umsserviceweb.push.vo.SearchPmsTransStatVO" />
+	   <typeAlias alias="searchPmsTransRsltVO"		type="com.bccns.umsserviceweb.push.vo.SearchPmsTransRsltVO"/>
+	   <typeAlias alias="pmsTransStatVO"			type="com.bccns.umsserviceweb.push.vo.PmsTransStatVO" />
+	   <typeAlias alias="pmsTransRsltVO"			type="com.bccns.umsserviceweb.push.vo.PmsTransRsltVO"/>
+	</typeAliases> 
+
+	<!-- mapper 설정 -->
+	<mappers>
+		<mapper resource="/sql/umsserviceweb/simpleDAO.xml" />
+		<mapper resource="/sql/notice/noticeDAO.xml" /> 
+		<mapper resource="/sql/user/userDAO.xml" />
+		<mapper resource="/sql/ums/umsDAO.xml" />
+		<mapper resource="/sql/mgr/addrDAO.xml" />
+		<mapper resource="/sql/mgr/msgBoxDAO.xml" />
+		<mapper resource="/sql/mgr/grpDAO.xml" />
+		<mapper resource="/sql/mgr/transDAO.xml" />
+		<mapper resource="/sql/mgr/attachFileDAO.xml" />
+		<mapper resource="/sql/mgr/mySvcDAO.xml" />
+		<mapper resource="/sql/smart/smartDAO.xml" />
+		<mapper resource="/sql/push/pushDAO.xml" />		
+		<mapper resource="/sql/push/privatePushDAO.xml" />						    
+						    
+	</mappers>
+</configuration>

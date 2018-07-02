@@ -1,0 +1,2415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.com//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bccns.umsserviceweb.mgr.dao.TransHisDAO">
+	<!-- http://mybatis.github.io/mybatis-3/ko/sqlmap-xml.html 참조 -->
+	<!-- result map 에  type 은 typeAliases 에 정의한 type, id 는 sql 에서 resultMap 에 사용할 값임. -->
+	
+	<resultMap type="transHisVO" id="transHisResultMap">
+        <result property="rowNumber" column="row_number"/>
+		<result property="msgId" column="msg_id"/>
+		<result property="userId" column="user_id"/>
+		<result property="userNm" column="user_nm"/>
+		<result property="phoneNumber" column="phone_number"/>
+		<result property="stype" column="stype"/>
+		<result property="sendDate" column="send_date"/>
+		<result property="confDate" column="conf_date"/>
+		<result property="resDate" column="res_date"/>
+		<result property="name" column="name"/>
+		<result property="contents" column="contents"/>
+    </resultMap>
+	
+	<resultMap type="transStatVO" id="transStatResultMap">
+		<result property="sendDate" column="send_date"/>
+	    <result property="rowNumber" column="row_number"/>
+		<result property="userId" column="user_id"/>
+		<result property="userNm" column="user_nm"/>
+		<result property="sendTryCnt" column="send_try_cnt"/>
+		<result property="sendFailCnt" column="send_fail_cnt"/>
+		<result property="sendWaitCnt" column="send_wait_cnt"/>
+		<result property="sendSucCnt" column="send_suc_cnt"/>
+		<result property="sendSmsCnt" column="send_sms_cnt"/>
+		<result property="sendLmsCnt" column="send_lms_cnt"/>
+		<result property="sendMmsCnt" column="send_mms_cnt"/>
+		<result property="sendFmsCnt" column="send_fms_cnt"/>
+		<result property="sendVmsCnt" column="send_vms_cnt"/>
+		<result property="sendVqrcnt" column="send_vqr_cnt"/>
+		<result property="dmSmsCnt" column="dm_sms_cnt"/>
+		<result property="dmLmsCnt" column="dm_lms_cnt"/>
+		<result property="dmConCnt" column="dm_con_cnt"/>
+		<result property="dmConPer" column="dm_con_per"/>
+		<result property="dmResCnt" column="dm_res_cnt"/>
+		<result property="dmResPer" column="dm_res_per"/>
+		<result property="faSmsCnt" column="fa_sms_cnt"/>
+		<result property="faLmsCnt" column="fa_lms_cnt"/>
+		<result property="faConCnt" column="fa_con_cnt"/>
+		<result property="faConPer" column="fa_con_per"/>
+		<result property="faResCnt" column="fa_res_cnt"/>
+		<result property="faResPer" column="fa_res_per"/>
+    </resultMap>
+    
+    <resultMap type="transRsltVO" id="transRsltResultMap">
+        <result property="jobId" column="JOB_ID"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="msgId" column="MSG_ID"/>
+		<result property="rowNumber" column="ROW_NUMBER"/>
+		<result property="msgType" column="MSG_TYPE"/>
+		<result property="msgCode" column="MSG_CODE"/>
+		<result property="subject" column="SUBJECT"/>
+		<result property="sendDate" column="SEND_DATE"/>
+		<result property="destCount" column="DEST_COUNT"/>
+		<result property="succCount" column="SUCC_COUNT"/>
+		<result property="failCount" column="FAIL_COUNT"/>
+		<result property="progCount" column="PROG_COUNT"/>
+    </resultMap>
+    
+    <resultMap type="rsltDetTopVO" id="rsltDetTopResultMap">
+        <result property="jobId" column="JOB_ID"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="msgId" column="MSG_ID"/>
+		<result property="msgType" column="MSG_TYPE"/>
+		<result property="msgCode" column="MSG_CODE"/>
+		<result property="subject" column="SUBJECT"/>
+		<result property="contents" column="CONTENTS"/>
+		<result property="sendDate" column="SEND_DATE"/>
+		<result property="destCount" column="DEST_COUNT"/>
+		<result property="callback" column="CALLBACK"/>
+    </resultMap>
+    
+    <resultMap type="rsltDetMiddleVO" id="rsltDetMiddleResultMap">
+    	<result property="totCount" column="TOT_COUNT"/>
+    	<result property="sucCount" column="SUCC"/>
+    	<result property="ingCount" column="ING"/>
+    	<result property="noAnsCount" column="NO_ANS"/>
+    	<result property="busyLineCount" column="BUSY_LINE"/>
+    	<result property="noNumCount" column="NO_NUM"/>
+    	<result property="totFailCount" column="TOT_FAIL"/>
+    	<result property="perSucc" column="PER_SUCC"/>
+    	<result property="perIng" column="PER_ING"/>
+    	<result property="perFail" column="PER_FAIL"/>
+    </resultMap>
+    
+    <resultMap type="rsltDetBottomVO" id="rsltDetBottomResultMap">
+    	<result property="rowNumber" column="ROW_NUMBER"/>
+        <result property="msgId" column="MSG_ID"/>
+        <result property="jobId" column="JOB_ID"/>
+        <result property="subJobId" column="SUBJOB_ID"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="destName" column="DEST_NAME"/>
+        <result property="phoneNumber" column="PHONE_NUMBER"/>
+        <result property="sendDate" column="SEND_DATE"/>
+        <result property="result" column="RESULT"/>
+        <result property="tcsResult" column="TCS_RESULT"/>
+        <result property="resultDesc" column="RESULT_DESC"/>
+    </resultMap>
+    
+    <resultMap type="transResvVO" id="transResvResultMap">
+        <result property="msgId" column="MSG_ID"/>
+		<result property="rowNumber" column="ROW_NUMBER"/>
+		<result property="msgType" column="MSG_TYPE"/>
+		<result property="subject" column="SUBJECT"/>
+		<result property="sendDate" column="SEND_DATE"/>
+		<result property="destCount" column="DEST_COUNT"/>
+    </resultMap>
+    
+    <resultMap type="resvDetTopVO" id="resvDetTopResultMap">
+        <result property="userId" column="USER_ID"/>
+        <result property="msgId" column="MSG_ID"/>
+		<result property="msgType" column="MSG_TYPE"/>
+		<result property="msgCode" column="MSG_CODE"/>
+		<result property="subject" column="SUBJECT"/>
+		<result property="contents" column="CONTENTS"/>
+		<result property="sendDate" column="SEND_DATE"/>
+		<result property="destCount" column="DEST_COUNT"/>
+		<result property="callback" column="CALLBACK"/>
+    </resultMap>
+    
+    <resultMap type="resvDetBottomVO" id="resvDetBottomResultMap">
+    	<result property="rowNumber" column="ROW_NUMBER"/>
+        <result property="msgId" column="MSG_ID"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="destName" column="DEST_NAME"/>
+        <result property="phoneNumber" column="PHONE_NUMBER"/>
+        <result property="sendDate" column="SEND_DATE"/>
+        <result property="resvDate" column="RESV_DATE"/>
+    </resultMap>
+	
+    <sql id="searchConditionsTransHis">
+          <if test="userId != null and userId != '' and userId != 'ALL'">
+                AND A.user_id = #{userId, jdbcType=VARCHAR}
+          </if>
+          <if test="srchRegDateStart != null and srchRegDateStart != '' and srchRegDateEnd != null and srchRegDateEnd != ''">
+                AND substring(A.send_date,1,8)  between replace(#{srchRegDateStart, jdbcType=VARCHAR}, '/', '') and replace(#{srchRegDateEnd, jdbcType=VARCHAR}, '/', '')
+          </if>          
+    </sql>  
+    
+    <sql id="searchConditionsTransHis1">
+        <where>
+          <if test="searchType == '00'">
+	          <if test="searchName != null and searchName != ''">
+	                AND A.RESULT = #{searchName, jdbcType=VARCHAR}
+	          </if>
+	      </if> 
+          <if test="searchType == '01'">
+	          <if test="searchName != null and searchName != ''">
+	                AND A.phone_number like CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+	          </if>
+	      </if> 
+	      <if test="searchType == '02'">
+	          <if test="searchName != null and searchName != ''">
+	                AND C.user_nm like CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+	          </if>
+	      </if> 
+	      
+	      
+	      <if test="userlv == '20' or userlv == '30'">
+	          AND C.user_lv  <![CDATA[ <= ]]> #{userlv, jdbcType=VARCHAR}
+	          AND C.dept = #{dept, jdbcType=VARCHAR}
+	          AND C.company = #{company, jdbcType=VARCHAR} 
+	      </if>
+	      
+	      <if test="userlv == '40'">
+	          AND C.user_lv  <![CDATA[ <= ]]> #{userlv, jdbcType=VARCHAR}
+	          AND C.company = #{company, jdbcType=VARCHAR} 
+	      </if>
+	      
+	      <if test="userlv == '10'">
+	          AND C.user_id = #{userId, jdbcType=VARCHAR}
+	      </if> 
+	      <if test="userlv == '99'">
+	          AND 1=1 
+	      </if> 
+	      </where>
+    </sql>  
+    
+    <sql id="searchConditionsTransStat">
+          <if test="userId != null and userId != '' and (userId != 'ALL' or (userId == 'ALL' and userlv == '10'))">
+                AND A.user_id = #{userId, jdbcType=VARCHAR}
+          </if>
+          <if test="srchRegDateStart != null and srchRegDateStart != '' and srchRegDateEnd != null and srchRegDateEnd != ''">
+                AND substring(A.send_date,1,8)  between replace(#{srchRegDateStart, jdbcType=VARCHAR}, '/', '') and replace(#{srchRegDateEnd, jdbcType=VARCHAR}, '/', '')
+          </if>          
+    </sql>
+    
+    <sql id="searchConditionsTransStat1">
+	    <where>
+	      <if test="userlv == '20' or userlv == '30'">
+	          AND C.user_lv  <![CDATA[ <= ]]> #{userlv, jdbcType=VARCHAR}
+	          AND C.dept = #{dept, jdbcType=VARCHAR}
+	          AND C.company = #{company, jdbcType=VARCHAR} 
+	      </if>
+	      
+	      <if test="userlv == '40'">
+	          AND C.user_lv  <![CDATA[ <= ]]> #{userlv, jdbcType=VARCHAR}
+	          AND C.company = #{company, jdbcType=VARCHAR} 
+	      </if>
+	      
+	      <if test="userlv == '10'">
+	          AND C.user_id = #{userId, jdbcType=VARCHAR}
+	      </if> 
+	      <if test="userlv == '99'">
+	          AND 1=1 
+	      </if> 
+	    </where>
+    </sql>   
+    
+    <sql id="searchConditionsTransRslt">
+        <if test="userId != null and userId != '' and userId != 'ALL'">
+              AND user_id = #{userId, jdbcType=VARCHAR}
+        </if>
+        <if test="srchRegDateStart != null and srchRegDateStart != '' and srchRegDateEnd != null and srchRegDateEnd != ''">
+                AND substring(A.send_date,1,8)  between replace(#{srchRegDateStart, jdbcType=VARCHAR}, '/', '') and replace(#{srchRegDateEnd, jdbcType=VARCHAR}, '/', '')
+        </if>
+    </sql>
+    
+	<sql id="searchConditionsTransRslt1">
+	    <where>
+	      <if test="searchType == '01'">
+	          <if test="srchContent != null and srchContent != ''">
+	                AND subject like CONCAT('%',#{srchContent, jdbcType=VARCHAR} ,'%')
+	          </if>
+	      </if>
+	      
+	      <if test="msgType != null and msgType != ''">
+	          AND msg_code =  #{msgType, jdbcType=VARCHAR}
+	      </if>
+	      <if test="userlv == '20' or userlv == '30'">
+	          AND C.user_lv  <![CDATA[ <= ]]> #{userlv, jdbcType=VARCHAR}
+	          AND C.dept = #{dept, jdbcType=VARCHAR}
+	          AND C.company = #{company, jdbcType=VARCHAR} 
+	      </if>
+	      
+	      <if test="userlv == '40'">
+	          AND C.user_lv  <![CDATA[ <= ]]> #{userlv, jdbcType=VARCHAR}
+	          AND C.company = #{company, jdbcType=VARCHAR} 
+	      </if>
+	      <if test="userlv == '10'">
+	          AND C.user_id = #{userId, jdbcType=VARCHAR}
+	      </if> 
+	      <if test="userlv == '99'">
+	          AND 1=1 
+	      </if> 
+	    </where>
+    </sql> 
+    
+    <sql id="searchConditionsRsltDet">
+    	<if test = "msgType != null and msgType != ''">
+		     <choose>
+		         <when test="msgType == '01'">
+		             	SDK_SMS_REPORT_DETAIL A
+		             WHERE 1=1
+		            	 <include refid="searchConditionsRsltDet2"/>
+		         </when>
+		         <when test="msgType == '02' or msgType == '03'">
+		             	SDK_MMS_REPORT_DETAIL A
+					WHERE 1=1
+		            	 <include refid="searchConditionsRsltDet2"/>
+		         </when>
+		         <when test="msgType == '04'">
+		             	SDK_FMS_REPORT_DETAIL A
+		             WHERE 1=1
+		            	 <include refid="searchConditionsRsltDet2"/>
+		         </when>
+		         <when test="msgType == '05' or msgType == '06'">
+		            	SDK_VMS_REPORT_DETAIL A
+		             WHERE 1=1
+		            	 <include refid="searchConditionsRsltDet2"/>
+		         </when>
+		         <when test="msgType == '07' or msgType == '08'">
+		             	(
+		             	SELECT MSG_ID
+							, USER_ID 
+							, JOB_ID
+							, SUBJOB_ID
+							, SEND_DATE
+							, DEST_NAME
+							, PHONE_NUMBER
+							, RESULT
+							, TCS_RESULT
+		             	 FROM SDK_SMS_REPORT_DETAIL
+		             	WHERE 1=1
+		            		<include refid="searchConditionsRsltDet2"/>
+		             	UNION ALL
+		             	SELECT MSG_ID
+							, USER_ID 
+							, JOB_ID
+							, SUBJOB_ID
+							, SEND_DATE
+							, DEST_NAME
+							, PHONE_NUMBER
+							, RESULT
+							, TCS_RESULT
+						FROM SDK_MMS_REPORT_DETAIL
+						WHERE 1=1
+		            	 	<include refid="searchConditionsRsltDet2"/>
+		            	) A
+		         </when>
+		     </choose>
+		</if>
+    </sql>
+    
+    
+    <sql id="searchConditionsRsltDet1">
+        <if test="jobId != null and jobId != ''">
+			AND job_id = #{jobId, jdbcType=VARCHAR}
+        </if>
+    </sql>
+    
+    <sql id="searchConditionsRsltDet2">
+        <if test="msgId != null and msgId != ''">
+			AND msg_id = #{msgId, jdbcType=VARCHAR}
+        </if>
+    </sql>
+    
+	<sql id="searchConditionsTransResv">
+		AND SCHEDULE_TYPE = 1
+        <if test="userId != null and userId != '' and userId != 'ALL'">
+              AND user_id = #{userId, jdbcType=VARCHAR}
+        </if>
+        <if test="srchRegDateStart != null and srchRegDateStart != '' and srchRegDateEnd != null and srchRegDateEnd != ''">
+                AND substring(A.send_date,1,8)  between replace(#{srchRegDateStart, jdbcType=VARCHAR}, '/', '') and replace(#{srchRegDateEnd, jdbcType=VARCHAR}, '/', '')
+        </if>
+    </sql>
+    
+	<sql id="searchConditionsTransResv1">
+	    <where>
+	      <if test="searchType == '01'">
+	          <if test="searchName != null and searchName != ''">
+	                AND subject like CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+	          </if>
+	      </if>
+	      <if test="msgType != null and msgType != ''">
+	          AND msg_code =  #{msgType, jdbcType=VARCHAR}
+	      </if>
+	      
+	      <if test="userlv == '20' or userlv == '30'">
+	          AND C.user_lv  <![CDATA[ <= ]]> #{userlv, jdbcType=VARCHAR}
+	          AND C.dept = #{dept, jdbcType=VARCHAR}
+	          AND C.company = #{company, jdbcType=VARCHAR} 
+	      </if>
+	      
+	      <if test="userlv == '40'">
+	          AND C.user_lv  <![CDATA[ <= ]]> #{userlv, jdbcType=VARCHAR}
+	          AND C.company = #{company, jdbcType=VARCHAR} 
+	      </if>
+	      <if test="userlv == '10'">
+	          AND C.user_id = #{userId, jdbcType=VARCHAR}
+	      </if>
+	      <if test="userlv == '99'">
+	          AND 1=1 
+	      </if> 
+	    </where>
+    </sql>
+    
+    <sql id="searchConditionResvDet">
+    	<if test = "msgType != null and msgType != ''">
+		     <choose>
+		         <when test="msgType == '01'">
+		             	SDK_SMS_SEND A
+		             WHERE 1=1
+		            	 <include refid="searchConditionResvDet1"/>
+		         </when>
+		         <when test="msgType == '02' or msgType == '03'">
+		             	SDK_MMS_SEND A
+					WHERE 1=1
+		            	 <include refid="searchConditionResvDet1"/>
+		         </when>
+		         <when test="msgType == '04'">
+		             	SDK_FMS_SEND A
+		             WHERE 1=1
+		            	 <include refid="searchConditionResvDet1"/>
+		         </when>
+		         <when test="msgType == '05' or msgType == '06'">
+		            	SDK_VMS_SEND A
+		             WHERE 1=1
+		            	 <include refid="searchConditionResvDet1"/>
+		         </when>
+		         <when test="msgType == '07' or msgType == '08'">
+		             	(
+		             	SELECT MSG_ID
+							, USER_ID 
+							, SEND_DATE
+							, PHONE_NUMBER
+		             	 FROM SDK_SMS_SEND
+		             	WHERE 1=1
+		            		<include refid="searchConditionResvDet1"/>
+		             	UNION ALL
+		             	SELECT MSG_ID
+							, USER_ID 
+							, SEND_DATE
+							, PHONE_NUMBER
+						FROM SDK_MMS_SEND
+						WHERE 1=1
+		            	 	<include refid="searchConditionResvDet1"/>
+		            	) A
+		         </when>
+		     </choose>
+		</if>
+    </sql>
+    
+    <sql id="searchConditionResvDet1">
+    	<if test="msgId != null">
+   			AND MSG_ID = #{msgid, jdbcType=NUMERIC}
+   		</if>
+    </sql>
+    <sql id="selectTransHisListSub1">
+        SELECT 'SMS' stype
+		     , B.msg_id
+		     , B.user_id
+		     , B.dest_name
+		     , B.phone_number
+			 , B.send_date send_date
+			 , A.RESERVED4 conf_date
+			 , A.RESERVED5 res_date 
+			 , B.RESULT
+		     , B.TCS_RESULT
+			 , A.SUBJECT name
+			 , A.SMS_MSG contents
+		FROM  SDK_SMS_REPORT A
+		LEFT JOIN SDK_SMS_REPORT_DETAIL B
+		ON A.user_id = B.user_id
+		AND A.job_id = B.job_id 
+		where 1=1 
+		AND A.RESERVED1 is null
+		<include refid="searchConditionsTransHis"/>
+		union all
+		SELECT 'LMS' stype
+		     , B.msg_id
+		     , B.user_id
+		     , B.dest_name
+		     , B.phone_number
+			 , B.send_date send_date
+			 , A.RESERVED4 conf_date
+			 , A.RESERVED5 res_date 
+			 , B.RESULT
+		     , B.TCS_RESULT
+			 , A.SUBJECT name
+			 , A.MMS_MSG contents
+		FROM  SDK_MMS_REPORT A
+		LEFT JOIN SDK_MMS_REPORT_DETAIL B
+		ON A.user_id = B.user_id
+		AND A.job_id = B.job_id 
+		where 1=1 
+		AND A.CONTENT_COUNT = 0
+		AND A.RESERVED1 is null
+		<include refid="searchConditionsTransHis"/>
+		union all
+		SELECT 'MMS' stype
+		     , B.msg_id
+		     , B.user_id
+		     , B.dest_name
+		     , B.phone_number
+			 , B.send_date send_date
+			 , A.RESERVED4 conf_date
+			 , A.RESERVED5 res_date 
+			 , B.RESULT
+		     , B.TCS_RESULT
+			 , A.SUBJECT name
+			 , A.MMS_MSG contents
+		FROM  SDK_MMS_REPORT A
+		LEFT JOIN SDK_MMS_REPORT_DETAIL B
+		ON A.user_id = B.user_id
+		AND A.job_id = B.job_id 
+		where 1=1 
+		AND A.CONTENT_COUNT > 0
+		AND A.RESERVED1 is null
+		<include refid="searchConditionsTransHis"/>
+		union all
+		SELECT 'FMS' stype
+		     , B.msg_id
+		     , B.user_id
+		     , B.dest_name
+		     , B.phone_number
+			 , B.send_date send_date
+			 , '' conf_date
+			 , '' res_date 
+			 , B.RESULT
+		     , B.TCS_RESULT
+			 , A.SUBJECT name
+			 , '' contents
+		FROM  SDK_FMS_REPORT A
+		LEFT JOIN SDK_FMS_REPORT_DETAIL B
+		ON A.user_id = B.user_id
+		AND A.job_id = B.job_id 
+		where 1=1 
+		<include refid="searchConditionsTransHis"/>
+		union all
+		SELECT 'VMS' stype
+		     , B.msg_id
+		     , B.user_id
+		     , B.dest_name
+		     , B.phone_number
+			 , B.STIME send_date
+			 , '' conf_date
+			 , '' res_date 
+			 , B.RESULT
+		     , B.TCS_RESULT
+			 , A.SUBJECT name
+			 , '' contents
+		FROM  SDK_VMS_REPORT A
+		LEFT JOIN SDK_VMS_REPORT_DETAIL B
+		ON A.user_id = B.user_id
+		AND A.job_id = B.job_id 
+		where 1=1 
+		AND A.MSG_SUBTYPE = '30'
+		<include refid="searchConditionsTransHis"/>
+		union all
+		SELECT 'VMSQR' stype
+		     , B.msg_id
+		     , B.user_id
+		     , B.dest_name
+		     , B.phone_number
+			 , B.STIME send_date
+			 , '' conf_date
+			 , '' res_date 
+			 , B.RESULT
+		     , B.TCS_RESULT
+			 , A.SUBJECT name
+			 , '' contents
+		FROM  SDK_VMS_REPORT A
+		LEFT JOIN SDK_VMS_REPORT_DETAIL B
+		ON A.user_id = B.user_id
+		AND A.job_id = B.job_id 
+		where 1=1 
+		AND A.MSG_SUBTYPE = '32'
+		<include refid="searchConditionsTransHis"/>
+		union all
+		SELECT 'SMART DM' stype
+		     , B.msg_id
+		     , B.user_id
+		     , B.dest_name
+		     , B.phone_number
+			 , B.deliver_date send_date
+			 , A.RESERVED4 conf_date
+			 , A.RESERVED5 res_date 
+			 , B.RESULT
+		     , B.TCS_RESULT
+			 , A.SUBJECT name
+			 , A.SMS_MSG contents
+		FROM  SDK_SMS_REPORT A
+		LEFT JOIN SDK_SMS_REPORT_DETAIL B
+		ON A.user_id = B.user_id
+		AND A.job_id = B.job_id 
+		where 1=1 
+		AND A.RESERVED1='SMARTDM'
+		<include refid="searchConditionsTransHis"/>
+		union all
+		SELECT 'SMART DM' stype
+		     , B.msg_id
+		     , B.user_id
+		     , B.dest_name
+		     , B.phone_number
+			 , B.send_date send_date
+			 , A.RESERVED4 conf_date
+			 , A.RESERVED5 res_date 
+			 , B.RESULT
+		     , B.TCS_RESULT
+			 , A.SUBJECT name
+			 , A.MMS_MSG contents
+		FROM  SDK_MMS_REPORT A
+		LEFT JOIN SDK_MMS_REPORT_DETAIL B
+		ON A.user_id = B.user_id
+		AND A.job_id = B.job_id 
+		where 1=1 
+		AND A.CONTENT_COUNT = 0
+		AND A.RESERVED1='SMARTDM'		
+		<include refid="searchConditionsTransHis"/>		 
+		union all
+		SELECT 'SMART FAX' stype
+		     , B.msg_id
+		     , B.user_id
+		     , B.dest_name
+		     , B.phone_number
+			 , B.send_date send_date
+			 , A.RESERVED4 conf_date
+			 , A.RESERVED5 res_date 
+			 , B.RESULT
+		     , B.TCS_RESULT
+			 , A.SUBJECT name
+			 , A.SMS_MSG contents
+		FROM  SDK_SMS_REPORT A
+		LEFT JOIN SDK_SMS_REPORT_DETAIL B
+		ON A.user_id = B.user_id
+		AND A.job_id = B.job_id 
+		where 1=1 
+		AND A.RESERVED1='SMARTFAX'
+		<include refid="searchConditionsTransHis"/>
+		union all
+		SELECT 'SMART FAX' stype
+		     , B.msg_id
+		     , B.user_id
+		     , B.dest_name
+		     , B.phone_number
+			 , B.send_date send_date
+			 , A.RESERVED4 conf_date
+			 , A.RESERVED5 res_date 
+			 , B.RESULT
+		     , B.TCS_RESULT
+			 , A.SUBJECT name
+			 , A.MMS_MSG contents
+		FROM  SDK_MMS_REPORT A
+		LEFT JOIN SDK_MMS_REPORT_DETAIL B
+		ON A.user_id = B.user_id
+		AND A.job_id = B.job_id 
+		where 1=1 
+		AND A.CONTENT_COUNT = 0
+		AND A.RESERVED1='SMARTFAX'	
+		<include refid="searchConditionsTransHis"/>
+    </sql>
+    
+    
+    <sql id="selectTransHisListSub2">
+        SELECT 'SMS' stype
+		     , B.msg_id
+		     , B.user_id
+		     , B.dest_name
+		     , B.phone_number
+			 , B.send_date send_date
+			 , A.RESERVED4 conf_date
+			 , A.RESERVED5 res_date 
+			 , B.RESULT
+		     , B.TCS_RESULT
+			 , A.SUBJECT name
+			 , A.SMS_MSG contents
+		FROM  SDK_SMS_REPORT A
+		LEFT JOIN SDK_SMS_REPORT_DETAIL B
+		ON A.user_id = B.user_id
+		AND A.job_id = B.job_id 
+		where 1=1 
+		AND A.RESERVED1 is null
+		<include refid="searchConditionsTransHis"/>
+		union all
+		SELECT 'LMS' stype
+		     , B.msg_id
+		     , B.user_id
+		     , B.dest_name
+		     , B.phone_number
+			 , B.send_date send_date
+			 , A.RESERVED4 conf_date
+			 , A.RESERVED5 res_date 
+			 , B.RESULT
+		     , B.TCS_RESULT
+			 , A.SUBJECT name
+			 , A.MMS_MSG contents
+		FROM  SDK_MMS_REPORT A
+		LEFT JOIN SDK_MMS_REPORT_DETAIL B
+		ON A.user_id = B.user_id
+		AND A.job_id = B.job_id 
+		where 1=1 
+		AND A.CONTENT_COUNT = 0
+		AND A.RESERVED1 is null
+		<include refid="searchConditionsTransHis"/>
+		union all
+		SELECT 'MMS' stype
+		     , B.msg_id
+		     , B.user_id
+		     , B.dest_name
+		     , B.phone_number
+			 , B.send_date send_date
+			 , A.RESERVED4 conf_date
+			 , A.RESERVED5 res_date 
+			 , B.RESULT
+		     , B.TCS_RESULT
+			 , A.SUBJECT name
+			 , A.MMS_MSG contents
+		FROM  SDK_MMS_REPORT A
+		LEFT JOIN SDK_MMS_REPORT_DETAIL B
+		ON A.user_id = B.user_id
+		AND A.job_id = B.job_id 
+		where 1=1 
+		AND A.CONTENT_COUNT > 0
+		AND A.RESERVED1 is null
+		<include refid="searchConditionsTransHis"/>
+		union all
+		SELECT 'FMS' stype
+		     , B.msg_id
+		     , B.user_id
+		     , B.dest_name
+		     , B.phone_number
+			 , B.send_date send_date
+			 , '' conf_date
+			 , '' res_date 
+			 , B.RESULT
+		     , B.TCS_RESULT
+			 , A.SUBJECT name
+			 , '' contents
+		FROM  SDK_FMS_REPORT A
+		LEFT JOIN SDK_FMS_REPORT_DETAIL B
+		ON A.user_id = B.user_id
+		AND A.job_id = B.job_id 
+		where 1=1 
+		<include refid="searchConditionsTransHis"/>
+		union all
+		SELECT 'VMS' stype
+		     , B.msg_id
+		     , B.user_id
+		     , B.dest_name
+		     , B.phone_number
+			 , B.STIME send_date
+			 , '' conf_date
+			 , '' res_date 
+			 , B.RESULT
+		     , B.TCS_RESULT
+			 , A.SUBJECT name
+			 , '' contents
+		FROM  SDK_VMS_REPORT A
+		LEFT JOIN SDK_VMS_REPORT_DETAIL B
+		ON A.user_id = B.user_id
+		AND A.job_id = B.job_id 
+		where 1=1 
+		AND A.MSG_SUBTYPE = '30'
+		<include refid="searchConditionsTransHis"/> 
+    </sql>
+	<select id="selectTransHisList" parameterType="searchTransHisVO" resultMap="transHisResultMap">
+       select *
+        from (	 
+		    SELECT 
+		    (@row_number:= @row_number + 1) AS row_number
+		        , A.MSG_ID
+		        , C.USER_ID
+				, C.USER_NM
+				, A.phone_number
+				, A.stype
+				, A.send_date
+				, A.conf_date
+				, A.res_date
+				, (case when A.name = '' OR  A.name is null then '제목없음' else A.name END) name
+				, A.contents contents
+				, A.RESULT
+				, A.TCS_RESULT
+				FROM 
+				(
+				<include refid="selectTransHisListSub2"/> 				
+				) A
+				 JOIN ${umsdb}.TB_UMS_USER C
+				 ON A.USER_ID = C.USER_ID 
+				 ,(SELECT @row_number:=0) AS t
+				 <include refid="searchConditionsTransHis1"/> 
+				 AND A.RESULT = '2'
+				 order by  A.send_date desc) AA				 
+	     where ROW_NUMBER between #{firstRecordIndex, jdbcType=NUMERIC} + 1 and #{firstRecordIndex, jdbcType=NUMERIC} + #{recordCountPerPage, jdbcType=NUMERIC}
+	     limit 10
+    </select>
+    	
+	<select id="selectTransHisListCount" parameterType="searchTransHisVO" resultType="java.lang.Integer">
+	    select count(ROW_NUMBER)  as count
+        from (	   
+		    SELECT 
+		    (@row_number:= @row_number + 1) AS row_number
+		        , A.MSG_ID
+		        , C.USER_ID
+				, C.USER_NM
+				, A.phone_number
+				, A.stype
+				, A.send_date
+				, A.conf_date
+				, A.res_date
+				, A.name name
+				, A.contents contents
+				, A.RESULT
+				, A.TCS_RESULT
+				FROM 
+				(
+				<include refid="selectTransHisListSub2"/> 
+				) A
+				 JOIN ${umsdb}.TB_UMS_USER C
+				 ON A.USER_ID = C.USER_ID 
+				 ,(SELECT @row_number:=0) AS t
+				 <include refid="searchConditionsTransHis1"/> 
+				 AND A.RESULT = '2'
+				 order by  A.send_date desc) AA	
+    </select>
+    
+	<select id="selectTransStatList" parameterType="searchTransStatVO" resultMap="transStatResultMap">
+       select * from (
+	    select  (@row_number:= @row_number + 1) AS row_number
+       		<choose>
+		        <when test="statType == '02'">
+		        , AAA.send_date 
+		        </when>
+		        <otherwise>
+		        , AAA.USER_ID
+				, AAA.USER_NM
+		        </otherwise>
+		    </choose>
+			, IFNULL(AAA.send_try_cnt,0) send_try_cnt
+			, IFNULL(AAA.send_fail_cnt,0) send_fail_cnt
+			, IFNULL(AAA.send_wait_cnt,0) send_wait_cnt
+			, IFNULL(AAA.send_suc_cnt,0) send_suc_cnt
+			, IFNULL(AAA.send_sms_cnt,0) send_sms_cnt
+			, IFNULL(AAA.send_lms_cnt,0) send_lms_cnt
+			, IFNULL(AAA.send_mms_cnt,0) send_mms_cnt
+			, IFNULL(AAA.send_fms_cnt,0) send_fms_cnt
+			, IFNULL(AAA.send_vms_cnt,0) send_vms_cnt
+			, IFNULL(AAA.send_vqr_cnt,0) send_vqr_cnt 
+			, IFNULL(AAA.dm_sms_cnt,0) dm_sms_cnt
+			, IFNULL(AAA.dm_lms_cnt,0) dm_lms_cnt
+			, IFNULL(AAA.dm_con_cnt,0) dm_con_cnt
+			, IFNULL(CAST((CAST(AAA.dm_con_cnt as DECIMAL)/CAST(AAA.dm_con_cnt1  as DECIMAL)* 100) as DECIMAL),0) dm_con_per 
+			, IFNULL(AAA.dm_res_cnt,0) dm_res_cnt
+			, IFNULL(CAST((CAST(AAA.dm_res_cnt as DECIMAL)/CAST(AAA.dm_res_cnt1 as DECIMAL)* 100) as DECIMAL),0) dm_res_per
+			, IFNULL(AAA.fa_sms_cnt,0) fa_sms_cnt
+			, IFNULL(AAA.fa_lms_cnt,0) fa_lms_cnt
+			, IFNULL(AAA.fa_res_cnt,0) fa_res_cnt
+			, IFNULL(CAST((CAST(AAA.fa_res_cnt  as DECIMAL)/CAST(AAA.fa_res_cnt1  as DECIMAL)* 100) as DECIMAL),0) fa_res_per
+        from (	 
+		    select
+		    <choose>
+		        <when test="statType == '02'">
+		           SUBSTRING(AA.send_date,1,8) send_date
+		        </when>
+		        <otherwise>
+		          AA.USER_ID USER_ID
+		        , AA.USER_NM USER_NM
+		        </otherwise>
+		    </choose>
+			, SUM(CASE WHEN AA.msg_id <![CDATA[ >= ]]> 0 THEN 1 ELSE 0 END) send_try_cnt
+			, SUM(CASE WHEN AA.result <![CDATA[ > ]]> 2 THEN 1 ELSE 0 END) send_fail_cnt
+			, SUM(CASE WHEN AA.result <![CDATA[ < ]]> 2 THEN 1 ELSE 0 END) send_wait_cnt
+			, SUM(CASE WHEN AA.result = 2 THEN 1 ELSE 0 END) send_suc_cnt
+			, SUM(CASE WHEN AA.stype = 'SMS' AND  AA.result = 2 THEN 1 ELSE 0 END) send_sms_cnt
+			, SUM(CASE WHEN AA.stype = 'LMS' AND  AA.result = 2 THEN 1 ELSE 0 END) send_lms_cnt
+			, SUM(CASE WHEN AA.stype = 'MMS' AND  AA.result = 2 THEN 1 ELSE 0 END) send_mms_cnt
+			, SUM(CASE WHEN AA.stype = 'FMS' AND  AA.result = 2 THEN 1 ELSE 0 END) send_fms_cnt
+			, SUM(CASE WHEN AA.stype = 'VMS' AND  AA.result = 2 THEN 1 ELSE 0 END) send_vms_cnt
+			, SUM(CASE WHEN AA.stype = 'VQR' AND  AA.result = 2 THEN 1 ELSE 0 END) send_vqr_cnt
+			, SUM(CASE WHEN AA.stype = 'SMSDM' AND  AA.result = 2 THEN 1 ELSE 0 END) dm_sms_cnt
+			, SUM(CASE WHEN AA.stype = 'LMSDM' AND  AA.result = 2 THEN 1 ELSE 0 END) dm_lms_cnt  
+			, SUM(CASE WHEN (AA.stype = 'SMSDM' OR AA.stype = 'LMSDM') AND  AA.result = 2 AND AA.dm_fg in ('1','2') THEN 1 ELSE 0 END) dm_con_cnt
+			, SUM(CASE WHEN (AA.stype = 'SMSDM' OR AA.stype = 'LMSDM') AND  AA.result = 2 AND AA.dm_fg in ('0','1','2') THEN 1 ELSE 0 END) dm_con_cnt1 
+			, SUM(CASE WHEN (AA.stype = 'SMSDM' OR AA.stype = 'LMSDM') AND  AA.result = 2 AND AA.dm_fg = '2' THEN 1 ELSE 0 END) dm_res_cnt
+			, SUM(CASE WHEN (AA.stype = 'SMSDM' OR AA.stype = 'LMSDM') AND  AA.result = 2 AND AA.dm_fg in ('0','1','2') THEN 1 ELSE 0 END) dm_res_cnt1
+			, SUM(CASE WHEN AA.stype = 'SMSFAX' AND  AA.result = 2 THEN 1 ELSE 0 END) fa_sms_cnt
+			, SUM(CASE WHEN AA.stype = 'LMSFAX' AND  AA.result = 2 THEN 1 ELSE 0 END) fa_lms_cnt
+			, SUM(CASE WHEN (AA.stype = 'SMSFAX' OR AA.stype = 'LMSFAX') AND  AA.result = 2 AND AA.dm_fg = '2' THEN 1 ELSE 0 END) fa_res_cnt
+			, SUM(CASE WHEN (AA.stype = 'SMSFAX' OR AA.stype = 'LMSFAX') AND  AA.result = 2 AND AA.dm_fg in ('0','1','2') THEN 1 ELSE 0 END) fa_res_cnt1
+			from (	 
+		    SELECT A.MSG_ID
+		        , C.USER_ID
+				, C.USER_NM
+				, A.phone_number
+				, A.stype
+				, A.send_date
+				, A.dm_fg
+				, A.conf_date
+				, A.res_date
+				, A.name name
+				, A.contents contents
+				, A.RESULT
+				, A.TCS_RESULT
+				FROM 
+				(
+				SELECT 'SMS' stype
+				     , B.msg_id
+				     , B.user_id
+				     , B.dest_name
+				     , B.phone_number
+					 , B.send_date send_date
+					 , A.RESERVED3 dm_fg
+					 , A.RESERVED4 conf_date
+					 , A.RESERVED5 res_date 
+					 , B.RESULT
+				     , B.TCS_RESULT
+					 , A.SUBJECT name
+					 , A.SMS_MSG contents
+				FROM  SDK_SMS_REPORT A
+				LEFT JOIN SDK_SMS_REPORT_DETAIL B
+				ON A.user_id = B.user_id
+				AND A.job_id = B.job_id 
+				where 1=1 
+				AND A.RESERVED1 is null
+				<include refid="searchConditionsTransStat"/>
+				union all
+				SELECT 'LMS' stype
+				     , B.msg_id
+				     , B.user_id
+				     , B.dest_name
+				     , B.phone_number
+					 , B.send_date send_date
+					 , A.RESERVED3 dm_fg
+					 , A.RESERVED4 conf_date
+					 , A.RESERVED5 res_date 
+					 , B.RESULT
+				     , B.TCS_RESULT
+					 , A.SUBJECT name
+					 , A.MMS_MSG contents
+				FROM  SDK_MMS_REPORT A
+				LEFT JOIN SDK_MMS_REPORT_DETAIL B
+				ON A.user_id = B.user_id
+				AND A.job_id = B.job_id 
+				where 1=1 
+				AND A.CONTENT_COUNT = 0
+				AND A.RESERVED1 is null
+				<include refid="searchConditionsTransStat"/>
+				union all
+				SELECT 'MMS' stype
+				     , B.msg_id
+				     , B.user_id
+				     , B.dest_name
+				     , B.phone_number
+					 , B.send_date send_date
+					 , A.RESERVED3 dm_fg
+					 , A.RESERVED4 conf_date
+					 , A.RESERVED5 res_date 
+					 , B.RESULT
+				     , B.TCS_RESULT
+					 , A.SUBJECT name
+					 , A.MMS_MSG contents
+				FROM  SDK_MMS_REPORT A
+				LEFT JOIN SDK_MMS_REPORT_DETAIL B
+				ON A.user_id = B.user_id
+				AND A.job_id = B.job_id 
+				where 1=1 
+				AND A.CONTENT_COUNT > 0
+				AND A.RESERVED1 is null
+				<include refid="searchConditionsTransStat"/>
+				union all
+				SELECT 'FMS' stype
+				     , B.msg_id
+				     , B.user_id
+				     , B.dest_name
+				     , B.phone_number
+					 , B.send_date send_date
+					 , A.RESERVED3 dm_fg
+					 , A.RESERVED4 conf_date
+					 , A.RESERVED5 res_date 
+					 , B.RESULT
+				     , B.TCS_RESULT
+					 , A.SUBJECT name
+					 , '' contents
+				FROM  SDK_FMS_REPORT A
+				LEFT JOIN SDK_FMS_REPORT_DETAIL B
+				ON A.user_id = B.user_id
+				AND A.job_id = B.job_id 
+				where 1=1 
+				<include refid="searchConditionsTransStat"/>
+				union all
+				SELECT 'VMS' stype
+				     , B.msg_id
+				     , B.user_id
+				     , B.dest_name
+				     , B.phone_number
+					 , B.STIME send_date
+					 , A.RESERVED3 dm_fg
+					 , A.RESERVED4 conf_date
+					 , A.RESERVED5 res_date 
+					 , B.RESULT
+				     , B.TCS_RESULT
+					 , A.SUBJECT name
+					 , '' contents
+				FROM  SDK_VMS_REPORT A
+				LEFT JOIN SDK_VMS_REPORT_DETAIL B
+				ON A.user_id = B.user_id
+				AND A.job_id = B.job_id 
+				where 1=1 
+				AND A.MSG_SUBTYPE = '30'
+				<include refid="searchConditionsTransStat"/>
+				union all
+				SELECT 'VMSQR' stype
+				     , B.msg_id
+				     , B.user_id
+				     , B.dest_name
+				     , B.phone_number
+					 , B.STIME send_date
+					 , A.RESERVED3 dm_fg
+					 , A.RESERVED4 conf_date
+					 , A.RESERVED5 res_date 
+					 , B.RESULT
+				     , B.TCS_RESULT
+					 , A.SUBJECT name
+					 , '' contents
+				FROM  SDK_VMS_REPORT A
+				LEFT JOIN SDK_VMS_REPORT_DETAIL B
+				ON A.user_id = B.user_id
+				AND A.job_id = B.job_id 
+				where 1=1 
+				AND A.MSG_SUBTYPE = '32'
+				<include refid="searchConditionsTransStat"/>
+				union all
+				SELECT 'SMSDM' stype
+				     , B.msg_id
+				     , B.user_id
+				     , B.dest_name
+				     , B.phone_number
+					 , B.send_date send_date
+					 , A.RESERVED3 dm_fg
+					 , A.RESERVED4 conf_date
+					 , A.RESERVED5 res_date 
+					 , B.RESULT
+				     , B.TCS_RESULT
+					 , A.SUBJECT name
+					 , A.SMS_MSG contents
+				FROM  SDK_SMS_REPORT A
+				LEFT JOIN SDK_SMS_REPORT_DETAIL B
+				ON A.user_id = B.user_id
+				AND A.job_id = B.job_id 
+				where 1=1 
+				AND A.RESERVED1='SMARTDM'
+				<include refid="searchConditionsTransStat"/>
+				union all
+				SELECT 'LMSDM' stype
+				     , B.msg_id
+				     , B.user_id
+				     , B.dest_name
+				     , B.phone_number
+					 , B.send_date send_date
+					 , A.RESERVED3 dm_fg
+					 , A.RESERVED4 conf_date
+					 , A.RESERVED5 res_date 
+					 , B.RESULT
+				     , B.TCS_RESULT
+					 , A.SUBJECT name
+					 , A.MMS_MSG contents
+				FROM  SDK_MMS_REPORT A
+				LEFT JOIN SDK_MMS_REPORT_DETAIL B
+				ON A.user_id = B.user_id
+				AND A.job_id = B.job_id 
+				where 1=1 
+				AND A.CONTENT_COUNT = 0
+				AND A.RESERVED1='SMARTDM'	
+				<include refid="searchConditionsTransStat"/>			 
+				union all
+				SELECT 'SMSFAX' stype
+				     , B.msg_id
+				     , B.user_id
+				     , B.dest_name
+				     , B.phone_number
+					 , B.send_date send_date
+					 , A.RESERVED3 dm_fg
+					 , A.RESERVED4 conf_date
+					 , A.RESERVED5 res_date 
+					 , B.RESULT
+				     , B.TCS_RESULT
+					 , A.SUBJECT name
+					 , A.SMS_MSG contents
+				FROM  SDK_SMS_REPORT A
+				LEFT JOIN SDK_SMS_REPORT_DETAIL B
+				ON A.user_id = B.user_id
+				AND A.job_id = B.job_id 
+				where 1=1 
+				AND A.RESERVED1='SMARTFAX'
+				<include refid="searchConditionsTransStat"/>
+				union all
+				SELECT 'LMSFAX' stype
+				     , B.msg_id
+				     , B.user_id
+				     , B.dest_name
+				     , B.phone_number
+					 , B.send_date send_date
+					 , A.RESERVED3 dm_fg
+					 , A.RESERVED4 conf_date
+					 , A.RESERVED5 res_date 
+					 , B.RESULT
+				     , B.TCS_RESULT
+					 , A.SUBJECT name
+					 , A.MMS_MSG contents
+				FROM  SDK_MMS_REPORT A
+				LEFT JOIN SDK_MMS_REPORT_DETAIL B
+				ON A.user_id = B.user_id
+				AND A.job_id = B.job_id 
+				where 1=1 
+				AND A.CONTENT_COUNT = 0
+				AND A.RESERVED1='SMARTFAX'	
+				 <include refid="searchConditionsTransStat"/>
+				) A
+				 JOIN ${umsdb}.TB_UMS_USER C
+				 ON A.USER_ID = C.USER_ID
+				 <include refid="searchConditionsTransStat1"/>
+				 ) AA
+				group by  <if test = "statType == '01'"> AA.USER_ID , AA.USER_NM </if>
+				<if test = "statType == '02'">SUBSTRING(AA.send_date,1,8)</if>
+				<choose>
+		        <when test="statType == '02'">
+		            order by   SUBSTRING(AA.send_date,1,8) desc
+		        </when>
+		        <otherwise>
+		            order by  AA.USER_ID 
+		        </otherwise>
+		    </choose>			
+				
+				) AAA ,(SELECT @row_number:=0) AS t ) A 
+	     where row_number between #{firstRecordIndex, jdbcType=NUMERIC} + 1 and #{firstRecordIndex, jdbcType=NUMERIC} + #{recordCountPerPage, jdbcType=NUMERIC}
+    </select>
+    
+	<select id="selectTransStatListCount" parameterType="searchTransStatVO" resultType="java.lang.Integer">
+         select count(*)  as count
+		        from (	 
+				    select
+					    <choose>
+					        <when test="statType == '02'">
+					          SUBSTRING(AA.send_date,1,8) send_date
+					        </when>
+					        <otherwise>
+					          AA.USER_ID USER_ID
+					        , AA.USER_NM USER_NM
+					        </otherwise>
+					    </choose>
+						from (	 
+					    SELECT A.MSG_ID
+					        , C.USER_ID
+							, C.USER_NM
+							, A.phone_number
+							, A.stype
+							, A.send_date
+							, A.conf_date
+							, A.res_date
+							, A.name name
+							, A.contents contents
+							, A.RESULT
+							, A.TCS_RESULT
+							FROM 
+							(
+							SELECT 'SMS' stype
+							     , B.msg_id
+							     , B.user_id
+							     , B.dest_name
+							     , B.phone_number
+								 , B.send_date send_date
+								 , '' conf_date
+								 , '' res_date 
+								 , B.RESULT
+							     , B.TCS_RESULT
+								 , A.SUBJECT name
+								 , A.SMS_MSG contents
+							FROM  SDK_SMS_REPORT A
+							LEFT JOIN SDK_SMS_REPORT_DETAIL B
+							ON A.user_id = B.user_id
+							AND A.job_id = B.job_id 
+							where 1=1 
+							AND A.RESERVED1 is null
+							<include refid="searchConditionsTransStat"/>
+							union all
+							SELECT 'LMS' stype
+							     , B.msg_id
+							     , B.user_id
+							     , B.dest_name
+							     , B.phone_number
+								 , B.send_date send_date
+								 , '' conf_date
+								 , '' res_date 
+								 , B.RESULT
+							     , B.TCS_RESULT
+								 , A.SUBJECT name
+								 , A.MMS_MSG contents
+							FROM  SDK_MMS_REPORT A
+							LEFT JOIN SDK_MMS_REPORT_DETAIL B
+							ON A.user_id = B.user_id
+							AND A.job_id = B.job_id 
+							where 1=1 
+							AND A.CONTENT_COUNT = 0
+							AND A.RESERVED1 is null
+							<include refid="searchConditionsTransStat"/>
+							union all
+							SELECT 'MMS' stype
+							     , B.msg_id
+							     , B.user_id
+							     , B.dest_name
+							     , B.phone_number
+								 , B.send_date send_date
+								 , '' conf_date
+								 , '' res_date 
+								 , B.RESULT
+							     , B.TCS_RESULT
+								 , A.SUBJECT name
+								 , A.MMS_MSG contents
+							FROM  SDK_MMS_REPORT A
+							LEFT JOIN SDK_MMS_REPORT_DETAIL B
+							ON A.user_id = B.user_id
+							AND A.job_id = B.job_id 
+							where 1=1 
+							AND A.CONTENT_COUNT > 0
+							AND A.RESERVED1 is null
+							<include refid="searchConditionsTransStat"/>
+							union all
+							SELECT 'FMS' stype
+							     , B.msg_id
+							     , B.user_id
+							     , B.dest_name
+							     , B.phone_number
+								 , B.send_date send_date
+								 , '' conf_date
+								 , '' res_date 
+								 , B.RESULT
+							     , B.TCS_RESULT
+								 , A.SUBJECT name
+								 , '' contents
+							FROM  SDK_FMS_REPORT A
+							LEFT JOIN SDK_FMS_REPORT_DETAIL B
+							ON A.user_id = B.user_id
+							AND A.job_id = B.job_id 
+							where 1=1 
+							<include refid="searchConditionsTransStat"/>
+							union all
+							SELECT 'VMS' stype
+							     , B.msg_id
+							     , B.user_id
+							     , B.dest_name
+							     , B.phone_number
+								 , B.STIME send_date
+								 , '' conf_date
+								 , '' res_date 
+								 , B.RESULT
+							     , B.TCS_RESULT
+								 , A.SUBJECT name
+								 , '' contents
+							FROM  SDK_VMS_REPORT A
+							LEFT JOIN SDK_VMS_REPORT_DETAIL B
+							ON A.user_id = B.user_id
+							AND A.job_id = B.job_id 
+							where 1=1 
+							AND A.MSG_SUBTYPE = '30'
+							<include refid="searchConditionsTransStat"/>
+							union all
+							SELECT 'VMSQR' stype
+							     , B.msg_id
+							     , B.user_id
+							     , B.dest_name
+							     , B.phone_number
+								 , B.STIME send_date
+								 , '' conf_date
+								 , '' res_date 
+								 , B.RESULT
+							     , B.TCS_RESULT
+								 , A.SUBJECT name
+								 , '' contents
+							FROM  SDK_VMS_REPORT A
+							LEFT JOIN SDK_VMS_REPORT_DETAIL B
+							ON A.user_id = B.user_id
+							AND A.job_id = B.job_id 
+							where 1=1 
+							AND A.MSG_SUBTYPE = '32'
+							<include refid="searchConditionsTransStat"/>
+							union all
+							SELECT 'SMSDM' stype
+							     , B.msg_id
+							     , B.user_id
+							     , B.dest_name
+							     , B.phone_number
+								 , B.send_date send_date
+								 , '' conf_date
+								 , '' res_date 
+								 , B.RESULT
+							     , B.TCS_RESULT
+								 , A.SUBJECT name
+								 , A.SMS_MSG contents
+							FROM  SDK_SMS_REPORT A
+							LEFT JOIN SDK_SMS_REPORT_DETAIL B
+							ON A.user_id = B.user_id
+							AND A.job_id = B.job_id 
+							where 1=1 
+							AND A.RESERVED1='SMARTDM'
+							<include refid="searchConditionsTransStat"/>
+							union all
+							SELECT 'LMSDM' stype
+							     , B.msg_id
+							     , B.user_id
+							     , B.dest_name
+							     , B.phone_number
+								 , B.send_date send_date
+								 , '' conf_date
+								 , '' res_date 
+								 , B.RESULT
+							     , B.TCS_RESULT
+								 , A.SUBJECT name
+								 , A.MMS_MSG contents
+							FROM  SDK_MMS_REPORT A
+							LEFT JOIN SDK_MMS_REPORT_DETAIL B
+							ON A.user_id = B.user_id
+							AND A.job_id = B.job_id 
+							where 1=1 
+							AND A.CONTENT_COUNT = 0
+							AND A.RESERVED1='SMARTDM'	
+							<include refid="searchConditionsTransStat"/>			 
+							union all
+							SELECT 'SMSFAX' stype
+							     , B.msg_id
+							     , B.user_id
+							     , B.dest_name
+							     , B.phone_number
+								 , B.send_date send_date
+								 , '' conf_date
+								 , '' res_date 
+								 , B.RESULT
+							     , B.TCS_RESULT
+								 , A.SUBJECT name
+								 , A.SMS_MSG contents
+							FROM  SDK_SMS_REPORT A
+							LEFT JOIN SDK_SMS_REPORT_DETAIL B
+							ON A.user_id = B.user_id
+							AND A.job_id = B.job_id 
+							where 1=1 
+							AND A.RESERVED1='SMARTFAX'
+							<include refid="searchConditionsTransStat"/>
+							union all
+							SELECT 'LMSFAX' stype
+							     , B.msg_id
+							     , B.user_id
+							     , B.dest_name
+							     , B.phone_number
+								 , B.send_date send_date
+								 , '' conf_date
+								 , '' res_date 
+								 , B.RESULT
+							     , B.TCS_RESULT
+								 , A.SUBJECT name
+								 , A.MMS_MSG contents
+							FROM  SDK_MMS_REPORT A
+							LEFT JOIN SDK_MMS_REPORT_DETAIL B
+							ON A.user_id = B.user_id
+							AND A.job_id = B.job_id 
+							where 1=1 
+							AND A.CONTENT_COUNT = 0
+							AND A.RESERVED1='SMARTFAX'	
+							 <include refid="searchConditionsTransStat"/>
+							) A
+							 JOIN ${umsdb}.TB_UMS_USER C
+							 ON A.USER_ID = C.USER_ID
+							 <include refid="searchConditionsTransStat1"/>
+							 ) AA		     
+							group by  <if test = "statType == '01'"> AA.USER_ID , AA.USER_NM </if>
+							<if test = "statType == '02'">SUBSTRING(AA.send_date,1,8)</if>
+										 ) AAA
+    </select>
+    
+	
+	<sql id="selectTransRsltListSub1">
+	    SELECT 'SMS' stype
+			, '01' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.job_id
+			, A.SUBJECT
+			, A.DEST_COUNT <!-- SUCC_COUNT+A.FAIL_COUNT DEST_COUNT -->
+			, A.SUCC_COUNT
+			, A.FAIL_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_SMS_REPORT A
+		where 1=1
+		AND A.RESERVED1 is null
+		<include refid="searchConditionsTransRslt"/>
+		UNION ALL
+		SELECT 'LMS' stype
+			, '02' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.job_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SUCC_COUNT
+			, A.FAIL_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_MMS_REPORT A
+		where 1=1
+		AND A.CONTENT_COUNT = 0
+		AND A.RESERVED1 is null
+		<include refid="searchConditionsTransRslt"/>
+		UNION ALL
+		SELECT 'MMS' stype
+			, '03' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.job_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SUCC_COUNT
+			, A.FAIL_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_MMS_REPORT A
+		where 1=1
+		AND A.CONTENT_COUNT > 0
+		AND A.RESERVED1 is null
+		<include refid="searchConditionsTransRslt"/>
+		UNION ALL
+		SELECT 'FMS' stype
+			, '04' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.job_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SUCC_COUNT
+			, A.FAIL_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_FMS_REPORT A
+		where 1=1
+		<include refid="searchConditionsTransRslt"/>
+		UNION ALL
+		SELECT 'VMS' stype
+			, '05' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.job_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SUCC_COUNT
+			, A.FAIL_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_VMS_REPORT A
+		where 1=1
+		AND A.MSG_SUBTYPE = '30'
+		<include refid="searchConditionsTransRslt"/>
+		UNION ALL
+		SELECT 'VQR' stype
+			, '06' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.job_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SUCC_COUNT
+			, A.FAIL_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_VMS_REPORT A
+		where 1=1
+		AND A.MSG_SUBTYPE = '32'
+		<include refid="searchConditionsTransRslt"/>
+		UNION ALL
+		SELECT 'SDM' stype
+			, '07' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.job_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SUCC_COUNT
+			, A.FAIL_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_SMS_REPORT A
+		where 1=1
+		AND A.RESERVED1='SMARTDM'
+		<include refid="searchConditionsTransRslt"/>
+		UNION ALL
+		SELECT 'SDM' stype
+			, '08' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.job_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SUCC_COUNT
+			, A.FAIL_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_MMS_REPORT A
+		where 1=1
+		AND A.RESERVED1='SMARTDM'
+		<include refid="searchConditionsTransRslt"/>
+		UNION ALL
+		SELECT 'SFX' stype
+			, '09' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.job_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SUCC_COUNT
+			, A.FAIL_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_SMS_REPORT A
+		where 1=1
+		AND A.RESERVED1='SMARTFAX'
+		<include refid="searchConditionsTransRslt"/>
+		UNION ALL
+		SELECT 'SFX' stype
+			, '09' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.job_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SUCC_COUNT
+			, A.FAIL_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_MMS_REPORT A
+		where 1=1
+		AND A.RESERVED1='SMARTFAX'
+		<include refid="searchConditionsTransRslt"/>
+	</sql>
+	
+	<sql id="selectTransRsltListSub2">
+	    SELECT 'SMS' stype
+			, '01' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.job_id
+			, A.SUBJECT
+			, A.DEST_COUNT <!-- SUCC_COUNT+A.FAIL_COUNT DEST_COUNT -->
+			, A.SUCC_COUNT
+			, A.FAIL_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_SMS_REPORT A
+		where 1=1
+		AND A.RESERVED1 is null
+		<include refid="searchConditionsTransRslt"/>
+		UNION ALL
+		SELECT 'LMS' stype
+			, '02' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.job_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SUCC_COUNT
+			, A.FAIL_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_MMS_REPORT A
+		where 1=1
+		AND A.CONTENT_COUNT = 0
+		AND A.RESERVED1 is null
+		<include refid="searchConditionsTransRslt"/>
+		UNION ALL
+		SELECT 'MMS' stype
+			, '03' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.job_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SUCC_COUNT
+			, A.FAIL_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_MMS_REPORT A
+		where 1=1
+		AND A.CONTENT_COUNT > 0
+		AND A.RESERVED1 is null
+		<include refid="searchConditionsTransRslt"/>
+		UNION ALL
+		SELECT 'FMS' stype
+			, '04' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.job_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SUCC_COUNT
+			, A.FAIL_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_FMS_REPORT A
+		where 1=1
+		<include refid="searchConditionsTransRslt"/>
+		UNION ALL
+		SELECT 'VMS' stype
+			, '05' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.job_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SUCC_COUNT
+			, A.FAIL_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_VMS_REPORT A
+		where 1=1
+		AND A.MSG_SUBTYPE = '30'
+		<include refid="searchConditionsTransRslt"/>
+	</sql>
+	<select id="selectTransRsltList" parameterType="searchTransRsltVO" resultMap="transRsltResultMap">
+	    select *
+        from (	    
+		    SELECT           (@row_number:= @row_number + 1) AS row_number
+		    	   , JOB_ID
+		    	   , A.USER_ID
+		    	   , MSG_ID
+	               , A.SEND_DATE SEND_DATE
+		           , CASE 
+					  WHEN A.stype  =  'SMS' THEN '문자메시지(SMS)'
+					  WHEN A.stype  =  'MMS' THEN '멀티미디어메시지(MMS)'
+					  WHEN A.stype  =  'LMS' THEN '장문메시지(LMS)'
+					  WHEN A.stype  =  'FMS' THEN '팩스메시지(FMS)'
+					  WHEN A.stype  =  'VMS' THEN '음성메시지(VMS)'
+					  WHEN A.stype  =  'VQR' THEN '설문조사(VMS)'
+					  WHEN A.stype  =  'SDM' THEN 'SMART DM(Smart DM)'
+					  WHEN A.stype  =  'SFX' THEN 'SMART FAX(Smart FAX)'
+					  ELSE '' 
+					 END MSG_TYPE
+					, A.MSG_CODE
+					, (case when A.SUBJECT = '' OR  A.SUBJECT is null then '제목없음' else A.SUBJECT END) SUBJECT
+					, A.DEST_COUNT  
+					, A.SUCC_COUNT 
+					, A.FAIL_COUNT 
+					,(((SUCC_COUNT+FAIL_COUNT)*100)/DEST_COUNT) PROG_COUNT
+					FROM 
+					(
+					<include refid="selectTransRsltListSub2"/>
+					) A
+				 	JOIN ${umsdb}.TB_UMS_USER C
+					ON A.USER_ID = C.USER_ID
+					,(SELECT @row_number:=0) AS t 
+					<include refid="searchConditionsTransRslt1"/>
+				order by A.SEND_DATE desc) AA  
+	    where AA.ROW_NUMBER between #{firstRecordIndex, jdbcType=NUMERIC} + 1 and #{firstRecordIndex, jdbcType=NUMERIC} + #{recordCountPerPage, jdbcType=NUMERIC}
+	</select>
+	
+	<select id="selectTransRsltListCount" parameterType="searchTransRsltVO" resultType="java.lang.Integer">
+	    SELECT COUNT(*) as count
+	    FROM (
+		    SELECT              JOB_ID
+		    	   , A.USER_ID
+		    	   , MSG_ID
+	               , A.SEND_DATE SEND_DATE
+		           , CASE 
+					  WHEN A.stype  =  'SMS' THEN '문자메시지(SMS)'
+					  WHEN A.stype  =  'MMS' THEN '멀티미디어메시지(MMS)'
+					  WHEN A.stype  =  'LMS' THEN '장문메시지(LMS)'
+					  WHEN A.stype  =  'FMS' THEN '팩스메시지(FMS)'
+					  WHEN A.stype  =  'VMS' THEN '음성메시지(VMS)'
+					  WHEN A.stype  =  'VQR' THEN '설문조사(VMS)'
+					  WHEN A.stype  =  'SDM' THEN 'SMART DM(Smart DM)'
+					  WHEN A.stype  =  'SFX' THEN 'SMART FAX(Smart FAX)'
+					  ELSE '' 
+					 END MSG_TYPE
+					, A.MSG_CODE
+					, A.SUBJECT
+					, A.DEST_COUNT  
+					, A.SUCC_COUNT 
+					, A.FAIL_COUNT 
+					,(((SUCC_COUNT+FAIL_COUNT)*100)/DEST_COUNT) PROG_COUNT
+					FROM 
+					(
+					<include refid="selectTransRsltListSub2"/>
+					) A
+					JOIN ${umsdb}.TB_UMS_USER C
+					ON A.USER_ID = C.USER_ID 
+					<include refid="searchConditionsTransRslt1"/>
+		) AA
+	</select>
+	
+	<select id="selectRsltDetTop" parameterType="searchRsltDetVO" resultMap="rsltDetTopResultMap">
+		SELECT *
+        FROM (	    
+		    SELECT MSG_ID
+		    	, USER_ID 
+				, JOB_ID
+				, SUBJECT
+				, CONTENTS
+				, SEND_DATE
+		        , CASE 
+					WHEN A.stype  =  'SMS' THEN '문자메시지(SMS)'
+					WHEN A.stype  =  'MMS' THEN '멀티미디어메시지(MMS)'
+					WHEN A.stype  =  'LMS' THEN '장문메시지(LMS)'
+					WHEN A.stype  =  'FMS' THEN '팩스메시지(FMS)'
+					WHEN A.stype  =  'VMS' THEN '음성메시지(VMS)'
+					WHEN A.stype  =  'VQR' THEN '설문조사(VMS)'
+					WHEN A.stype  =  'SDM' THEN 'SMART DM(Smart DM)'
+					WHEN A.stype  =  'SFX' THEN 'SMART FAX(Smart FAX)'
+					ELSE '' 
+				  END MSG_TYPE
+				, MSG_CODE
+				, DEST_COUNT
+				, CALLBACK 
+			FROM 
+			(
+			   	SELECT 'SMS' stype
+					, '01' msg_code
+					, A.msg_id
+					, A.user_id
+					, A.job_id
+					, A.SUBJECT
+					, A.SMS_MSG CONTENTS
+					, A.SEND_DATE
+					, A.DEST_COUNT
+					, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+					, CALLBACK
+				FROM  SDK_SMS_REPORT A
+				where 1=1
+				AND A.RESERVED1 is null
+				<include refid="searchConditionsRsltDet1"/>
+				UNION ALL
+				SELECT 'LMS' stype
+					, '02' msg_code
+					, A.msg_id
+					, A.user_id
+					, A.job_id
+					, A.SUBJECT
+					, A.MMS_MSG CONTENTS
+					, A.SEND_DATE
+					, A.DEST_COUNT
+					, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+					, CALLBACK
+				FROM  SDK_MMS_REPORT A
+				where 1=1
+				AND A.CONTENT_COUNT = 0
+				AND A.RESERVED1 is null
+				<include refid="searchConditionsRsltDet1"/>
+				UNION ALL
+				SELECT 'MMS' stype
+					, '03' msg_code
+					, A.msg_id
+					, A.user_id
+					, A.job_id
+					, A.SUBJECT
+					, A.MMS_MSG CONTENTS
+					, A.SEND_DATE
+					, A.DEST_COUNT
+					, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+					, CALLBACK
+				FROM  SDK_MMS_REPORT A
+				where 1=1
+				AND A.CONTENT_COUNT > 0
+				AND A.RESERVED1 is null
+				<include refid="searchConditionsRsltDet1"/>
+				UNION ALL
+				SELECT 'FMS' stype
+					, '04' msg_code
+					, A.msg_id
+					, A.user_id
+					, A.job_id
+					, A.SUBJECT
+					, '' CONTENTS
+					, A.SEND_DATE
+					, A.DEST_COUNT
+					, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+					, CALLBACK
+				FROM  SDK_FMS_REPORT A
+				where 1=1
+				<include refid="searchConditionsRsltDet1"/>
+				UNION ALL
+				SELECT 'VMS' stype
+					, '05' msg_code
+					, A.msg_id
+					, A.user_id
+					, A.job_id
+					, A.SUBJECT
+					, '' CONTENTS
+					, A.SEND_DATE
+					, A.DEST_COUNT
+					, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+					, CALLBACK
+				FROM  SDK_VMS_REPORT A
+				where 1=1
+				AND A.MSG_SUBTYPE = '30'
+				<include refid="searchConditionsRsltDet1"/>
+				UNION ALL
+				SELECT 'VQR' stype
+					, '06' msg_code
+					, A.msg_id
+					, A.user_id
+					, A.job_id
+					, A.SUBJECT
+					, '' CONTENTS
+					, A.SEND_DATE
+					, A.DEST_COUNT
+					, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+					, CALLBACK
+				FROM  SDK_VMS_REPORT A
+				where 1=1
+				AND A.MSG_SUBTYPE = '32'
+				<include refid="searchConditionsRsltDet1"/>
+				UNION ALL
+				SELECT 'SDM' stype
+					, '07' msg_code
+					, A.msg_id
+					, A.user_id
+					, A.job_id
+					, A.SUBJECT
+					, A.SMS_MSG CONTENTS
+					, A.SEND_DATE
+					, A.DEST_COUNT
+					, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+					, CALLBACK
+				FROM  SDK_SMS_REPORT A
+				where 1=1
+				AND A.RESERVED1='SMARTDM'
+				<include refid="searchConditionsRsltDet1"/>
+				UNION ALL
+				SELECT 'SDM' stype
+					, '08' msg_code
+					, A.msg_id
+					, A.user_id
+					, A.job_id
+					, A.SUBJECT
+					, A.MMS_MSG CONTENTS
+					, A.SEND_DATE
+					, A.DEST_COUNT
+					, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+					, CALLBACK
+				FROM  SDK_MMS_REPORT A
+				where 1=1
+				AND A.RESERVED1='SMARTDM'
+				<include refid="searchConditionsRsltDet1"/>
+				UNION ALL
+				SELECT 'SFX' stype
+					, '09' msg_code
+					, A.msg_id
+					, A.user_id
+					, A.job_id
+					, A.SUBJECT
+					, A.SMS_MSG CONTENTS
+					, A.SEND_DATE
+					, A.DEST_COUNT
+					, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+					, CALLBACK
+				FROM  SDK_SMS_REPORT A
+				where 1=1
+				AND A.RESERVED1='SMARTFAX'
+				<include refid="searchConditionsRsltDet1"/>
+				UNION ALL
+				SELECT 'SFX' stype
+					, '09' msg_code
+					, A.msg_id
+					, A.user_id
+					, A.job_id
+					, A.SUBJECT
+					, A.MMS_MSG CONTENTS
+					, A.SEND_DATE
+					, A.DEST_COUNT
+					, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+					, CALLBACK
+				FROM  SDK_MMS_REPORT A
+				where 1=1
+				AND A.RESERVED1='SMARTFAX'
+				<include refid="searchConditionsRsltDet1"/>
+			) A 
+		) AA
+	</select>
+	
+	<select id="selectRsltDetMiddle" parameterType="searchRsltDetVO" resultMap="rsltDetMiddleResultMap">
+		SELECT *, 
+			CAST((CAST( SUCC  as DECIMAL)/CAST(TOT_COUNT as DECIMAL)* 100) as DECIMAL) AS PER_SUCC , 
+			CAST((CAST( ING  as DECIMAL)/CAST( TOT_COUNT  as DECIMAL)* 100) as DECIMAL) AS PER_ING , 
+			CAST((CAST( TOT_FAIL  as DECIMAL)/CAST( TOT_COUNT  as DECIMAL)* 100) as DECIMAL) AS PER_FAIL 
+		FROM(
+		    SELECT min(case when result_name = 'TOT_COUNT' then RESULT_COUNT end) as TOT_COUNT
+				, min(case when result_name = 'SUCC' then RESULT_COUNT end) as SUCC
+				, min(case when result_name = 'ING' then RESULT_COUNT end) as ING
+				, min(case when result_name = 'NO_ANS' then RESULT_COUNT end) as NO_ANS
+				, min(case when result_name = 'BUSY_LINE' then RESULT_COUNT end) as BUSY_LINE
+				, min(case when result_name = 'NO_NUM' then RESULT_COUNT end) as NO_NUM
+				, min(case when result_name = 'TOT_FAIL' then RESULT_COUNT end) as TOT_FAIL
+			FROM (
+					SELECT 
+						COUNT(*) as RESULT_COUNT, 'TOT_COUNT' as RESULT_NAME
+					FROM (SELECT * FROM
+						<include refid="searchConditionsRsltDet"/>
+						 ) A 
+				UNION ALL
+					SELECT 
+						COUNT(*) as RESULT_COUNT, 'SUCC' as RESULT_NAME
+					FROM (SELECT * FROM 
+						<include refid="searchConditionsRsltDet"/>
+					     ) A
+					WHERE RESULT = 2 
+				UNION ALL
+					SELECT 
+						COUNT(*) as RESULT_COUNT, 'ING' as RESULT_NAME
+					FROM (SELECT * FROM 
+						<include refid="searchConditionsRsltDet"/>
+						) A
+					WHERE RESULT <![CDATA[ < ]]> 2 
+				UNION ALL
+					SELECT 
+						COUNT(*) as RESULT_COUNT, 'NO_ANS' as RESULT_NAME
+					FROM (SELECT * FROM 
+						<include refid="searchConditionsRsltDet"/>
+						) A
+					WHERE (RESULT = 4 OR TCS_RESULT = 201)
+				UNION ALL
+					SELECT 
+						COUNT(*) as RESULT_COUNT, 'BUSY_LINE' as RESULT_NAME
+					FROM (SELECT * FROM 
+						<include refid="searchConditionsRsltDet"/>
+						) A
+					WHERE (RESULT = 5 OR TCS_RESULT = 200)
+				UNION ALL
+					SELECT 
+						COUNT(*) as RESULT_COUNT, 'NO_NUM' as RESULT_NAME
+					FROM (SELECT * FROM 
+						<include refid="searchConditionsRsltDet"/>
+						) A
+					WHERE (RESULT = 6 OR TCS_RESULT IN (202, 203))
+				UNION ALL
+					SELECT 
+						COUNT(*) as RESULT_COUNT, 'TOT_FAIL' as RESULT_NAME
+					FROM (SELECT * FROM 
+						<include refid="searchConditionsRsltDet"/>
+						) A
+					WHERE RESULT <![CDATA[ > ]]> 2
+			) AA
+		) AAA
+	</select>
+	
+	<select id="selectRsltDetBottomList" parameterType="searchRsltDetVO" resultMap="rsltDetBottomResultMap">
+		SELECT *
+		FROM ( 
+			SELECT 
+				(@row_number:= @row_number + 1) AS row_number
+				, MSG_ID
+				, USER_ID 
+				, JOB_ID
+				, SUBJOB_ID
+				, SEND_DATE
+				, (case when DEST_NAME = 'nullval' OR  DEST_NAME is null then '수신자명 없음' else DEST_NAME END) DEST_NAME
+				, PHONE_NUMBER
+				, RESULT
+				, TCS_RESULT
+				,CASE WHEN A.RESULT = 2 THEN '성공' WHEN A.RESULT  <![CDATA[ < ]]> 2 THEN '대기' ELSE '실패' END AS RESULT_DESC
+			FROM 
+				(SELECT * FROM
+				<include refid="searchConditionsRsltDet"/>
+				) A,(SELECT @row_number:=0) AS t
+		order by A.SEND_DATE desc) AA
+		where AA.ROW_NUMBER between #{firstRecordIndex, jdbcType=NUMERIC} + 1 and #{firstRecordIndex, jdbcType=NUMERIC} + #{recordCountPerPage, jdbcType=NUMERIC}
+	</select>
+	
+	<select id="selectRsltDetBottomListExcel" parameterType="searchRsltDetVO" resultMap="rsltDetBottomResultMap">
+		SELECT *
+		FROM ( 
+			SELECT 
+				(@row_number:= @row_number + 1) AS row_number
+				, MSG_ID
+				, USER_ID 
+				, JOB_ID
+				, SUBJOB_ID
+				, SEND_DATE
+				, (case when DEST_NAME = 'nullval' OR  DEST_NAME is null then '수신자명 없음' else DEST_NAME END) DEST_NAME
+				, PHONE_NUMBER
+				, RESULT
+				, TCS_RESULT
+				,CASE WHEN A.RESULT = 2 THEN '성공' WHEN A.RESULT  <![CDATA[ < ]]> 2 THEN '대기' ELSE '실패' END AS RESULT_DESC
+			FROM 
+				(SELECT * FROM
+				<include refid="searchConditionsRsltDet"/>
+				) A,(SELECT @row_number:=0) AS t
+		order by A.SEND_DATE desc) AA
+	</select>
+		
+	<sql id="selectTransResvListSub1">
+	    SELECT 'SMS' stype
+			, '01' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_SMS_SEND A
+		where 1=1
+		AND A.RESERVED1 is null
+		<include refid="searchConditionsTransResv"/>
+		UNION ALL
+		SELECT 'LMS' stype
+			, '02' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_MMS_SEND A
+		where 1=1
+		AND A.CONTENT_COUNT = 0
+		AND A.RESERVED1 is null
+		<include refid="searchConditionsTransResv"/>
+		UNION ALL
+		SELECT 'MMS' stype
+			, '03' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_MMS_SEND A
+		where 1=1
+		AND A.CONTENT_COUNT > 0
+		AND A.RESERVED1 is null
+		<include refid="searchConditionsTransResv"/>
+		UNION ALL
+		SELECT 'FMS' stype
+			, '04' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_FMS_SEND A
+		where 1=1
+		<include refid="searchConditionsTransResv"/>
+		UNION ALL
+		SELECT 'VMS' stype
+			, '05' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_VMS_SEND A
+		where 1=1
+		AND A.MSG_SUBTYPE = '30'
+		<include refid="searchConditionsTransResv"/>
+		UNION ALL
+		SELECT 'VQR' stype
+			, '06' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_VMS_SEND A
+		where 1=1
+		AND A.MSG_SUBTYPE = '32'
+		<include refid="searchConditionsTransResv"/>
+		UNION ALL
+		SELECT 'SDM' stype
+			, '07' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_SMS_SEND A
+		where 1=1
+		AND A.RESERVED1='SMARTDM'
+		<include refid="searchConditionsTransResv"/>
+		UNION ALL
+		SELECT 'SDM' stype
+			, '08' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_MMS_SEND A
+		where 1=1
+		AND A.RESERVED1='SMARTDM'
+		<include refid="searchConditionsTransResv"/>
+		UNION ALL
+		SELECT 'SFX' stype
+			, '09' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_SMS_SEND A
+		where 1=1
+		AND A.RESERVED1='SMARTFAX'
+		<include refid="searchConditionsTransResv"/>
+		UNION ALL
+		SELECT 'SFX' stype
+			, '09' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_MMS_SEND A
+		where 1=1
+		AND A.RESERVED1='SMARTFAX'
+		<include refid="searchConditionsTransResv"/>
+	</sql>
+	<sql id="selectTransResvListSub2">
+	    SELECT 'SMS' stype
+			, '01' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_SMS_SEND A
+		where 1=1
+		AND A.RESERVED1 is null
+		<include refid="searchConditionsTransResv"/>
+		UNION ALL
+		SELECT 'LMS' stype
+			, '02' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_MMS_SEND A
+		where 1=1
+		AND A.CONTENT_COUNT = 0
+		AND A.RESERVED1 is null
+		<include refid="searchConditionsTransResv"/>
+		UNION ALL
+		SELECT 'MMS' stype
+			, '03' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_MMS_SEND A
+		where 1=1
+		AND A.CONTENT_COUNT > 0
+		AND A.RESERVED1 is null
+		<include refid="searchConditionsTransResv"/>
+		UNION ALL
+		SELECT 'FMS' stype
+			, '04' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_FMS_SEND A
+		where 1=1
+		<include refid="searchConditionsTransResv"/>
+		UNION ALL
+		SELECT 'VMS' stype
+			, '05' msg_code
+			, A.msg_id
+			, A.user_id
+			, A.SUBJECT
+			, A.DEST_COUNT
+			, A.SEND_DATE
+			, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+		FROM  SDK_VMS_SEND A
+		where 1=1
+		AND A.MSG_SUBTYPE = '30'
+		<include refid="searchConditionsTransResv"/>
+	</sql>
+	<select id="selectTransResvList" parameterType="searchTransResvVO" resultMap="transResvResultMap">
+	    SELECT * 
+	    FROM (
+		    SELECT   
+		             (@row_number:= @row_number + 1) AS row_number
+	               , A.SEND_DATE SEND_DATE
+		           , CASE 
+					  WHEN A.stype  =  'SMS' THEN '문자메시지(SMS)'
+					  WHEN A.stype  =  'MMS' THEN '멀티미디어메시지(MMS)'
+					  WHEN A.stype  =  'LMS' THEN '장문메시지(LMS)'
+					  WHEN A.stype  =  'FMS' THEN '팩스메시지(FMS)'
+					  WHEN A.stype  =  'VMS' THEN '음성메시지(VMS)'
+					  WHEN A.stype  =  'VQR' THEN '설문조사(VMS)'
+					  WHEN A.stype  =  'SDM' THEN 'SMART DM(Smart DM)'
+					  WHEN A.stype  =  'SFX' THEN 'SMART FAX(Smart FAX)'
+					  ELSE '' 
+					 END MSG_TYPE
+					, A.MSG_CODE
+					, (case when A.SUBJECT = '' OR  A.SUBJECT is null then '제목없음' else A.SUBJECT END) SUBJECT
+					, A.DEST_COUNT  
+					FROM 
+					(
+					<include refid="selectTransResvListSub2"/> 
+					) A
+					JOIN ${umsdb}.TB_UMS_USER C
+					ON A.USER_ID = C.USER_ID 
+					,(SELECT @row_number:=0) AS t
+					<include refid="searchConditionsTransResv1"/>
+		order by A.SEND_DATE desc) AA
+		where ROW_NUMBER between #{firstRecordIndex, jdbcType=NUMERIC} + 1 and #{firstRecordIndex, jdbcType=NUMERIC} + #{recordCountPerPage, jdbcType=NUMERIC}
+	</select>
+	
+	<select id="selectTransResvListCount" parameterType="searchTransResvVO" resultType="java.lang.Integer">
+	    SELECT COUNT(*) as count
+	    FROM (
+		    SELECT   A.SEND_DATE SEND_DATE
+		           , CASE 
+					  WHEN A.stype  =  'SMS' THEN '문자메시지(SMS)'
+					  WHEN A.stype  =  'MMS' THEN '멀티미디어메시지(MMS)'
+					  WHEN A.stype  =  'LMS' THEN '장문메시지(LMS)'
+					  WHEN A.stype  =  'FMS' THEN '팩스메시지(FMS)'
+					  WHEN A.stype  =  'VMS' THEN '음성메시지(VMS)'
+					  WHEN A.stype  =  'VQR' THEN '설문조사(VMS)'
+					  WHEN A.stype  =  'SDM' THEN 'SMART DM(Smart DM)'
+					  WHEN A.stype  =  'SFX' THEN 'SMART FAX(Smart FAX)'
+					  ELSE '' 
+					 END MSG_TYPE
+					, A.MSG_CODE
+					, A.SUBJECT
+					, A.DEST_COUNT  
+					FROM 
+					(
+					<include refid="selectTransResvListSub2"/>
+					) A
+					JOIN ${umsdb}.TB_UMS_USER C
+					ON A.USER_ID = C.USER_ID 
+					<include refid="searchConditionsTransResv1"/>
+		) AA
+	</select>
+	
+	<select id="selectResvDetTop" parameterType="searchResvDetVO" resultMap="resvDetTopResultMap">
+		SELECT * 
+	    FROM (
+		    SELECT A.USER_ID
+		    		, MSG_ID
+		    		, A.SEND_DATE SEND_DATE
+		           , CASE 
+					  WHEN A.stype  =  'SMS' THEN '문자메시지(SMS)'
+					  WHEN A.stype  =  'MMS' THEN '멀티미디어메시지(MMS)'
+					  WHEN A.stype  =  'LMS' THEN '장문메시지(LMS)'
+					  WHEN A.stype  =  'FMS' THEN '팩스메시지(FMS)'
+					  WHEN A.stype  =  'VMS' THEN '음성메시지(VMS)'
+					  WHEN A.stype  =  'VQR' THEN '설문조사(VMS)'
+					  WHEN A.stype  =  'SDM' THEN 'SMART DM(Smart DM)'
+					  WHEN A.stype  =  'SFX' THEN 'SMART FAX(Smart FAX)'
+					  ELSE '' 
+					 END MSG_TYPE
+					, A.MSG_CODE
+					, (case when A.SUBJECT = '' OR  A.SUBJECT is null then '제목없음' else A.SUBJECT END) SUBJECT
+					, A.CONTENTS
+					, A.DEST_COUNT
+					, A.CALLBACK 
+			FROM (
+				<if test="msgType != null and msgType != '' ">
+					<choose>
+						<when test="msgType == '01'">
+						SELECT 'SMS' stype
+							, '01' msg_code
+							, A.msg_id
+							, A.user_id
+							, A.SUBJECT
+							, A.SMS_MSG CONTENTS
+							, A.DEST_COUNT
+							, A.CALLBACK
+							, A.SEND_DATE
+							, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+						FROM  SDK_SMS_SEND A
+						where 1=1
+						AND A.RESERVED1 is null
+						<include refid="searchConditionResvDet1"/>
+						</when>
+						
+						<when test="msgType == '02">
+						SELECT 'LMS' stype
+							, '02' msg_code
+							, A.msg_id
+							, A.user_id
+							, A.SUBJECT
+							, A.MMS_MSG CONTENTS
+							, A.DEST_COUNT
+							, A.CALLBACK
+							, A.SEND_DATE
+							, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+						FROM  SDK_MMS_SEND A
+						where 1=1
+						AND A.RESERVED1 is null
+						<include refid="searchConditionResvDet1"/>
+						</when>
+						
+						<when test="msgType == '03">
+						SELECT 'MMS' stype
+							, '03' msg_code
+							, A.msg_id
+							, A.user_id
+							, A.SUBJECT
+							, A.MMS_MSG CONTENTS
+							, A.DEST_COUNT
+							, A.CALLBACK
+							, A.SEND_DATE
+							, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+						FROM  SDK_MMS_SEND A
+						where 1=1
+						AND A.CONTENT_COUNT > 0
+						AND A.RESERVED1 is null
+						<include refid="searchConditionResvDet1"/>
+						</when>
+						
+						<when test="msgType == '04">
+						SELECT 'FMS' stype
+							, '04' msg_code
+							, A.msg_id
+							, A.user_id
+							, A.SUBJECT
+							, '' CONTENTS
+							, A.DEST_COUNT
+							, A.CALLBACK
+							, A.SEND_DATE
+							, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+						FROM  SDK_FMS_SEND A
+						where 1=1
+						<include refid="searchConditionResvDet1"/>
+						</when>
+						
+						<when test="msgType == '05">
+						SELECT 'VMS' stype
+							, '05' msg_code
+							, A.msg_id
+							, A.user_id
+							, A.SUBJECT
+							, '' CONTENTS
+							, A.DEST_COUNT
+							, A.CALLBACK
+							, A.SEND_DATE
+							, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+						FROM  SDK_VMS_SEND A
+						where 1=1
+						AND A.MSG_SUBTYPE = '30'
+						<include refid="searchConditionResvDet1"/>
+						</when>
+						
+						<when test="msgType == '06">
+						SELECT 'VQR' stype
+							, '06' msg_code
+							, A.msg_id
+							, A.user_id
+							, A.SUBJECT
+							, '' CONTENTS
+							, A.DEST_COUNT
+							, A.CALLBACK
+							, A.SEND_DATE
+							, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+						FROM  SDK_VMS_SEND A
+						where 1=1
+						AND A.MSG_SUBTYPE = '32'
+						<include refid="searchConditionResvDet1"/>
+						</when>
+						
+						<when test="msgType == '07">
+						SELECT 'SDM' stype
+							, '07' msg_code
+							, A.msg_id
+							, A.user_id
+							, A.SUBJECT
+							, A.SMS_MSG CONTENTS
+							, A.DEST_COUNT
+							, A.CALLBACK
+							, A.SEND_DATE
+							, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+						FROM  SDK_SMS_SEND A
+						where 1=1
+						AND A.RESERVED1='SMARTDM'
+						<include refid="searchConditionResvDet1"/>
+						</when>
+						
+						<when test="msgType == '08">
+						SELECT 'SDM' stype
+							, '08' msg_code
+							, A.msg_id
+							, A.user_id
+							, A.SUBJECT
+							, A.MMS_MSG CONTENTS
+							, A.DEST_COUNT
+							, A.CALLBACK
+							, A.SEND_DATE
+							, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+						FROM  SDK_MMS_SEND A
+						where 1=1
+						AND A.RESERVED1='SMARTDM'
+						<include refid="searchConditionResvDet1"/>
+						</when>
+						
+						<when test="msgType == '09">
+						SELECT * FROM(
+							SELECT 'SFX' stype
+								, '09' msg_code
+								, A.msg_id
+								, A.user_id
+								, A.SUBJECT
+								, A.SMS_MSG CONTENTS
+								, A.DEST_COUNT
+								, A.CALLBACK
+								, A.SEND_DATE
+								, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+							FROM  SDK_SMS_SEND A
+							where 1=1
+							AND A.RESERVED1='SMARTFAX'
+						<include refid="searchConditionResvDet1"/>
+							UNION ALL
+							SELECT 'SFX' stype
+								, '09' msg_code
+								, A.msg_id
+								, A.user_id
+								, A.SUBJECT
+								, A.MMS_MSG CONTENTS
+								, A.DEST_COUNT
+								, A.CALLBACK
+								, A.SEND_DATE
+								, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+							FROM  SDK_MMS_SEND A
+							where 1=1
+							AND A.RESERVED1='SMARTFAX'
+						<include refid="searchConditionResvDet1"/>
+							) A
+						</when>
+					</choose>
+				</if>
+			) A
+		) AA
+	</select>
+	
+	<select id="selectResvDetBottomList" parameterType="searchResvDetVO" resultMap="resvDetBottomResultMap">
+	
+	</select>
+	
+	<select id="selectResvDetBottomListCount" parameterType="searchResvDetVO" resultType="java.lang.Integer">
+	
+	</select>
+</mapper>

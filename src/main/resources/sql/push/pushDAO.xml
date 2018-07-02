@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.com//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bccns.umsserviceweb.push.dao.PushDAO">
+	<!-- http://mybatis.github.io/mybatis-3/ko/sqlmap-xml.html 참조 -->
+	<!-- result map 에  type 은 typeAliases 에 정의한 type, id 는 sql 에서 resultMap 에 사용할 값임. -->
+	 
+	<resultMap type="pmsSendVO" id="pmsSendResultMap">
+    	<result property="apiKey" column="api_key"/>
+		<result property="regId" column="reg_id"/>
+		<result property="num" column="num"/>
+		<result property="sendDt" column="send_dt"/>
+		<result property="sender" column="sender"/>
+		<result property="title" column="title"/>
+		<result property="message" column="message"/>
+		<result property="phoneNo" column="phone_no"/>
+		<result property="regDt" column="reg_dt"/>
+    </resultMap>
+    
+	<resultMap type="PmsPointMsgVO" id="pmsPointMsgResultMap">
+    	<result property="macAddr" column="mac_addr"/>
+		<result property="msgNo" column="msg_no"/>
+		<result property="subject" column="subject"/>
+		<result property="contents1" column="contents1"/>
+		<result property="contents2" column="contents2"/>
+		<result property="contents3" column="contents3"/>
+		<result property="contents4" column="contents4"/>
+		<result property="contents5" column="contents5"/>
+		<result property="contents6" column="contents6"/>
+		<result property="contents7" column="contents7"/>
+		<result property="contents8" column="contents8"/>
+		<result property="contents9" column="contents9"/>
+    </resultMap>
+    
+	
+	<sql id="searchConditions1">
+        <where>
+          <if test="phoneNo != null and phoneNo != ''">
+                AND phone_no = #{phoneNo, jdbcType=VARCHAR}
+          </if>
+        </where>
+    </sql> 
+    
+	<insert id="insertPushRegId" parameterType="reqBodyPUSH0100VO">
+        INSERT INTO push.TB_PUSH_RECV_LIST
+           (   phone_no
+		      ,reg_id
+		      ,reg_dt
+		   )
+     VALUES
+           (
+               #{phoneNo  , jdbcType=VARCHAR}
+			 , #{regId    , jdbcType=VARCHAR}
+			 , sysdate()   
+			)
+    </insert>
+    
+    <select id="selectPushRegId" parameterType="pmsSendVO" resultMap="pmsSendResultMap">
+		    SELECT reg_id
+			      ,phone_no
+			      ,reg_dt
+			  FROM push.TB_PUSH_RECV_LIST
+			  <include refid="searchConditions1"/>
+    </select>
+    
+     <select id="selectPushPointMsg" parameterType="PmsPointMsgVO" resultMap="pmsPointMsgResultMap">
+		    SELECT B.MAC_ADDR
+		         , A.MSG_NO
+				 , A.SUBJECT
+		         , A.CONTENTS1
+		         , A.CONTENTS2
+		         , A.CONTENTS3
+		         , A.CONTENTS4
+		         , A.CONTENTS5
+		         , A.CONTENTS6
+		         , A.CONTENTS7
+		         , A.CONTENTS8
+		         , A.CONTENTS9
+		         , A.CONTENTS10 
+			  FROM ${umsdb}.TB_UMS_MSG A
+			  JOIN ${umsdb}.TB_PUSH_POINT_LIST B
+			  ON A.MSG_NO = B.MSG_NO
+			  where MAC_ADDR = #{macAddr, jdbcType=VARCHAR}
+    </select>
+    
+    
+</mapper>

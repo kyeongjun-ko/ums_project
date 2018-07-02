@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.com//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bccns.umsserviceweb.mgr.dao.AttachFileDAO">
+	<!-- http://mybatis.github.io/mybatis-3/ko/sqlmap-xml.html 참조 -->
+	<!-- result map 에  type 은 typeAliases 에 정의한 type, id 는 sql 에서 resultMap 에 사용할 값임. -->
+	
+	<resultMap type="attachFileVO" id="attachFileResultMap">
+        <result property="userId" column="user_id"/>
+		<result property="grpCd" column="grp_cd"/>
+		<result property="grpNo" column="grp_no"/>
+		<result property="fileNo" column="file_no"/>
+		<result property="msgNo" column="msg_no"/>
+		<result property="fileType" column="file_type"/>
+		<result property="fileSize" column="file_size"/>
+		<result property="fileDir" column="file_dir"/>
+		<result property="fileNm" column="file_nm"/>
+		<result property="instDt" column="inst_dt"/>
+		<result property="instId" column="inst_id"/>
+		<result property="updtDt" column="updt_dt"/>
+		<result property="updtId" column="updt_id"/>
+    </resultMap>
+	  
+    
+	<insert id="insertAttachFile" parameterType="attachFileVO">
+        INSERT INTO ${umsdb}.TB_UMS_FILE
+           (   USER_ID
+			 , GRP_CD
+			 , GRP_NO
+			 , FILE_NO 
+			 , MSG_NO
+			 , FILE_TYPE
+			 , FILE_SIZE
+			 , FILE_DIR
+			 , FILE_NM
+			 , INST_DT
+			 , INST_ID
+			 , UPDT_DT
+			 , UPDT_ID)
+     VALUES
+           (
+               #{userId     ,jdbcType=VARCHAR}
+			 , #{grpCd      ,jdbcType=VARCHAR}
+			 , #{grpNo      ,jdbcType=VARCHAR} 
+			 , ${umsdb}.nextval('TB_UMS_FILE.FILE_NO')
+			 , #{msgNo      ,jdbcType=VARCHAR}
+			 , #{fileType   ,jdbcType=VARCHAR}
+			 , #{fileSize   ,jdbcType=VARCHAR}
+			 , #{fileDir    ,jdbcType=VARCHAR}
+			 , #{fileNm     ,jdbcType=VARCHAR}  
+			 , #{instDt     , jdbcType=VARCHAR}
+			 , #{instId     , jdbcType=VARCHAR}
+			 , #{updtDt     , jdbcType=VARCHAR}
+			 , #{updtId     , jdbcType=VARCHAR}   
+			)
+    </insert>
+	
+    <delete id="deleteAttachFile" parameterType="attachFileVO">
+        DELETE FROM ${umsdb}.TB_UMS_FILE
+        WHERE   USER_ID = #{userId, jdbcType=VARCHAR}
+         	AND GRP_CD  = #{grpCd, jdbcType=VARCHAR} 
+			AND FILE_NO  = #{fileNo, jdbcType=VARCHAR}
+    </delete>
+	 
+</mapper>

@@ -1,0 +1,689 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.com//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bccns.umsserviceweb.push.dao.PrivatePushDAO">
+	<!-- http://mybatis.github.io/mybatis-3/ko/sqlmap-xml.html 참조 -->
+	<!-- result map 에  type 은 typeAliases 에 정의한 type, id 는 sql 에서 resultMap 에 사용할 값임. -->
+	 
+	<resultMap type="pmsSendVO" id="pmsSendResultMap">
+    	<result property="apiKey" column="api_key"/>
+		<result property="regId" column="reg_id"/>
+		<result property="num" column="num"/>
+		<result property="sendDt" column="send_dt"/>
+		<result property="sender" column="sender"/>
+		<result property="msgType" column="msg_type"/>
+		<result property="title" column="title"/>
+		<result property="message" column="message"/>
+		<result property="phoneNo" column="phone_no"/>
+		<result property="regDt" column="reg_dt"/>
+		<result property="reserveDt" column="reserve_dt"/>
+		<result property="fileSize" column="file_size"/>
+    </resultMap>
+    
+    
+	<resultMap type="pmsTransStatVO" id="transStatResultMap">
+		<result property="sendDate" column="send_date"/>
+	    <result property="rowNumber" column="row_number"/>
+		<result property="userId" column="user_id"/>
+		<result property="userNm" column="user_nm"/>
+		<result property="sendTryCnt" column="send_try_cnt"/>
+		<result property="sendFailCnt" column="send_fail_cnt"/>
+		<result property="sendWaitCnt" column="send_wait_cnt"/>
+		<result property="sendSucCnt" column="send_suc_cnt"/>
+		<result property="sendTextCnt" column="send_text_cnt"/>
+		<result property="sendHtmlCnt" column="send_html_cnt"/>
+		<result property="sendImageCnt" column="send_image_cnt"/>
+    </resultMap>
+    
+    <resultMap type="pmsTransRsltVO" id="transRsltResultMap">        
+        <result property="msgId" column="msg_id"/>
+     	<result property="rowNumber" column="row_number"/>
+       	<result property="userId" column="user_id"/>
+        <result property="msgType" column="msg_type"/>
+        <result property="phoneNo" column="phone_no"/>
+        <result property="senderNo" column="sender_no"/>
+        <result property="msgTitle" column="msg_title"/>
+        <result property="msgContent" column="msg_content"/>
+ 		<result property="regDt" column="reg_dt"/>
+ 		<result property="updDt" column="upd_dt"/>
+ 		<result property="sendDt" column="send_dt"/>
+ 		<result property="reserveDt" column="reserve_dt"/>
+ 		<result property="stateCd" column="state_cd"/>
+ 		<result property="fileSize" column="file_size"/>
+    </resultMap>
+    
+    <resultMap type="rsltDetTopVO" id="rsltDetTopResultMap">
+        <result property="jobId" column="JOB_ID"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="msgId" column="MSG_ID"/>
+		<result property="msgType" column="MSG_TYPE"/>
+		<result property="msgCode" column="MSG_CODE"/>
+		<result property="subject" column="SUBJECT"/>
+		<result property="contents" column="CONTENTS"/>
+		<result property="sendDate" column="SEND_DATE"/>
+		<result property="destCount" column="DEST_COUNT"/>
+		<result property="callback" column="CALLBACK"/>
+    </resultMap>
+    
+    <resultMap type="rsltDetMiddleVO" id="rsltDetMiddleResultMap">
+    	<result property="totCount" column="TOT_COUNT"/>
+    	<result property="sucCount" column="SUCC"/>
+    	<result property="ingCount" column="ING"/>
+    	<result property="noAnsCount" column="NO_ANS"/>
+    	<result property="busyLineCount" column="BUSY_LINE"/>
+    	<result property="noNumCount" column="NO_NUM"/>
+    	<result property="totFailCount" column="TOT_FAIL"/>
+    	<result property="perSucc" column="PER_SUCC"/>
+    	<result property="perIng" column="PER_ING"/>
+    	<result property="perFail" column="PER_FAIL"/>
+    </resultMap>
+    
+    <resultMap type="rsltDetBottomVO" id="rsltDetBottomResultMap">
+    	<result property="rowNumber" column="ROW_NUMBER"/>
+        <result property="msgId" column="MSG_ID"/>
+        <result property="jobId" column="JOB_ID"/>
+        <result property="subJobId" column="SUBJOB_ID"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="destName" column="DEST_NAME"/>
+        <result property="phoneNumber" column="PHONE_NUMBER"/>
+        <result property="sendDate" column="SEND_DATE"/>
+        <result property="result" column="RESULT"/>
+        <result property="tcsResult" column="TCS_RESULT"/>
+        <result property="resultDesc" column="RESULT_DESC"/>
+    </resultMap>
+	
+    <insert id="insertPushTestData" parameterType="pmsSendVO">
+	     insert into MSG_QUEUE (phone_no,sender_no, msg_type, msg_title, msg_content
+	                          , reg_dt, state_cd, reserve_dt, file_size, user_id)
+	     values (#{phoneNo},#{sender},#{msgType},#{title}, #{message}
+	            , sysdate(), '0', #{reserveDt},#{fileSize}, #{userId})
+	</insert>
+	
+    
+    <sql id="searchConditionsTransStatA1">
+          <if test="userId != null and userId != '' and (userId != 'ALL' or (userId == 'ALL' and userlv == '10'))">
+                AND A1.user_id = #{userId, jdbcType=VARCHAR}
+          </if>
+          <if test="srchRegDateStart != null and srchRegDateStart != '' and srchRegDateEnd != null and srchRegDateEnd != ''">
+                AND substring(A1.reserve_dt,1,8)  between replace(#{srchRegDateStart, jdbcType=VARCHAR}, '/', '') and replace(#{srchRegDateEnd, jdbcType=VARCHAR}, '/', '')
+          </if>          
+    </sql>
+    <sql id="searchConditionsTransStatA2">
+          <if test="userId != null and userId != '' and (userId != 'ALL' or (userId == 'ALL' and userlv == '10'))">
+                AND A2.user_id = #{userId, jdbcType=VARCHAR}
+          </if>
+          <if test="srchRegDateStart != null and srchRegDateStart != '' and srchRegDateEnd != null and srchRegDateEnd != ''">
+                AND substring(A2.reserve_dt,1,8)  between replace(#{srchRegDateStart, jdbcType=VARCHAR}, '/', '') and replace(#{srchRegDateEnd, jdbcType=VARCHAR}, '/', '')
+          </if>          
+    </sql>
+    
+    <sql id="searchConditionsTransStat1">
+	    <where>
+	      <if test="userlv == '20' or userlv == '30'">
+	          AND C.user_lv  <![CDATA[ <= ]]> #{userlv, jdbcType=VARCHAR}
+	          AND C.dept = #{dept, jdbcType=VARCHAR}
+	          AND C.company = #{company, jdbcType=VARCHAR} 
+	      </if>
+	      
+	      <if test="userlv == '40'">
+	          AND C.user_lv  <![CDATA[ <= ]]> #{userlv, jdbcType=VARCHAR}
+	          AND C.company = #{company, jdbcType=VARCHAR} 
+	      </if>
+	      
+	      <if test="userlv == '10'">
+	          AND C.user_id = #{userId, jdbcType=VARCHAR}
+	      </if> 
+	      <if test="userlv == '99'">
+	          AND 1=1 
+	      </if> 
+	    </where>
+    </sql>   
+    
+    <sql id="searchConditionsTransRslt">
+        <if test="userId != null and userId != '' and userId != 'ALL'">
+              AND A.user_id = #{userId, jdbcType=VARCHAR}
+        </if>
+        <if test="srchRegDateStart != null and srchRegDateStart != '' and srchRegDateEnd != null and srchRegDateEnd != ''">
+                AND substring(A.reserve_dt,1,8)  between replace(#{srchRegDateStart, jdbcType=VARCHAR}, '/', '') and replace(#{srchRegDateEnd, jdbcType=VARCHAR}, '/', '')
+        </if>
+    </sql>
+    
+	<sql id="searchConditionsTransRslt1">
+	    <where>
+	      <if test="searchType == '01'">
+	          <if test="srchContent != null and srchContent != ''">
+	                AND A.msg_title like CONCAT('%',#{srchContent, jdbcType=VARCHAR} ,'%')
+	          </if>
+	      </if>
+	      
+	      <if test="msgType != null and msgType != ''">
+	          AND A.msg_type =  #{msgType, jdbcType=VARCHAR}
+	      </if>
+	      <if test="userlv == '20' or userlv == '30'">
+	          AND C.user_lv  <![CDATA[ <= ]]> #{userlv, jdbcType=VARCHAR}
+	          AND C.dept = #{dept, jdbcType=VARCHAR}
+	          AND C.company = #{company, jdbcType=VARCHAR} 
+	      </if>
+	      
+	      <if test="userlv == '40'">
+	          AND C.user_lv  <![CDATA[ <= ]]> #{userlv, jdbcType=VARCHAR}
+	          AND C.company = #{company, jdbcType=VARCHAR} 
+	      </if>
+	      <if test="userlv == '10'">
+	          AND C.user_id = #{userId, jdbcType=VARCHAR}
+	      </if> 
+	      <if test="userlv == '99'">
+	          AND 1=1 
+	      </if> 
+	    </where>
+    </sql> 
+    
+    <sql id="searchConditionsRsltDet">
+    	SELECT  A.msg_type  msg_type
+		    , A.phone_no phone_no
+		    , A.sender_no sender_no
+			, A.seq msg_id
+			, A.user_id
+			, A.msg_title msg_title
+			, A.msg_content msg_content
+			, A.reg_dt reg_dt 
+			, A.upd_dt upd_dt
+			, A.send_dt send_dt
+			, A.reserve_dt reserve_dt
+			, A.state_cd state_cd
+			, A.file_size file_size
+		FROM  push.msg_report A
+		where 1=1
+		<include refid="searchConditionsRsltDet1"/>
+		UNION ALL
+		SELECT  A.msg_type  msg_type
+	        , A.phone_no phone_no
+	        , A.sender_no sender_no
+			, A.seq msg_id
+			, A.user_id
+			, A.msg_title msg_title
+			, A.msg_content msg_content
+			, A.reg_dt reg_dt 
+			, A.upd_dt upd_dt
+			, A.send_dt send_dt
+			, A.reserve_dt reserve_dt
+			, A.state_cd state_cd
+			, A.file_size file_size
+		FROM  push.msg_report_fail A
+		where 1=1
+		<include refid="searchConditionsRsltDet1"/>
+    </sql>
+    
+    
+    <sql id="searchConditionsRsltDet1">
+        <if test="msg_id != null and msg_id != ''">
+			AND A.seq = #{msg_id, jdbcType=VARCHAR}
+        </if>
+    </sql>
+    
+    <sql id="searchConditionsRsltDet2">
+        <if test="msg_id != null and msg_id != ''">
+			AND A.seq = #{msg_id, jdbcType=VARCHAR}
+        </if>
+    </sql>
+    
+    
+    <select id="selectTransStatList" parameterType="searchTransStatVO" resultMap="transStatResultMap">
+       select * from (
+	    select  (@row_number:= @row_number + 1) AS row_number
+       		<choose>
+		        <when test="statType == '02'">
+		        , AAA.send_date 
+		        </when>
+		        <otherwise>
+		        , AAA.USER_ID
+				, AAA.USER_NM
+		        </otherwise>
+		    </choose>
+			, IFNULL(AAA.send_try_cnt,0) send_try_cnt
+			, IFNULL(AAA.send_fail_cnt,0) send_fail_cnt
+			, IFNULL(AAA.send_wait_cnt,0) send_wait_cnt
+			, IFNULL(AAA.send_suc_cnt,0) send_suc_cnt
+			, IFNULL(AAA.send_text_cnt,0) send_text_cnt
+			, IFNULL(AAA.send_html_cnt,0) send_html_cnt
+			, IFNULL(AAA.send_image_cnt,0) send_image_cnt 
+		from (	 
+		    select
+		    <choose>
+		        <when test="statType == '02'">
+		           SUBSTRING(AA.send_date,1,8) send_date
+		        </when>
+		        <otherwise>
+		          AA.USER_ID USER_ID
+		        , AA.USER_NM USER_NM
+		        </otherwise>
+		    </choose>
+			, SUM(CASE WHEN AA.msg_id <![CDATA[ >= ]]> 0 THEN 1 ELSE 0 END) send_try_cnt
+			, SUM(CASE WHEN AA.result <![CDATA[ >= ]]> 4 THEN 1 ELSE 0 END) send_fail_cnt
+			, SUM(CASE WHEN AA.result <![CDATA[ < ]]> 3 THEN 1 ELSE 0 END) send_wait_cnt
+			, SUM(CASE WHEN AA.result = 3 THEN 1 ELSE 0 END) send_suc_cnt
+			, SUM(CASE WHEN AA.stype = '01' AND  AA.result = 3 THEN 1 ELSE 0 END) send_text_cnt
+			, SUM(CASE WHEN AA.stype = '02' AND  AA.result = 3 THEN 1 ELSE 0 END) send_html_cnt
+			, SUM(CASE WHEN AA.stype = '03' AND  AA.result = 3 THEN 1 ELSE 0 END) send_image_cnt
+			from (	 
+		    SELECT A.seq MSG_ID
+		        , C.USER_ID
+				, C.USER_NM
+				, A.phone_no phone_number
+				, A.msg_type stype
+				, A.reserve_dt send_date
+				, '' dm_fg
+				, A.read_dt conf_date
+				, '' res_date
+				, A.msg_title name
+				, A.msg_content contents
+				, A.state_cd RESULT
+				, '' TCS_RESULT
+				FROM 
+				(
+				SELECT A1.seq,
+					   A1.phone_no,
+					   A1.sender_no,
+					   A1.msg_type,
+					   A1.msg_title,
+					   A1.msg_content,
+					   A1.reg_dt,
+					   A1.upd_dt,
+					   A1.send_dt,
+					   A1.state_cd,
+					   A1.read_dt,
+					   A1.reserve_dt,
+					   A1.file_size,
+					   A1.user_id
+				FROM  push.msg_report A1
+				where 1=1
+				<include refid="searchConditionsTransStatA1"/>
+				union all
+				SELECT A2.seq,
+					   A2.phone_no,
+					   A2.sender_no,
+					   A2.msg_type,
+					   A2.msg_title,
+					   A2.msg_content,
+					   A2.reg_dt,
+					   A2.upd_dt,
+					   A2.send_dt,
+					   A2.state_cd,
+					   A2.read_dt,
+					   A2.reserve_dt,
+					   A2.file_size,
+					   A2.user_id
+				FROM  push.msg_report_fail A2
+				where 1=1 
+				<include refid="searchConditionsTransStatA2"/>
+				) A
+				 JOIN ${umsdb}.TB_UMS_USER C
+				 ON A.USER_ID = C.USER_ID
+				 <include refid="searchConditionsTransStat1"/>
+				 ) AA
+				group by  <if test = "statType == '01'"> AA.USER_ID , AA.USER_NM </if>
+				<if test = "statType == '02'">SUBSTRING(AA.send_date,1,8)</if>
+				<choose>
+		        <when test="statType == '02'">
+		            order by   SUBSTRING(AA.send_date,1,8)
+		        </when>
+		        <otherwise>
+		            order by  AA.USER_ID 
+		        </otherwise>
+		    </choose>			
+				) AAA ,(SELECT @row_number:=0) AS t ) A 
+	     where row_number between #{firstRecordIndex, jdbcType=NUMERIC} + 1 and #{firstRecordIndex, jdbcType=NUMERIC} + #{recordCountPerPage, jdbcType=NUMERIC}
+    </select>
+     
+	<select id="selectTransStatListCount" parameterType="searchTransStatVO" resultType="java.lang.Integer">
+         select count(*)  as count
+		        from (	 
+			select  (@row_number:= @row_number + 1) AS row_number
+       		<choose>
+		        <when test="statType == '02'">
+		        , AAA.send_date 
+		        </when>
+		        <otherwise>
+		        , AAA.USER_ID
+				, AAA.USER_NM
+		        </otherwise>
+		    </choose>
+			, IFNULL(AAA.send_try_cnt,0) send_try_cnt
+			, IFNULL(AAA.send_fail_cnt,0) send_fail_cnt
+			, IFNULL(AAA.send_wait_cnt,0) send_wait_cnt
+			, IFNULL(AAA.send_suc_cnt,0) send_suc_cnt
+			, IFNULL(AAA.send_text_cnt,0) send_text_cnt
+			, IFNULL(AAA.send_html_cnt,0) send_html_cnt
+			, IFNULL(AAA.send_image_cnt,0) send_image_cnt
+		from (	 
+		    select
+		    <choose>
+		        <when test="statType == '02'">
+		           SUBSTRING(AA.send_date,1,8) send_date
+		        </when>
+		        <otherwise>
+		          AA.USER_ID USER_ID
+		        , AA.USER_NM USER_NM
+		        </otherwise>
+		    </choose>
+			, SUM(CASE WHEN AA.msg_id <![CDATA[ >= ]]> 0 THEN 1 ELSE 0 END) send_try_cnt
+			, SUM(CASE WHEN AA.result <![CDATA[ >= ]]> 4 THEN 1 ELSE 0 END) send_fail_cnt
+			, SUM(CASE WHEN AA.result <![CDATA[ < ]]> 3 THEN 1 ELSE 0 END) send_wait_cnt
+			, SUM(CASE WHEN AA.result = 3 THEN 1 ELSE 0 END) send_suc_cnt
+			, SUM(CASE WHEN AA.stype = '01' AND  AA.result = 3 THEN 1 ELSE 0 END) send_text_cnt
+			, SUM(CASE WHEN AA.stype = '02' AND  AA.result = 3 THEN 1 ELSE 0 END) send_html_cnt
+			, SUM(CASE WHEN AA.stype = '03' AND  AA.result = 3 THEN 1 ELSE 0 END) send_image_cnt
+			from (	 
+		    SELECT A.seq MSG_ID
+		        , C.USER_ID
+				, C.USER_NM
+				, A.phone_no phone_number
+				, A.msg_type stype
+				, A.reserve_dt send_date
+				, '' dm_fg
+				, A.read_dt conf_date
+				, '' res_date
+				, A.msg_title name
+				, A.msg_content contents
+				, A.state_cd RESULT
+				, '' TCS_RESULT
+				FROM 
+				(
+				SELECT A1.seq,
+					   A1.phone_no,
+					   A1.sender_no,
+					   A1.msg_type,
+					   A1.msg_title,
+					   A1.msg_content,
+					   A1.reg_dt,
+					   A1.upd_dt,
+					   A1.send_dt,
+					   A1.state_cd,
+					   A1.read_dt,
+					   A1.reserve_dt,
+					   A1.file_size,
+					   A1.user_id
+				FROM  push.msg_report A1
+				where 1=1
+				<include refid="searchConditionsTransStatA1"/>
+				union all
+				SELECT A2.seq,
+					   A2.phone_no,
+					   A2.sender_no,
+					   A2.msg_type,
+					   A2.msg_title,
+					   A2.msg_content,
+					   A2.reg_dt,
+					   A2.upd_dt,
+					   A2.send_dt,
+					   A2.state_cd,
+					   A2.read_dt,
+					   A2.reserve_dt,
+					   A2.file_size,
+					   A2.user_id
+				FROM  push.msg_report_fail A2
+				where 1=1 
+				<include refid="searchConditionsTransStatA2"/>
+				) A
+				 JOIN ${umsdb}.TB_UMS_USER C
+				 ON A.USER_ID = C.USER_ID
+				 <include refid="searchConditionsTransStat1"/>
+				 ) AA
+				group by  <if test = "statType == '01'"> AA.USER_ID , AA.USER_NM </if>
+				<if test = "statType == '02'">SUBSTRING(AA.send_date,1,8)</if>
+				<choose>
+		        <when test="statType == '02'">
+		            order by   SUBSTRING(AA.send_date,1,8)
+		        </when>
+		        <otherwise>
+		            order by  AA.USER_ID 
+		        </otherwise>
+		    </choose>			
+				) AAA ,(SELECT @row_number:=0) AS t ) A 
+    </select>
+    
+	 
+	
+	<sql id="selectTransRsltListSub2">
+	    SELECT  A.msg_type  msg_type
+	        , A.phone_no phone_no
+	        , A.sender_no sender_no
+			, A.seq msg_id
+			, A.user_id
+			, A.msg_title msg_title
+			, A.msg_content msg_content
+			, A.reg_dt reg_dt 
+			, A.upd_dt upd_dt
+			, A.send_dt send_dt
+			, A.reserve_dt reserve_dt
+			, A.state_cd state_cd
+			, A.file_size file_size
+		FROM  push.msg_report A
+		where 1=1
+		<include refid="searchConditionsTransRslt"/>
+		UNION ALL
+		SELECT  A.msg_type  msg_type
+	        , A.phone_no phone_no
+	        , A.sender_no sender_no
+			, A.seq msg_id
+			, A.user_id
+			, A.msg_title msg_title
+			, A.msg_content msg_content
+			, A.reg_dt reg_dt 
+			, A.upd_dt upd_dt
+			, A.send_dt send_dt
+			, A.reserve_dt reserve_dt
+			, A.state_cd state_cd
+			, A.file_size file_size
+		FROM  push.msg_report_fail A
+		where 1=1
+		<include refid="searchConditionsTransRslt"/>
+	</sql>
+	<select id="selectTransRsltList" parameterType="searchTransRsltVO" resultMap="transRsltResultMap">
+	    select *
+        from (	    
+		    SELECT           (@row_number:= @row_number + 1) AS row_number
+			       , A.phone_no phone_no
+			       , A.sender_no sender_no
+				   , A.msg_id msg_id
+				   , A.user_id
+				   , substr(A.msg_content,1,20) msg_content
+				   , DATE_FORMAT(A.reg_dt, '%Y%m%d%H%m%s') reg_dt 
+				   , DATE_FORMAT(A.upd_dt, '%Y%m%d%H%m%s') upd_dt
+				   , A.send_dt send_dt
+				   , A.reserve_dt reserve_dt
+				   , CASE 
+					  WHEN A.state_cd  =  '3' THEN '성공'
+					  WHEN A.state_cd  =  '6' THEN '실패'
+					  ELSE '' 
+					 END state_cd
+				   , A.file_size file_size
+		           , CASE 
+					  WHEN A.msg_type  =  '01' THEN 'TEXT'
+					  WHEN A.msg_type  =  '02' THEN 'HTML'
+					  WHEN A.msg_type  =  '03' THEN 'IMAGE'
+					  ELSE '' 
+					 END MSG_TYPE
+					, (case when A.msg_title = '' OR  A.msg_title is null then '제목없음' else A.msg_title END) msg_title
+					FROM 
+					(
+					<include refid="selectTransRsltListSub2"/>
+					) A
+				 	JOIN ${umsdb}.TB_UMS_USER C
+					ON A.USER_ID = C.USER_ID
+					,(SELECT @row_number:=0) AS t 
+					<include refid="searchConditionsTransRslt1"/>
+				order by A.send_dt desc) AA 
+	    where ROW_NUMBER between #{firstRecordIndex, jdbcType=NUMERIC} + 1 and #{firstRecordIndex, jdbcType=NUMERIC} + #{recordCountPerPage, jdbcType=NUMERIC}
+	</select>
+	
+	<select id="selectTransRsltListCount" parameterType="searchTransRsltVO" resultType="java.lang.Integer">
+	    SELECT COUNT(*) as count
+	    FROM (
+		    SELECT           (@row_number:= @row_number + 1) AS row_number
+			       , A.phone_no phone_no
+			       , A.sender_no sender_no
+				   , A.msg_id msg_id
+				   , A.user_id
+				   , A.msg_title msg_title
+				   , A.msg_content msg_content
+				   , A.reg_dt reg_dt 
+				   , A.upd_dt upd_dt
+				   , A.send_dt send_dt
+				   , A.reserve_dt reserve_dt
+				   , A.state_cd state_cd
+				   , A.file_size file_size
+		           , CASE 
+					  WHEN A.msg_type  =  '01' THEN 'TEXT'
+					  WHEN A.msg_type  =  '02' THEN 'HTML'
+					  WHEN A.msg_type  =  '03' THEN 'IMAGE'
+					  ELSE '' 
+					 END MSG_TYPE
+					FROM 
+					(
+					<include refid="selectTransRsltListSub2"/>
+					) A
+				 	JOIN ${umsdb}.TB_UMS_USER C
+					ON A.USER_ID = C.USER_ID
+					,(SELECT @row_number:=0) AS t 
+					<include refid="searchConditionsTransRslt1"/>
+				order by A.send_dt desc) AA 
+	</select>
+	
+	<select id="selectRsltDetTop" parameterType="searchRsltDetVO" resultMap="rsltDetTopResultMap">
+		SELECT *
+        FROM (	    
+		    SELECT A.msg_id MSG_ID
+		    	, A.user_id USER_ID 
+				, '' JOB_ID
+				, A.msg_title SUBJECT
+				, A.msg_content CONTENTS
+				, A.reserve_dt SEND_DATE
+		        , CASE 
+				    WHEN A.msg_type  =  '01' THEN 'TEXT'
+				    WHEN A.msg_type  =  '02' THEN 'HTML'
+				    WHEN A.msg_type  =  '03' THEN 'IMAGE'
+					ELSE '' 
+				  END MSG_TYPE
+				, A.state_cd MSG_CODE
+				, '1' DEST_COUNT
+				, A.sender_no CALLBACK 
+			FROM 
+			(
+			   	SELECT  A.msg_type  msg_type
+				    , A.phone_no phone_no
+				    , A.sender_no sender_no
+					, A.seq msg_id
+					, A.user_id
+					, A.msg_title msg_title
+					, A.msg_content msg_content
+					, A.reg_dt reg_dt 
+					, A.upd_dt upd_dt
+					, A.send_dt send_dt
+					, A.reserve_dt reserve_dt
+					, A.state_cd state_cd
+					, A.file_size file_size
+				FROM  push.msg_report A
+				where 1=1
+				<include refid="searchConditionsRsltDet1"/>
+				UNION ALL
+				SELECT  A.msg_type  msg_type
+			        , A.phone_no phone_no
+			        , A.sender_no sender_no
+					, A.seq msg_id
+					, A.user_id
+					, A.msg_title msg_title
+					, A.msg_content msg_content
+					, A.reg_dt reg_dt 
+					, A.upd_dt upd_dt
+					, A.send_dt send_dt
+					, A.reserve_dt reserve_dt
+					, A.state_cd state_cd
+					, A.file_size file_size
+				FROM  push.msg_report_fail A
+				where 1=1
+				<include refid="searchConditionsRsltDet1"/>
+			) A 
+		) AA
+	</select>
+	
+	<select id="selectRsltDetMiddle" parameterType="searchRsltDetVO" resultMap="rsltDetMiddleResultMap">
+		SELECT *, 
+			CAST((CAST( SUCC  as DECIMAL)/CAST(TOT_COUNT as DECIMAL)* 100) as DECIMAL) AS PER_SUCC , 
+			CAST((CAST( ING  as DECIMAL)/CAST( TOT_COUNT  as DECIMAL)* 100) as DECIMAL) AS PER_ING , 
+			CAST((CAST( TOT_FAIL  as DECIMAL)/CAST( TOT_COUNT  as DECIMAL)* 100) as DECIMAL) AS PER_FAIL 
+		FROM(
+		    SELECT min(case when result_name = 'TOT_COUNT' then RESULT_COUNT end) as TOT_COUNT
+				, min(case when result_name = 'SUCC' then RESULT_COUNT end) as SUCC
+				, min(case when result_name = 'ING' then RESULT_COUNT end) as ING
+				, min(case when result_name = 'NO_ANS' then RESULT_COUNT end) as NO_ANS
+				, min(case when result_name = 'BUSY_LINE' then RESULT_COUNT end) as BUSY_LINE
+				, min(case when result_name = 'NO_NUM' then RESULT_COUNT end) as NO_NUM
+				, min(case when result_name = 'TOT_FAIL' then RESULT_COUNT end) as TOT_FAIL
+			FROM (
+					SELECT 
+						COUNT(*) as RESULT_COUNT, 'TOT_COUNT' as RESULT_NAME
+					FROM ( 
+						<include refid="searchConditionsRsltDet"/>
+						 ) A 
+				UNION ALL
+					SELECT 
+						COUNT(*) as RESULT_COUNT, 'SUCC' as RESULT_NAME
+					FROM ( 
+						<include refid="searchConditionsRsltDet"/>
+					     ) A
+					WHERE state_cd = 3 
+				UNION ALL
+					SELECT 
+						COUNT(*) as RESULT_COUNT, 'ING' as RESULT_NAME
+					FROM ( 
+						<include refid="searchConditionsRsltDet"/>
+						) A
+					WHERE state_cd = 2 
+				UNION ALL
+					SELECT 
+						COUNT(*) as RESULT_COUNT, 'NO_ANS' as RESULT_NAME
+					FROM ( 
+						<include refid="searchConditionsRsltDet"/>
+						) A
+					WHERE state_cd = 4
+				UNION ALL
+					SELECT 
+						0 as RESULT_COUNT, 'BUSY_LINE' as RESULT_NAME
+				UNION ALL
+					SELECT 
+						0 as RESULT_COUNT, 'NO_NUM' as RESULT_NAME
+				UNION ALL
+					SELECT 
+						COUNT(*) as RESULT_COUNT, 'TOT_FAIL' as RESULT_NAME
+					FROM (  
+						<include refid="searchConditionsRsltDet"/>
+						) A
+					WHERE state_cd = 6
+			) AA
+		) AAA
+	</select>
+	
+	<select id="selectRsltDetBottomList" parameterType="searchRsltDetVO" resultMap="rsltDetBottomResultMap">
+		SELECT *
+		FROM ( 
+			SELECT 
+				(@row_number:= @row_number + 1) AS row_number
+				, A.msg_id MSG_ID
+				, A.user_id USER_ID 
+				, '' JOB_ID
+				, '' SUBJOB_ID
+				, A.reserve_dt SEND_DATE
+				, '수신자명 없음' DEST_NAME
+				, A.phone_no PHONE_NUMBER
+				, A.state_cd RESULT
+				, '' TCS_RESULT
+				, CASE WHEN A.state_cd = 3 THEN '성공' WHEN A.state_cd  = 2 THEN '대기' ELSE '실패' END AS RESULT_DESC
+			FROM 
+				(SELECT * FROM
+				<include refid="searchConditionsRsltDet"/>
+				) A,(SELECT @row_number:=0) AS t
+		order by A.SEND_DATE desc) AA
+		where ROW_NUMBER between #{firstRecordIndex, jdbcType=NUMERIC} + 1 and #{firstRecordIndex, jdbcType=NUMERIC} + #{recordCountPerPage, jdbcType=NUMERIC}
+	</select>
+	
+</mapper>

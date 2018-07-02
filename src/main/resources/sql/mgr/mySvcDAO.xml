@@ -1,0 +1,626 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.com//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bccns.umsserviceweb.mgr.dao.MySvcDAO">
+	<!-- http://mybatis.github.io/mybatis-3/ko/sqlmap-xml.html 참조 -->
+	<!-- result map 에  type 은 typeAliases 에 정의한 type, id 는 sql 에서 resultMap 에 사용할 값임. -->
+	
+	<resultMap type="mySvcVO" id="mySvcResultMap">
+        <result property="userId" column="user_id"/>
+        <result property="yyyymm" column="yyyymm"/>
+		<result property="smsSendCnt" column="smsSendCnt"/>
+		<result property="smsSuccCnt" column="smsSuccCnt"/>
+		<result property="smsfailCnt" column="smsfailCnt"/>
+		<result property="lmsSendCnt" column="lmsSendCnt"/>
+		<result property="lmsSuccCnt" column="lmsSuccCnt"/>
+		<result property="lmsfailCnt" column="lmsfailCnt"/>
+		<result property="mmsSendCnt" column="mmsSendCnt"/>
+		<result property="mmsSuccCnt" column="mmsSuccCnt"/>
+		<result property="mmsfailCnt" column="mmsfailCnt"/>
+		<result property="fmsSendCnt" column="fmsSendCnt"/>
+		<result property="fmsSuccCnt" column="fmsSuccCnt"/>
+		<result property="fmsfailCnt" column="fmsfailCnt"/>
+		<result property="vmsSendCnt" column="vmsSendCnt"/>
+		<result property="vmsSuccCnt" column="vmsSuccCnt"/>
+		<result property="vmsfailCnt" column="vmsfailCnt"/>
+		<result property="vmsQrSendCnt" column="vmsQrSendCnt"/>
+		<result property="vmsQrSuccCnt" column="vmsQrSuccCnt"/>
+		<result property="vmsQrfailCnt" column="vmsQrfailCnt"/>
+		<result property="smartDmSendCnt" column="smartDmSendCnt"/>
+		<result property="smartDmSuccCnt" column="smartDmSuccCnt"/>
+		<result property="smartDmfailCnt" column="smartDmfailCnt"/>
+		<result property="smartFaxSendCnt" column="smartFaxSendCnt"/>
+		<result property="smartFaxSuccCnt" column="smartFaxSuccCnt"/>
+		<result property="smartFaxfailCnt" column="smartFaxfailCnt"/>
+		<result property="totSendCnt" column="totSendCnt"/>
+		<result property="totSuccCnt" column="totSuccCnt"/>
+		<result property="totfailCnt" column="totfailCnt"/>
+    </resultMap>
+    
+	<resultMap type="transUseListVO" id="transUseListResultMap">
+        <result property="userId" column="userId"/>
+		<result property="sendDate" column="sendDate"/>
+		<result property="msgType" column="msgType"/>
+		<result property="subject" column="subject"/>
+		<result property="sendCnt" column="sendCnt"/>
+		<result property="succCnt" column="succCnt"/>
+		<result property="failCnt" column="failCnt"/>
+		<result property="totalCnt" column="totalCnt"/>
+		<result property="instDt" column="instDt"/>
+		<result property="instId" column="instId"/>
+		<result property="updtDt" column="updtDt"/>
+		<result property="updtId" column="updtId"/>
+		<result property="searchType" column="searchType"/>
+		<result property="searchName" column="searchName"/>
+		<result property="regFg" column="regFg"/>
+    </resultMap>
+    
+	<sql id="searchConditions">
+          <if test="userId != null and userId != ''">
+                AND A.user_id = #{userId, jdbcType=VARCHAR}
+          </if>
+          <if test="yyyymm != null and yyyymm != ''">
+                AND SUBSTRING(A.SEND_DATE,1,6) =  #{yyyymm, jdbcType=VARCHAR}
+          </if>
+    </sql>  
+    <sql id="searchConditions1">
+        <where>
+          <if test="userId != null and userId != ''">
+                AND user_id = #{userId, jdbcType=VARCHAR}
+          </if>
+          <if test="grpNo != null and grpNo != ''">
+                AND grp_no = #{grpNo, jdbcType=VARCHAR}
+          </if>
+          <if test="name != null and name != ''">
+                AND name like CONCAT('%',#{name, jdbcType=VARCHAR} ,'%')
+          </if> 
+          <if test="searchType == '00'">
+	          <if test="searchName != null and searchName != ''">
+	                AND SMS_NO = #{searchName, jdbcType=VARCHAR}
+	          </if>
+	      </if> 
+          <if test="searchType == '01'">
+	          <if test="searchName != null and searchName != ''">
+	                AND VMS_NO like CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+	          </if>
+	      </if> 
+	      <if test="searchType == '02'">
+	          <if test="searchName != null and searchName != ''">
+	                AND FMS_NO like CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+	          </if>
+	      </if> 
+	      <if test="searchType == '03'">
+	          <if test="searchName != null and searchName != ''">
+	                AND name like CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+	          </if>
+	      </if> 
+        </where>
+    </sql>  
+    
+    <select id="selectMySvcListMain" parameterType="searchMySvcVO" resultMap="mySvcResultMap">
+	    select  
+			  MAX(AA.USER_ID)
+			, MAX(AA.YYYYMM)
+			, SUM(CASE WHEN AA.stype  =  'SMS' THEN TOT_COUNT ELSE 0 END) smsSendCnt
+			, SUM(CASE WHEN AA.stype  =  'SMS' THEN SUCC_COUNT ELSE 0 END) smsSuccCnt
+			, SUM(CASE WHEN AA.stype  =  'SMS' THEN FAIL_COUNT ELSE 0 END) smsfailCnt
+			, SUM(CASE WHEN AA.stype  =  'LMS' THEN TOT_COUNT ELSE 0 END) lmsSendCnt
+			, SUM(CASE WHEN AA.stype  =  'LMS' THEN SUCC_COUNT ELSE 0 END) lmsSuccCnt
+			, SUM(CASE WHEN AA.stype  =  'LMS' THEN FAIL_COUNT ELSE 0 END) lmsfailCnt
+			, SUM(CASE WHEN AA.stype  =  'MMS' THEN TOT_COUNT ELSE 0 END) mmsSendCnt
+			, SUM(CASE WHEN AA.stype  =  'MMS' THEN SUCC_COUNT ELSE 0 END) mmsSuccCnt
+			, SUM(CASE WHEN AA.stype  =  'MMS' THEN FAIL_COUNT ELSE 0 END) mmsfailCnt
+			, SUM(CASE WHEN AA.stype  =  'FMS' THEN TOT_COUNT ELSE 0 END) fmsSendCnt
+			, SUM(CASE WHEN AA.stype  =  'FMS' THEN SUCC_COUNT ELSE 0 END) fmsSuccCnt
+			, SUM(CASE WHEN AA.stype  =  'FMS' THEN FAIL_COUNT ELSE 0 END) fmsfailCnt
+			, SUM(CASE WHEN AA.stype  =  'VMS' THEN TOT_COUNT ELSE 0 END) vmsSendCnt
+			, SUM(CASE WHEN AA.stype  =  'VMS' THEN SUCC_COUNT ELSE 0 END) vmsSuccCnt
+			, SUM(CASE WHEN AA.stype  =  'VMS' THEN FAIL_COUNT ELSE 0 END) vmsfailCnt
+			, SUM(CASE WHEN AA.stype  =  'VQR' THEN TOT_COUNT ELSE 0 END) vmsQrSendCnt
+			, SUM(CASE WHEN AA.stype  =  'VQR' THEN SUCC_COUNT ELSE 0 END) vmsQrSuccCnt
+			, SUM(CASE WHEN AA.stype  =  'VQR' THEN FAIL_COUNT ELSE 0 END) vmsQrfailCnt
+			, SUM(CASE WHEN AA.stype  =  'SDM' THEN TOT_COUNT ELSE 0 END) smartDmSendCnt
+			, SUM(CASE WHEN AA.stype  =  'SDM' THEN SUCC_COUNT ELSE 0 END) smartDmSuccCnt
+			, SUM(CASE WHEN AA.stype  =  'SDM' THEN FAIL_COUNT ELSE 0 END) smartDmfailCnt
+			, SUM(CASE WHEN AA.stype  =  'SFX' THEN TOT_COUNT ELSE 0 END) smartFaxSendCnt
+			, SUM(CASE WHEN AA.stype  =  'SFX' THEN SUCC_COUNT ELSE 0 END) smartFaxSuccCnt
+			, SUM(CASE WHEN AA.stype  =  'SFX' THEN FAIL_COUNT ELSE 0 END) smartFaxfailCnt
+			, SUM(TOT_COUNT) totSendCnt
+			, SUM(SUCC_COUNT) totSuccCnt
+			, SUM(FAIL_COUNT) totfailCnt
+			from (
+			SELECT            A.stype
+			                , A.msg_id
+					        , A.USER_ID
+							, B.USER_NM
+							, A.job_id
+							, A.TOT_COUNT 
+							, A.SUCC_COUNT
+							, A.FAIL_COUNT
+							, A.YYYYMM
+							FROM 
+							(
+							   SELECT '' stype
+									, '' msg_id
+									, '' user_id
+									, '' job_id
+									, 0 TOT_COUNT
+									, 0 SUCC_COUNT
+									, 0 FAIL_COUNT
+									, '' YYYYMM
+								UNION ALL
+							   SELECT 'SMS' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_SMS_REPORT A
+								where 1=1
+								AND A.RESERVED1 IS null
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'LMS' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_MMS_REPORT A
+								where 1=1
+								AND A.CONTENT_COUNT = 0
+								AND A.RESERVED1 IS null
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'MMS' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_MMS_REPORT A
+								where 1=1
+								AND A.CONTENT_COUNT > 0
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'FMS' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_FMS_REPORT A
+								where 1=1
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'VMS' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_VMS_REPORT A
+								where 1=1
+								AND A.MSG_SUBTYPE = '30'
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'VQR' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_VMS_REPORT A
+								where 1=1
+								AND A.MSG_SUBTYPE = '32'
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'SDM' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_SMS_REPORT A
+								where 1=1
+								AND A.RESERVED1='SMARTDM'
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'SDM' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_MMS_REPORT A
+								where 1=1
+								AND A.RESERVED1='SMARTDM'
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'SFX' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_SMS_REPORT A
+								where 1=1
+								AND A.RESERVED1='SMARTFAX'
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'SFX' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_MMS_REPORT A
+								where 1=1
+								AND A.RESERVED1='SMARTFAX'
+								<include refid="searchConditions"/>
+							) A
+							 LEFT OUTER JOIN  ${umsdb}.TB_UMS_USER B 
+							 ON A.USER_ID = B.USER_ID 
+				) AA  
+    </select>
+	
+	<select id="selectTransUseList" parameterType="searchTransUseListVO" resultMap="transUseListResultMap">
+       select *
+        from (	    
+		    SELECT            (@row_number:= @row_number + 1) AS row_number
+		                    , CONCAT(SUBSTRING(A.SEND_DATE ,1,4),'-',SUBSTRING(A.SEND_DATE ,5,2),'-',SUBSTRING(A.SEND_DATE ,7,2) , ' ' , SUBSTRING(A.SEND_DATE ,9,2) , ':',SUBSTRING(A.SEND_DATE ,11,2) ,':',SUBSTRING(A.SEND_DATE ,13,2)) sendDate 
+			                , CASE 
+							  WHEN A.stype  =  'SMS' THEN '문자메시지(SMS)'
+							  WHEN A.stype  =  'MMS' THEN '멀티미디어메시지(MMS)'
+							  WHEN A.stype  =  'LMS' THEN '장문메시지(LMS)'
+							  WHEN A.stype  =  'FMS' THEN '팩스메시지(FMS)'
+							  WHEN A.stype  =  'VMS' THEN '음성메시지(VMS)'
+							  WHEN A.stype  =  'VQR' THEN '설문조사(VMS)'
+							  WHEN A.stype  =  'SDM' THEN 'SMART DM(Smart DM)'
+							  WHEN A.stype  =  'SFX' THEN 'SMART FAX(Smart FAX)'
+							  ELSE '' 
+							 END msgType
+							, A.SUBJECT subject
+							, A.TOT_COUNT  totalCnt
+							, A.SUCC_COUNT succCnt
+							, A.FAIL_COUNT failCnt
+							FROM 
+							(
+							   SELECT 'SMS' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUBJECT
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, A.SEND_DATE
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_SMS_REPORT A
+								where 1=1
+								AND A.RESERVED1 IS null
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'LMS' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUBJECT
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, A.SEND_DATE
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_MMS_REPORT A
+								where 1=1
+								AND A.CONTENT_COUNT = 0
+								AND A.RESERVED1 IS null
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'MMS' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUBJECT
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, A.SEND_DATE
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_MMS_REPORT A
+								where 1=1
+								AND A.CONTENT_COUNT > 0
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'FMS' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUBJECT
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, A.SEND_DATE
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_FMS_REPORT A
+								where 1=1
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'VMS' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUBJECT
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, A.SEND_DATE
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_VMS_REPORT A
+								where 1=1
+								AND A.MSG_SUBTYPE = '30'
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'VQR' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUBJECT
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, A.SEND_DATE
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_VMS_REPORT A
+								where 1=1
+								AND A.MSG_SUBTYPE = '32'
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'SDM' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUBJECT
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, A.SEND_DATE
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_SMS_REPORT A
+								where 1=1
+								AND A.RESERVED1='SMARTDM'
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'SDM' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUBJECT
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, A.SEND_DATE
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_MMS_REPORT A
+								where 1=1
+								AND A.RESERVED1='SMARTDM'
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'SFX' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUBJECT
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, A.SEND_DATE
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_SMS_REPORT A
+								where 1=1
+								AND A.RESERVED1='SMARTFAX'
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'SFX' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUBJECT
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, A.SEND_DATE
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_MMS_REPORT A
+								where 1=1
+								AND A.RESERVED1='SMARTFAX'
+								<include refid="searchConditions"/>
+							) A,(SELECT @row_number:=0) AS t
+				order by A.SEND_DATE desc) AA 
+	     where ROW_NUMBER between #{firstRecordIndex, jdbcType=NUMERIC} + 1 and #{firstRecordIndex, jdbcType=NUMERIC} + #{recordCountPerPage, jdbcType=NUMERIC}
+    </select>
+	
+	<select id="selectTransUseListCount" parameterType="searchTransUseListVO" resultType="java.lang.Integer">
+        SELECT            count(*) COUNT
+							FROM 
+							(
+							   SELECT 'SMS' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUBJECT
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, A.SEND_DATE
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_SMS_REPORT A
+								where 1=1
+								AND A.RESERVED1 IS null
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'LMS' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUBJECT
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, A.SEND_DATE
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_MMS_REPORT A
+								where 1=1
+								AND A.CONTENT_COUNT = 0
+								AND A.RESERVED1 IS null
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'MMS' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUBJECT
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, A.SEND_DATE
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_MMS_REPORT A
+								where 1=1
+								AND A.CONTENT_COUNT > 0
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'FMS' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUBJECT
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, A.SEND_DATE
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_FMS_REPORT A
+								where 1=1
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'VMS' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUBJECT
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, A.SEND_DATE
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_VMS_REPORT A
+								where 1=1
+								AND A.MSG_SUBTYPE = '30'
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'VQR' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUBJECT
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, A.SEND_DATE
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_VMS_REPORT A
+								where 1=1
+								AND A.MSG_SUBTYPE = '32'
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'SDM' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUBJECT
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, A.SEND_DATE
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_SMS_REPORT A
+								where 1=1
+								AND A.RESERVED1='SMARTDM'
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'SDM' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUBJECT
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, A.SEND_DATE
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_MMS_REPORT A
+								where 1=1
+								AND A.RESERVED1='SMARTDM'
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'SFX' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUBJECT
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, A.SEND_DATE
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_SMS_REPORT A
+								where 1=1
+								AND A.RESERVED1='SMARTFAX'
+								<include refid="searchConditions"/>
+								UNION ALL
+								SELECT 'SFX' stype
+									, A.msg_id
+									, A.user_id
+									, A.job_id
+									, A.SUBJECT
+									, A.SUCC_COUNT+A.FAIL_COUNT TOT_COUNT
+									, A.SUCC_COUNT
+									, A.FAIL_COUNT
+									, A.SEND_DATE
+									, SUBSTRING(A.SEND_DATE,1,6) YYYYMM
+								FROM  SDK_MMS_REPORT A
+								where 1=1
+								AND A.RESERVED1='SMARTFAX'
+								<include refid="searchConditions"/>
+							) A
+    </select>
+    <select id="selectYyyyMmList" resultType="yyyyMmVO">
+        select DATE_FORMAT(now(), '%Y%m') yyyymm
+			  ,DATE_FORMAT(DATE_ADD(now(),interval -1 month), '%Y%m') yyyymm1
+			  ,DATE_FORMAT(DATE_ADD(now(),interval -2 month), '%Y%m') yyyymm2
+			  ,DATE_FORMAT(DATE_ADD(now(),interval -3 month), '%Y%m') yyyymm3
+			  ,DATE_FORMAT(DATE_ADD(now(),interval -4 month), '%Y%m') yyyymm4
+			  ,DATE_FORMAT(DATE_ADD(now(),interval -5 month), '%Y%m') yyyymm5
+    </select>
+	
+</mapper>

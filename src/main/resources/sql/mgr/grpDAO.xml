@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.com//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bccns.umsserviceweb.mgr.dao.GrpDAO">
+	<!-- http://mybatis.github.io/mybatis-3/ko/sqlmap-xml.html 참조 -->
+	<!-- result map 에  type 은 typeAliases 에 정의한 type, id 는 sql 에서 resultMap 에 사용할 값임. -->
+	
+	<resultMap type="grpVO" id="grpResultMap">
+        <result property="userId" column="user_id"/>
+		<result property="grpCd" column="grp_cd"/>
+		<result property="grpNo" column="grp_no"/>
+		<result property="grpNm" column="grp_nm"/>
+		<result property="note" column="note"/>
+		<result property="instDt" column="inst_dt"/>
+		<result property="instId" column="inst_id"/>
+		<result property="updtDt" column="updt_dt"/>
+		<result property="updtId" column="updt_id"/>
+		<result property="grpCdNm" column="grp_cd_nm"/>
+		<result property="grpCnt" column="grp_cnt"/>
+    </resultMap>
+	
+	<sql id="searchConditions">
+        <where>
+          <if test="userId != null and userId != ''">
+                AND A.user_id = #{userId, jdbcType=VARCHAR}
+          </if>
+          <if test="grpCd != null and grpCd != ''">
+                AND A.grp_cd = #{grpCd, jdbcType=VARCHAR}
+          </if>
+          <if test="grpNo != null and grpNo != ''">
+                AND A.grp_no = #{grpNo, jdbcType=VARCHAR}
+          </if>
+          <if test="grpNm != null and grpNm != ''">
+                AND A.grp_nm like CONCAT('%',#{grpNm, jdbcType=VARCHAR} ,'%')
+          </if> 
+        </where>
+    </sql>  
+    <sql id="searchConditions1">
+        <where>
+          <if test="userId != null and userId != ''">
+                AND user_id = #{userId, jdbcType=VARCHAR}
+          </if>
+          <if test="grpNo != null and grpNo != ''">
+                AND grp_no = #{grpNo, jdbcType=VARCHAR}
+          </if>
+          <if test="name != null and name != ''">
+                AND name like CONCAT('%',#{name, jdbcType=VARCHAR} ,'%')
+          </if> 
+          <if test="searchType == '00'">
+	          <if test="searchName != null and searchName != ''">
+	                AND SMS_NO = #{searchName, jdbcType=VARCHAR}
+	          </if>
+	      </if> 
+          <if test="searchType == '01'">
+	          <if test="searchName != null and searchName != ''">
+	                AND VMS_NO like CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+	          </if>
+	      </if> 
+	      <if test="searchType == '02'">
+	          <if test="searchName != null and searchName != ''">
+	                AND FMS_NO like CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+	          </if>
+	      </if> 
+	      <if test="searchType == '03'">
+	          <if test="searchName != null and searchName != ''">
+	                AND name like CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+	          </if>
+	      </if> 
+        </where>
+    </sql>  
+	
+	<select id="selectGrpList" parameterType="searchgrpVO" resultMap="grpResultMap">
+       select *
+        from (	    
+		    SELECT (@row_number:= @row_number + 1) AS row_number
+				 , IFNULL(C.GRP_CNT,0) GRP_CNT
+		         , A.USER_ID
+			     , A.GRP_CD
+				 , B.CODE_NAME grp_cd_nm
+			     , A.GRP_NO
+			     , A.GRP_NM
+			     , A.NOTE
+			     , A.INST_DT
+			     , A.INST_ID
+			     , A.UPDT_DT
+			     , A.UPDT_ID
+			  FROM ${umsdb}.TB_UMS_GRP A
+			  JOIN ${umsdb}.TB_UMS_CODE B
+			  ON A.GRP_CD = B.CODE
+             AND B.CODE_GROUP = 'GRP_CD'
+			  LEFT OUTER JOIN
+			  (
+			  select 
+			    user_id
+			  , '10' grp_cd
+			  , grp_no
+			  , count(*) grp_cnt
+			   from ${umsdb}.tb_ums_addr
+			   group by user_id
+			  , grp_no
+			  union all
+			  select 
+			    user_id
+			  , grp_cd
+			  , grp_no
+			  , count(*) grp_cnt 
+			  from ${umsdb}.tb_ums_msg
+			  group by user_id
+			  , grp_cd
+			  , grp_no
+			  ) C			  
+			  ON A.USER_ID = C.USER_ID
+			  AND A.GRP_CD = C.GRP_CD
+			  AND A.GRP_NO = C.GRP_NO  
+			  ,(SELECT @row_number:=0) AS t
+			  <include refid="searchConditions"/>
+	          order by A.GRP_CD, A.GRP_NM) AA
+	     where ROW_NUMBER between #{firstRecordIndex, jdbcType=NUMERIC} + 1 and #{firstRecordIndex, jdbcType=NUMERIC} + #{recordCountPerPage, jdbcType=NUMERIC}
+    </select>     
+    
+	
+	<select id="selectGrp" parameterType="searchgrpVO" resultMap="grpResultMap">
+	    SELECT A.USER_ID
+		     , A.GRP_CD
+			 , B.CODE_NAME
+		     , A.GRP_NO
+		     , A.GRP_NM
+		     , A.NOTE
+		     , A.INST_DT
+		     , A.INST_ID
+		     , A.UPDT_DT
+		     , A.UPDT_ID
+		  FROM ${umsdb}.TB_UMS_GRP A
+		  JOIN ${umsdb}.TB_UMS_CODE B
+		  ON A.GRP_CD = B.CODE
+		  AND B.CODE_GROUP = 'GRP_CD'
+		  <include refid="searchConditions"/>
+    </select>
+    
+	<select id="selectGrpListCount" parameterType="searchgrpVO" resultType="java.lang.Integer">
+        SELECT  count(A.grp_NO) as count
+          FROM  ${umsdb}.TB_UMS_GRP A
+		  <include refid="searchConditions"/>
+    </select>
+   
+	<insert id="insertGrpIdOff" parameterType="grpVO">
+        INSERT INTO ${umsdb}.TB_UMS_GRP
+           (   USER_ID
+		     , GRP_CD
+		     , GRP_NO
+		     , GRP_NM
+		     , NOTE
+		     , INST_DT
+		     , INST_ID
+		     , UPDT_DT
+		     , UPDT_ID)
+     VALUES
+           (
+               #{userId  ,jdbcType=VARCHAR}
+             , #{grpCd   ,jdbcType=VARCHAR}
+             , #{grpNo   ,jdbcType=VARCHAR}
+			 , #{grpNm   ,jdbcType=VARCHAR}
+			 , #{note    ,jdbcType=VARCHAR}
+			 , #{instDt     , jdbcType=VARCHAR}
+			 , #{instId     , jdbcType=VARCHAR}
+			 , #{updtDt     , jdbcType=VARCHAR}
+			 , #{updtId     , jdbcType=VARCHAR}   
+			)
+    </insert>
+    <insert id="insertGrp" parameterType="grpVO">
+        INSERT INTO ${umsdb}.TB_UMS_GRP
+           (   USER_ID
+		     , GRP_CD
+		     , GRP_NO
+		     , GRP_NM
+		     , NOTE
+		     , INST_DT
+		     , INST_ID
+		     , UPDT_DT
+		     , UPDT_ID)
+     VALUES
+           (
+               #{userId  ,jdbcType=VARCHAR}
+             , #{grpCd   ,jdbcType=VARCHAR}
+             , ${umsdb}.nextval('TB_UMS_GRP.GRP_NO')
+			 , #{grpNm   ,jdbcType=VARCHAR}
+			 , #{note    ,jdbcType=VARCHAR}
+			 , #{instDt     , jdbcType=VARCHAR}
+			 , #{instId     , jdbcType=VARCHAR}
+			 , #{updtDt     , jdbcType=VARCHAR}
+			 , #{updtId     , jdbcType=VARCHAR}   
+			)
+    </insert>
+	<update id="updateGrp" parameterType="grpVO">
+        UPDATE ${umsdb}.TB_UMS_GRP 
+             SET         
+               GRP_NM     = #{grpNm    ,jdbcType=VARCHAR}
+			 , note       = #{note   ,jdbcType=VARCHAR}
+			 , UPDT_DT    = #{updtDt     , jdbcType=VARCHAR}
+			 , UPDT_ID    = #{updtId     , jdbcType=VARCHAR}   
+       WHERE    USER_ID = #{userId, jdbcType=VARCHAR} 
+			AND GRP_CD  = #{grpCd, jdbcType=VARCHAR}
+			AND grp_NO  = #{grpNo, jdbcType=VARCHAR}
+    </update>
+	
+    <delete id="deleteGrp" parameterType="grpVO">
+        DELETE FROM ${umsdb}.TB_UMS_GRP
+        WHERE   USER_ID = #{userId, jdbcType=VARCHAR} 
+			AND GRP_CD  = #{grpCd, jdbcType=VARCHAR}
+			AND grp_NO  = #{grpNo, jdbcType=VARCHAR}
+    </delete>
+	 
+</mapper>

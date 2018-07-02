@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:javaee="http://java.sun.com/xml/ns/javaee"
+    xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>UMSServiceWeb.root</param-value>
+	</context-param>
+	
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
+	<context-param>
+		<param-name>log4jRefreshInterval</param-name>
+		<param-value>300000</param-value>
+	</context-param>
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>/WEB-INF/classes/config/log/log4j.xml</param-value>
+	</context-param>
+	
+	<!-- Spring Context 파일 위치 설정 및 Context 파일을 load 하기 위한 listener 설정 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:/config/spring/context-*.xml</param-value>
+	</context-param>
+
+	<!-- Log4j 설정 파일 load 하기 위한 listener 설정 was 실행 java option 에 -Dserver.type= 
+		추가요. local : -Dserver.type= Dev : -Dserver.type=Dev Stg : -Dserver.type=Stg 
+		Prd : -Dserver.type=Prd -->
+		
+	<!-- XSS Filter 설정. -->
+   <filter>
+       <filter-name>xssFilter</filter-name>
+       <filter-class>com.bccns.umsserviceweb.common.filter.XSSFilter</filter-class>
+   </filter>
+   <filter-mapping>
+       <filter-name>xssFilter</filter-name>
+       <url-pattern>/*</url-pattern>
+   </filter-mapping>
+ 
+	<!-- 파일 업로드 처리를 위한 필터 설정. -->
+	<filter>
+		<filter-name>multipartFilter</filter-name>
+		<filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>multipartFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- Web Application 의 기본적인 Charset을 지정하기 위한 필터 설정. UTF-8 로 설정하고, 필터링 대상은 
+		모든 request(/*)에 대해 필터링 하도록 설정한다. -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- HTTP Method 중 GET, POST 이외의 메소드 DELETE나 PUT 같은 확장 메소드를 프로그램 내에서 구현하고자 
+		할 경우 사용하는 Filter 설정. -->
+	<filter>
+		<filter-name>httpMethodFilter</filter-name>
+		<filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>httpMethodFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- Spring MVC 사용을 위한 DispatcherServlet 설정. -->
+	<servlet>
+		<servlet-name>spring</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>spring</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	<!-- 
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.css</url-pattern>
+		<url-pattern>*.js</url-pattern>
+		<url-pattern>*.jpg</url-pattern>
+		<url-pattern>*.gif</url-pattern>
+		<url-pattern>*.png</url-pattern>
+		<url-pattern>*.ico</url-pattern>
+		<url-pattern>*.swf</url-pattern> 
+	</servlet-mapping>
+
+	
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>/*/NULL</url-pattern>
+		<url-pattern>/*/null</url-pattern>
+	</servlet-mapping>
+ -->
+	<filter>
+		<filter-name>sitemesh</filter-name>
+		<filter-class>com.opensymphony.module.sitemesh.filter.PageFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>sitemesh</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- Servlet Session 타임아웃을 30분으로 설정 -->
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+
+	<!-- JSP 파일을 브라우저에서 직접 요청할 수 없도록 하는 보안 설정. -->
+	<security-constraint>
+		<display-name>JSP Protection</display-name>
+		<web-resource-collection>
+			<web-resource-name>SecureJSPPages</web-resource-name>
+			<url-pattern>*.jsp</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>nobody</role-name>
+		</auth-constraint>
+	</security-constraint>
+	<security-role>
+		<description>JSP Protection</description>
+		<role-name>nobody</role-name>
+	</security-role>
+	
+</web-app>

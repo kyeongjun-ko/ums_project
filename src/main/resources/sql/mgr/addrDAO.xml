@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.com//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bccns.umsserviceweb.mgr.dao.AddrDAO">
+	<!-- http://mybatis.github.io/mybatis-3/ko/sqlmap-xml.html 참조 -->
+	<!-- result map 에  type 은 typeAliases 에 정의한 type, id 는 sql 에서 resultMap 에 사용할 값임. -->
+	
+	<resultMap type="addrVO" id="addrResultMap">
+        <result property="userId" column="user_id"/>
+		<result property="grpNo" column="grp_no"/>
+		<result property="grpNm" column="grp_nm"/>
+		<result property="addrNo" column="addr_no"/>
+		<result property="name" column="name"/>
+		<result property="sname" column="sname"/>
+		<result property="smsNo" column="sms_no"/>
+		<result property="vmsNo" column="vms_no"/>
+		<result property="fmsNo" column="fms_no"/>
+		<result property="note" column="note"/>
+		<result property="instDt" column="inst_dt"/>
+		<result property="instId" column="inst_id"/>
+		<result property="updtDt" column="updt_dt"/>
+		<result property="updtId" column="updt_id"/>
+    </resultMap>
+	
+	<sql id="searchConditions">
+        <where>
+          <if test="userId != null and userId != ''">
+                AND user_id = #{userId, jdbcType=VARCHAR}
+          </if>
+          <if test="grpNo != null and grpNo != ''">
+                AND grp_no = #{grpNo, jdbcType=VARCHAR}
+          </if>
+          <if test="addrNo != null and addrNo != ''">
+                AND addr_no = #{addrNo, jdbcType=VARCHAR}
+          </if>
+          <if test="name != null and name != ''">
+                AND name = #{name, jdbcType=VARCHAR}
+          </if> 
+          <if test="smsNo != null and smsNo != ''">
+                AND sms_no = #{smsNo, jdbcType=VARCHAR}
+          </if>
+          <if test="vmsNo != null and vmsNo != ''">
+                AND vms_no = #{vmsNo, jdbcType=VARCHAR}
+          </if>
+          <if test="fmsNo != null and fmsNo != ''">
+                AND fms_no = #{fmsNo, jdbcType=VARCHAR}
+          </if>
+        </where>
+    </sql>  
+    <sql id="searchConditions1">
+        <where>
+          <if test="userId != null and userId != ''">
+                AND A.user_id = #{userId, jdbcType=VARCHAR}
+          </if>
+          <if test="grpNo != null and grpNo != ''">
+                AND A.grp_no = #{grpNo, jdbcType=VARCHAR}
+          </if> 
+          <if test="searchType == '00'">
+	          <if test="searchName != null and searchName != ''">
+	                AND A.SMS_NO like CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+	          </if>
+	      </if> 
+          <if test="searchType == '01'">
+	          <if test="searchName != null and searchName != ''">
+	                AND A.VMS_NO like CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+	          </if>
+	      </if> 
+	      <if test="searchType == '02'">
+	          <if test="searchName != null and searchName != ''">
+	                AND A.FMS_NO like CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+	          </if>
+	      </if> 
+	      <if test="searchType == '03'">
+	          <if test="searchName != null and searchName != ''">
+	                AND A.name like CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+	          </if>
+	      </if> 
+        </where>
+    </sql>  
+	 
+	<select id="selectAddrList" parameterType="searchAddrVO" resultMap="addrResultMap">
+       select *
+        from (	    
+		    SELECT (@row_number:= @row_number + 1) AS row_number
+		         , A.USER_ID
+				 , A.GRP_NO
+				 , B.GRP_NM grp_nm 
+				 , A.ADDR_NO
+				 , A.NAME
+				 , SUBSTRING(A.NAME,0,16) sname
+				 , A.SMS_NO
+				 , A.VMS_NO
+				 , A.FMS_NO
+				 , A.NOTE
+				 , A.INST_DT
+				 , A.INST_ID
+				 , A.UPDT_DT
+				 , A.UPDT_ID
+			  FROM ${umsdb}.TB_UMS_ADDR A
+			  LEFT OUTER JOIN ${umsdb}.TB_UMS_GRP B
+			  ON A.USER_ID = B.USER_ID
+			  AND B.GRP_CD = '10'
+			  AND A.GRP_NO = B.GRP_NO 
+			  ,(SELECT @row_number:=0) AS t 
+			  <include refid="searchConditions1"/>
+	           order by A.NAME asc) A
+	           where ROW_NUMBER between #{firstRecordIndex, jdbcType=NUMERIC} + 1 and #{firstRecordIndex, jdbcType=NUMERIC} + #{recordCountPerPage, jdbcType=NUMERIC}
+               
+    </select>
+    
+	<select id="selectAddr" parameterType="searchAddrVO" resultMap="addrResultMap">
+		    SELECT USER_ID
+				 , GRP_NO
+				 , ADDR_NO
+				 , NAME
+				 , SMS_NO
+				 , VMS_NO
+				 , FMS_NO
+				 , NOTE
+				 , INST_DT
+				 , INST_ID
+				 , UPDT_DT
+				 , UPDT_ID
+			  FROM ${umsdb}.TB_UMS_ADDR  		  
+			  <include refid="searchConditions"/>			  
+    </select>
+    
+	<select id="selectAddrListCount" parameterType="searchAddrVO" resultType="java.lang.Integer">
+        SELECT  count(A.ADDR_NO) as count
+          FROM  ${umsdb}.TB_UMS_ADDR A
+    	<include refid="searchConditions1"/>
+    </select>
+    
+	<insert id="insertAddr" parameterType="addrVO">
+        INSERT INTO ${umsdb}.TB_UMS_ADDR
+           (   USER_ID
+			 , GRP_NO
+			 , ADDR_NO
+			 , NAME
+			 , SMS_NO
+			 , VMS_NO
+			 , FMS_NO
+			 , NOTE
+			 , INST_DT
+			 , INST_ID
+			 , UPDT_DT
+			 , UPDT_ID)
+     VALUES
+           (
+               #{userId  ,jdbcType=VARCHAR}
+			 , #{grpNo   ,jdbcType=VARCHAR}
+			 , ${umsdb}.nextval('TB_UMS_ADDR.ADDR_NO')
+			 , #{name    ,jdbcType=VARCHAR}
+			 , #{smsNo   ,jdbcType=VARCHAR}
+			 , #{vmsNo   ,jdbcType=VARCHAR}
+			 , #{fmsNo   ,jdbcType=VARCHAR}
+			 , #{note    ,jdbcType=VARCHAR}
+			 , #{instDt     , jdbcType=VARCHAR}
+			 , #{instId     , jdbcType=VARCHAR}
+			 , #{updtDt     , jdbcType=VARCHAR}
+			 , #{updtId     , jdbcType=VARCHAR}   
+			)
+    </insert>
+    
+	<update id="updateAddr" parameterType="addrVO">
+        UPDATE ${umsdb}.TB_UMS_ADDR 
+             SET         
+               NAME       = #{name    ,jdbcType=VARCHAR}
+			 , SMS_NO     = #{smsNo   ,jdbcType=VARCHAR}
+			 , VMS_NO     = #{vmsNo   ,jdbcType=VARCHAR}
+			 , FMS_NO     = #{fmsNo   ,jdbcType=VARCHAR}
+			 , NOTE       = #{note    ,jdbcType=VARCHAR}
+			 , UPDT_DT    = #{updtDt     , jdbcType=VARCHAR}
+			 , UPDT_ID    = #{updtId     , jdbcType=VARCHAR}   
+       WHERE    USER_ID = #{userId, jdbcType=VARCHAR} 
+			AND GRP_NO  = #{grpNo, jdbcType=VARCHAR}
+			AND ADDR_NO  = #{addrNo, jdbcType=VARCHAR}
+    </update>
+	
+    <delete id="deleteAddr" parameterType="addrVO">
+        DELETE FROM ${umsdb}.TB_UMS_ADDR
+        WHERE   USER_ID = #{userId, jdbcType=VARCHAR}  
+			AND ADDR_NO  = #{addrNo, jdbcType=VARCHAR}
+    </delete>
+	 
+</mapper>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.com//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bccns.umsserviceweb.smart.dao.SmartDAO"> 
+	
+    <resultMap type="smartModListVO" id="smartModListMap">
+		<result property="userId" column="user_id"/>
+        <result property="rowNumber" column="row_number"/>
+        
+		<result property="grpCd" column="grp_cd"/>
+		<result property="dmType" column="MSG_TYPE"/>
+		<result property="grpNo" column="grp_no"/>
+		<result property="grpNm" column="grp_nm"/>
+		<result property="msgNo" column="msg_no"/>
+		
+		<result property="subject" column="subject"/>
+		<result property="contents1" column="contents1"/>
+		<result property="contents2" column="contents2"/>
+		<result property="contents3" column="contents3"/>
+		<result property="contents4" column="contents4"/>
+		<result property="contents5" column="contents5"/>
+		<result property="contents6" column="contents6"/>
+		<result property="contents7" column="contents7"/>
+		<result property="contents8" column="contents8"/>
+		<result property="contents9" column="contents9"/>
+		<result property="contents10" column="contents10"/>
+		<result property="instDt" column="inst_dt"/>
+		<result property="instId" column="inst_id"/>
+		<result property="updtDt" column="updt_dt"/>
+		<result property="updtId" column="updt_id"/>
+		
+		<result property="rightNo" column="RIGHT_NO" />
+		<result property="rtStrtDt" column="RT_STRT_DT"/>
+		<result property="rtEndDt" column="RT_END_DT"/>
+		<result property="dept" column="DEPT"/>
+		<result property="deptNm" column="DEPT_NM"/>
+		<result property="company" column="COMPANY"/>
+		<result property="initDtRight" column="initDtRight"/>
+		<result property="instIdRight" column="instIdRight"/>
+		<result property="rtStrtDt" column="rtStrtDt"/>
+		<result property="updtDtRight" column="updtDtRight"/>
+	</resultMap>
+	
+    <resultMap type="commCodeVO" id="smartModDeptListMap">
+        <result property="code" column="CODE" />
+        <result property="codeName" column="CODE_NAME" />
+    </resultMap>
+	
+    <sql id="searchConditions">
+		<if test="searchType == '01'">
+			<if test="searchName != null and searchName != ''">
+			    AND subject like  CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+			</if>
+			<if test="grpNo != null and grpNo != ''">
+			    AND A.GRP_NO = #{grpNo, jdbcType=VARCHAR}
+			</if>
+		</if>
+    </sql>
+	<select id="selectSmartDmListCount" parameterType="SearchMsgBoxVO" resultType="java.lang.Integer">
+	    SELECT count(*)  as count
+	    FROM ( SELECT A.USER_ID,
+		    	A.GRP_CD, 
+		    	A.GRP_NO, 
+		    	C.GRP_NM, 
+		    	A.MSG_NO, 
+		    	A.SUBJECT, 
+		    	A.CONTENTS1,
+		    	B.RT_STRT_DT, 
+		    	B.RT_END_DT, 
+		    	B.DEPT ,
+		    	D.CODE_NAME AS DEPT_NM, 
+		    	B.COMPANY
+			FROM ${umsdb}.TB_UMS_MSG A 
+			    LEFT OUTER JOIN ${umsdb}.TB_UMS_RIGHT B ON A.MSG_NO = B.MSG_NO
+				LEFT OUTER JOIN ${umsdb}.TB_UMS_GRP C   ON A.USER_ID = C.USER_ID AND B.GRP_CD = C.GRP_CD AND B.GRP_NO = C.GRP_NO
+				LEFT OUTER JOIN ${umsdb}.TB_UMS_CODE D  ON D.CODE_GROUP = 'DEPT_CD' AND D.CODE = B.DEPT
+			WHERE A.GRP_CD = '07' AND B.COMPANY = #{company, jdbcType=VARCHAR}
+			<include refid="searchConditions"/>
+			) A
+	</select>
+		
+	<select id="selectSmartDmList" parameterType="SearchMsgBoxVO" resultMap="smartModListMap">
+	    SELECT * 
+	    FROM (SELECT (@row_number:= @row_number + 1) AS row_number,
+		    	A.USER_ID,
+		    	A.GRP_CD,
+		    	CASE 
+					  WHEN A.GRP_CD  =  '07' THEN 'SMART DM'
+					  WHEN A.GRP_CD  =  '08' THEN 'SMART FAX'
+					  ELSE '' 
+					 END MSG_TYPE, 
+		    	A.GRP_NO, 
+		    	C.GRP_NM, 
+		    	A.MSG_NO, 
+		    	A.SUBJECT, 
+		    	A.CONTENTS1,
+		    	B.RIGHT_NO,
+		    	B.RT_STRT_DT, 
+		    	B.RT_END_DT, 
+		    	B.DEPT ,
+		    	D.CODE_NAME AS DEPT_NM, 
+		    	B.COMPANY,
+		    	A.INST_DT
+			FROM ${umsdb}.TB_UMS_MSG A LEFT OUTER JOIN ${umsdb}.TB_UMS_RIGHT B ON A.MSG_NO = B.MSG_NO
+				LEFT OUTER JOIN ${umsdb}.TB_UMS_GRP C ON A.USER_ID = C.USER_ID AND B.GRP_CD = C.GRP_CD AND B.GRP_NO = C.GRP_NO
+				LEFT OUTER JOIN ${umsdb}.TB_UMS_CODE D ON  D.CODE_GROUP = 'DEPT_CD' AND D.CODE = B.DEPT
+				,(SELECT @row_number:=0) AS t
+			WHERE A.GRP_CD = '07' AND B.COMPANY = #{company, jdbcType=VARCHAR}
+			<include refid="searchConditions"/>
+			order by  A.MSG_NO ) A
+			where ROW_NUMBER between #{firstRecordIndex, jdbcType=NUMERIC} + 1 and #{firstRecordIndex, jdbcType=NUMERIC} + #{recordCountPerPage, jdbcType=NUMERIC}
+	</select>
+	
+	<select id="selectSmartDmMod" parameterType="SmartModListVO" resultMap="smartModListMap">
+		SELECT 
+		    	A.USER_ID,
+		    	A.GRP_CD,
+		    	CASE 
+					  WHEN A.GRP_CD  =  '07' THEN 'SMART DM'
+					  WHEN A.GRP_CD  =  '08' THEN 'SMART FAX'
+					  ELSE '' 
+					 END MSG_TYPE, 
+		    	A.GRP_NO, 
+		    	C.GRP_NM, 
+		    	A.MSG_NO, 
+		    	A.SUBJECT, 
+		    	A.CONTENTS1,
+		    	B.RIGHT_NO,
+		    	B.RT_STRT_DT, 
+		    	B.RT_END_DT, 
+		    	B.DEPT ,
+		    	D.CODE_NAME AS DEPT_NM, 
+		    	B.COMPANY,
+		    	A.INST_DT
+		FROM ${umsdb}.TB_UMS_MSG A LEFT OUTER JOIN ${umsdb}.TB_UMS_RIGHT B ON A.MSG_NO = B.MSG_NO
+			LEFT OUTER JOIN ${umsdb}.TB_UMS_GRP C ON A.USER_ID = C.USER_ID AND B.GRP_CD = C.GRP_CD AND B.GRP_NO = C.GRP_NO
+			LEFT OUTER JOIN ${umsdb}.TB_UMS_CODE D ON  D.CODE_GROUP = 'DEPT_CD' AND D.CODE = B.DEPT
+		WHERE A.GRP_CD = '07' AND A.MSG_NO = #{msgNo, jdbcType=VARCHAR} AND RIGHT_NO = #{rightNo, jdbcType=VARCHAR}
+			AND DEPT = #{dept, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="selectSmartDmModCount" parameterType="SmartModListVO"  resultType="java.lang.Integer">
+		SELECT 
+		    	Count(*) as count
+		FROM ${umsdb}.TB_UMS_MSG A LEFT JOIN ${umsdb}.TB_UMS_RIGHT B ON A.MSG_NO = B.MSG_NO
+		WHERE A.GRP_CD = #{grpCd, jdbcType=VARCHAR} AND A.MSG_NO = #{msgNo, jdbcType=VARCHAR} AND RIGHT_NO = #{rightNo, jdbcType=VARCHAR}
+			AND DEPT = #{dept, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="selectSmartDmDeptList" parameterType="SmartModListVO" resultMap="smartModDeptListMap">
+	    SELECT A.CODE, A.CODE_NAME--, B.MSG_NO, B.RIGHT_NO, B.DEPT
+		FROM (
+			SELECT CODE, CODE_NAME
+			FROM ${umsdb}.TB_UMS_CODE
+			WHERE CODE_GROUP = 'DEPT_CD') A LEFT OUTER JOIN ${umsdb}.TB_UMS_RIGHT B ON A.CODE = B.DEPT AND B.MSG_NO = #{msgNo, jdbcType=VARCHAR}
+		WHERE (MSG_NO IS NULL AND RIGHT_NO IS NULL AND DEPT IS NULL) OR RIGHT_NO = #{rightNo, jdbcType=VARCHAR}
+	</select>
+	
+	<update id="updateSmartDmList" parameterType="SmartModListVO">
+	    UPDATE ${umsdb}.TB_UMS_RIGHT 
+	    SET         
+               RT_STRT_DT	= #{rtStrtDt,	jdbcType=VARCHAR}
+			 , RT_END_DT	= #{rtEndDt,	jdbcType=VARCHAR}
+			 , DEPT			= #{dept,		jdbcType=VARCHAR}
+			 , UPDT_DT		= DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+			 , UPDT_ID		= #{userId,		jdbcType=VARCHAR}
+       	WHERE  MSG_NO 		= #{msgNo,		jdbcType=VARCHAR} 
+			AND RIGHT_NO  	= #{rightNo,	jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="deleteSmartDmList" parameterType="SmartModListVO">
+	     DELETE 
+	     FROM ${umsdb}.TB_UMS_RIGHT 
+	     WHERE GRP_NO = #{grpNo, jdbcType=VARCHAR} AND RIGHT_NO = #{rightNo, jdbcType=VARCHAR} AND DEPT = #{dept, jdbcType=VARCHAR}
+	</delete>
+</mapper>

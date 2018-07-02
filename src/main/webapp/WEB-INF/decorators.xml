@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<decorators defaultdir="/WEB-INF/view/decorators">
+
+    <!-- 제외 목록 -->
+    <excludes>
+        <pattern>/excelDownload</pattern>
+        <pattern>/showMessage</pattern>
+        <pattern>/smartDmWeb/*</pattern>
+        <pattern>/smartFaxWeb/*</pattern>
+        <pattern>/**/*Ajax*</pattern>
+        <pattern>/**/*Xml*</pattern>
+        <pattern>/**/*Excel*</pattern>
+    </excludes>
+    
+    <!-- 상단 -->
+    <decorator name="_header" page="main/header.jsp" />
+    <!-- GNB 
+    <decorator name="_gnb" page="main/gnb.jsp" />
+    -->
+    <!-- 하단 -->
+    <decorator name="_footer" page="main/footer.jsp" />
+    
+    <decorator name="_left" page="main/left.jsp" />
+                    
+    <!-- 기본 Layout -->
+    <decorator name="defaultLayout" page="defaultLayout.jsp">
+        <pattern>/*</pattern>
+    </decorator>
+                
+    <!-- 로그인 Layout -->
+    <decorator name="loginLayout" page="loginLayout.jsp">
+        <pattern>/login/</pattern>
+    </decorator>
+           
+    <!-- 팝업 화면용 -->
+    <decorator name="popupLayout" page="popupLayout.jsp">
+        <pattern>/**/*Popup*</pattern>
+        <pattern>/**/*PopUp*</pattern>
+        <pattern>/**/*Pop*</pattern>
+    </decorator> 
+
+    <!-- 아이프레임 화면용 -->
+    <decorator name="iframeLayout" page="iframeLayout.jsp">
+        <pattern>/*SD*</pattern> 
+        <pattern>/*SF*</pattern>
+    </decorator>
+   
+</decorators>

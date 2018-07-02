@@ -1,0 +1,1115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.com//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bccns.umsserviceweb.common.dao.UmsUserDAO">    
+	<!-- http://mybatis.github.io/mybatis-3/ko/sqlmap-xml.html 참조 -->
+	<!-- result map 에  type 은 typeAliases 에 정의한 type, id 는 sql 에서 resultMap 에 사용할 값임. -->
+	<resultMap type="UmsUserVO" id="umsUserResultMap">
+		<result property="userId"      column="user_id"/>     
+		<result property="userNm"      column="user_nm"/>     
+		<result property="userPw"      column="user_pw"/>     
+		<result property="userLv"      column="user_lv"/>     
+		<result property="dept"        column="dept"/>        
+		<result property="company"     column="company"/>     
+		<result property="email"       column="email"/>       
+		<result property="telNo1"      column="tel_no1"/>     
+		<result property="telNo2"      column="tel_no2"/>     
+		<result property="callbackNo1" column="callback_no1"/>
+		<result property="callbackNo2" column="callback_no2"/>
+		<result property="callbackNo3" column="callback_no3"/>
+		<result property="callbackNo4" column="callback_no4"/>
+		<result property="que"         column="que"/>         
+		<result property="ans"         column="ans"/>         
+		<result property="instDt"      column="inst_dt"/>     
+		<result property="instId"      column="inst_id"/>     
+		<result property="updtDt"      column="updt_dt"/>     
+		<result property="updtId"      column="updt_id"/>     
+		<result property="loginDt"     column="login_dt"/> 
+		<result property="userLvNm"     column="user_lv_nm"/>
+		<result property="loginYn"     column="login_yn"/>
+		<result property="updateDay"     column="update_day"/>
+	</resultMap>
+    
+    <resultMap type="MobileVO" id="mobileResultMap">
+        <result property="userNm"      	column="user_nm"/>
+        <result property="userId"      	column="user_id"/>
+        <result property="userPw"      	column="user_pw"/>
+        <result property="telNo2"      column="tel_no2"/>
+        <result property="osGb"  		column="os_gb"/>
+        <result property="deviceToken"  column="reg_id"/>
+    </resultMap>
+      
+	<resultMap type="UsrGrpVO" id="usrGrpResultMap">
+        <result property="userId" column="user_id"/>
+		<result property="grpCd" column="grp_cd"/>
+		<result property="grpNo" column="grp_no"/>
+		<result property="grpNm" column="grp_nm"/>
+		<result property="note" column="note"/>
+		<result property="instDt" column="inst_dt"/>
+		<result property="instId" column="inst_id"/>
+		<result property="updtDt" column="updt_dt"/>
+		<result property="updtId" column="updt_id"/>
+    </resultMap>
+    
+	<resultMap type="CommCodeVO" id="commCodeResultMap">
+        <result property="codeGroup" column="code_group"/>
+		<result property="code" column="code"/>
+		<result property="codeName" column="code_name"/>
+		<result property="instDt" column="inst_dt"/>
+		<result property="instId" column="inst_id"/>
+		<result property="updtDt" column="updt_dt"/>
+		<result property="updtId" column="updt_id"/>
+    </resultMap>
+    
+    <resultMap type="SearchUmsUserVO" id="selectApplUsrResultMap">
+        <result property="rowNumber" column="row_number"/>
+        <result property="userId"      column="user_id"/>     
+		<result property="userNm"      column="user_nm"/>     
+		<result property="userPw"      column="user_pw"/>     
+		<result property="userLv"      column="user_lv"/>     
+		<result property="dept"        column="dept"/>        
+		<result property="company"     column="company"/>     
+		<result property="email"       column="email"/>       
+		<result property="telNo1"      column="tel_no1"/>     
+		<result property="telNo2"      column="tel_no2"/>     
+		<result property="callbackNo1" column="callback_no1"/>
+		<result property="callbackNo2" column="callback_no2"/>
+		<result property="callbackNo3" column="callback_no3"/>
+		<result property="callbackNo4" column="callback_no4"/>
+		<result property="que"         column="que"/>         
+		<result property="ans"         column="ans"/>         
+		<result property="instDt"      column="inst_dt"/>     
+		<result property="instId"      column="inst_id"/>     
+		<result property="updtDt"      column="updt_dt"/>     
+		<result property="updtId"      column="updt_id"/>     
+		<result property="loginDt"     column="login_dt"/> 
+		<result property="userLvNm"     column="user_lv_nm"/>
+		<result property="loginYn"     column="login_yn"/>
+		<result property="confYn"     column="conf_yn"/>
+		<result property="deptNm" column="dept_nm"/>
+		<result property="companyNm" column="company_nm"/>
+	</resultMap>	
+	
+    <resultMap type="callBackVO" id="callBackMap">
+        <result property="rowNumber" 	column="row_number"/>
+        <result property="userId" 		column="USER_ID"/>
+        <result property="userNm" 		column="USER_NM"/>
+        <result property="callbackNo" 	column="CALLBACK_NO"/>
+        <result property="dept"			column="DEPT"/>
+        <result property="company"		column="COMPANY"/>
+        <result property="method" 		column="METHOD"/>
+        <result property="status" 		column="STATUS"/>
+        <result property="statusCd" 	column="STATUS_CD"/>
+        <result property="instDt" 		column="INST_DT"/>
+        <result property="updtDt" 		column="UPDT_DT"/>
+    </resultMap>
+	
+	<sql id="usrGrpSearchConditions">
+        <where>
+          <if test="userId != null and userId != ''">
+                AND user_id = #{userId, jdbcType=VARCHAR}
+          </if>
+          <if test="grpCd != null and grpCd != ''">
+                AND grp_cd = #{grpCd, jdbcType=VARCHAR}
+          </if>
+          <if test="grpNo != null and grpNo != ''">
+                AND grp_no = #{grpNo, jdbcType=VARCHAR}
+          </if>
+        </where>
+    </sql>  
+    
+	<sql id="usrGrpSearchConditions1">
+        <where>
+          <if test="grpCd != null and grpCd != ''">
+                AND A.grp_cd = #{grpCd, jdbcType=VARCHAR}
+          </if>
+          <if test="grpNo != null and grpNo != ''">
+                AND A.grp_no = #{grpNo, jdbcType=VARCHAR}
+          </if>
+        </where>
+    </sql>  
+    
+	<sql id="commCodeSearchConditions">
+        <where>
+          <if test="codeGroup != null and codeGroup != ''">
+                AND code_group = #{codeGroup, jdbcType=VARCHAR}
+          </if>
+          <if test="code != null and code != ''">
+                AND code = #{code, jdbcType=VARCHAR}
+          </if>
+        </where>
+    </sql>  
+	
+	<select id="selectUmsUserInfo" parameterType="umsUserVO" resultMap="umsUserResultMap">
+		SELECT
+			 USER_ID
+			,USER_NM
+			,USER_LV
+			,COMPANY
+			,${umsdb}.GETCODE('USER_LV', USER_LV) USER_LV_NM
+			,'N' LOGIN_YN	#CASE WHEN DATEADD(DAY, -90, now()) > LOGIN_DT THEN 'N' ELSE 'Y' END LOGIN_YN
+			,DATEDIFF(SUBSTRING( UPDT_DT,1,8) + ' ' + substring( UPDT_DT,9,2) + ':' + substring( UPDT_DT,11,2)  + ':' +    substring( UPDT_DT,13,2) ,now()) UPDATE_DAY
+		FROM ${umsdb}.TB_UMS_USER
+		WHERE 1=1
+			AND USER_ID = #{userId, jdbcType=VARCHAR} 
+			AND USER_PW = #{userPw, jdbcType=VARCHAR}  
+			AND CONF_YN = 'Y'
+	</select>
+	
+	<select id="selectMobileApi" parameterType="MobileVO" resultMap="mobileResultMap">
+ 		SELECT
+	        USER_ID
+	       ,USER_PW
+	       ,USER_NM
+	       ,TEL_NO2
+	       ,(SELECT OS_GB
+   		   		  FROM push.TB_PUSH_RECV_LIST
+   		   		 WHERE PHONE_NO = replace(TEL_NO2,"-","")) as OS_GB
+	     FROM ${umsdb}.TB_UMS_USER
+	     WHERE 1=1
+	        AND USER_ID = #{userId, jdbcType=VARCHAR}
+			AND USER_PW = #{userPw, jdbcType=VARCHAR}  
+			AND CONF_YN = 'Y'
+	</select>
+	
+	<update id="updateMobileApi" parameterType="MobileVO">
+	    UPDATE push.TB_PUSH_RECV_LIST 
+   		   SET reg_id = #{deviceToken}
+   		 WHERE PHONE_NO = replace((
+   		         SELECT
+                 TEL_NO2
+	             FROM ${umsdb}.TB_UMS_USER
+	             WHERE 1=1
+	             AND USER_ID = #{userId, jdbcType=VARCHAR}
+			     AND USER_PW = #{userPw, jdbcType=VARCHAR}  
+		         AND CONF_YN = 'Y'
+			),"-","")
+	</update>
+	
+	<update id="updateMobileApi2" parameterType="MobileVO">
+	    UPDATE push.TB_PUSH_RECV_LIST
+   		   SET OS_GB = #{osGb}
+   		 WHERE PHONE_NO = replace((
+   		         SELECT
+                 TEL_NO2
+	             FROM ${umsdb}.TB_UMS_USER
+	             WHERE 1=1
+	             AND USER_ID = #{userId, jdbcType=VARCHAR}
+			     AND USER_PW = #{userPw, jdbcType=VARCHAR}  
+		         AND CONF_YN = 'Y'
+			),"-","")
+
+	</update>
+	
+	<update id="updateMobileUpdateApi" parameterType="MobileVO">
+	    
+	    UPDATE push.TB_PUSH_RECV_LIST 
+   		SET reg_id = #{deviceToken}
+   	    WHERE PHONE_NO = replace(#{telNo2, jdbcType=VARCHAR},"-","")
+   	    
+	</update>
+	
+	<select id="selectUmsUserInfoD2" parameterType="umsUserVO" resultMap="umsUserResultMap">
+		SELECT
+			  A.USER_ID
+			, A.USER_NM
+			, A.USER_PW
+			, A.USER_LV
+			, B.CODE_NAME DEPT
+			, C.CODE_NAME COMPANY
+			, A.EMAIL
+			, A.TEL_NO1 
+			, A.TEL_NO2
+			, A.CALLBACK_NO1
+			, A.CALLBACK_NO2
+			, A.CALLBACK_NO3
+			, A.CALLBACK_NO4
+			, A.QUE
+			, A.ANS
+			, A.INST_DT
+			, A.INST_ID
+			, A.UPDT_DT
+			, A.UPDT_ID
+			, A.LOGIN_DT
+		FROM ${umsdb}.TB_UMS_USER A
+		LEFT OUTER JOIN ${umsdb}.TB_UMS_CODE B
+		ON A.DEPT = B.CODE
+		AND B.CODE_GROUP = 'DEPT_CD'
+		LEFT OUTER JOIN ${umsdb}.TB_UMS_CODE C
+		ON A.COMPANY = C.CODE
+		AND C.CODE_GROUP = 'COM_CD' 
+		WHERE 1=1
+			AND USER_ID = #{userId, jdbcType=VARCHAR} 
+	</select>
+	
+	<select id="selectUmsUserInfoD" parameterType="umsUserVO" resultMap="umsUserResultMap">
+		SELECT
+			  USER_ID
+			, USER_NM
+			, USER_PW
+			, USER_LV
+			, DEPT
+			, COMPANY
+			, EMAIL
+			, TEL_NO1
+			, TEL_NO2
+			, CALLBACK_NO1
+			, CALLBACK_NO2
+			, CALLBACK_NO3
+			, CALLBACK_NO4
+			, QUE
+			, ANS
+			, INST_DT
+			, INST_ID
+			, UPDT_DT
+			, UPDT_ID
+			, LOGIN_DT
+		FROM ${umsdb}.TB_UMS_USER
+		WHERE 1=1
+			AND USER_ID = #{userId, jdbcType=VARCHAR} 
+	</select>
+	<select id="selectUmsUserIdValid" parameterType="umsUserVO" resultType="java.lang.Integer">
+		SELECT
+			 count(user_id) as count
+		FROM ${umsdb}.TB_UMS_USER
+		WHERE 1=1
+			AND USER_ID = #{userId, jdbcType=VARCHAR} 
+	</select>
+	 
+	<insert id="insertUmsUserInfo" parameterType="umsUserVO">
+        INSERT INTO ${umsdb}.TB_UMS_USER
+              (   USER_ID
+				, USER_NM
+				, USER_PW
+				, USER_LV
+				, DEPT
+				, COMPANY
+				, EMAIL
+				, TEL_NO1
+				, TEL_NO2
+				, CALLBACK_NO1
+				, CALLBACK_NO2
+				, CALLBACK_NO3
+				, CALLBACK_NO4
+				, QUE
+				, ANS
+				, INST_DT
+				, INST_ID
+				, UPDT_DT
+				, UPDT_ID
+				, LOGIN_DT
+				, CONF_YN
+              ) VALUES (
+                  #{userId       ,jdbcType=VARCHAR}
+				, #{userNm       ,jdbcType=VARCHAR}
+				, #{userPw       ,jdbcType=VARCHAR}
+				, #{userLv       ,jdbcType=VARCHAR}
+				, #{dept         ,jdbcType=VARCHAR}
+				, #{company      ,jdbcType=VARCHAR}
+				, #{email        ,jdbcType=VARCHAR}
+				, #{telNo1       ,jdbcType=VARCHAR}
+				, #{telNo2       ,jdbcType=VARCHAR}
+				, #{callbackNo1  ,jdbcType=VARCHAR}
+				, #{callbackNo2  ,jdbcType=VARCHAR}
+				, #{callbackNo3  ,jdbcType=VARCHAR}
+				, #{callbackNo4  ,jdbcType=VARCHAR}
+				, #{que          ,jdbcType=VARCHAR}
+				, #{ans          ,jdbcType=VARCHAR}
+				, #{instDt       ,jdbcType=VARCHAR}
+				, #{instId       ,jdbcType=VARCHAR}
+				, #{updtDt       ,jdbcType=VARCHAR}
+				, #{updtId       ,jdbcType=VARCHAR}
+				, #{loginDt      ,jdbcType=VARCHAR}
+				, #{confYn       ,jdbcType=VARCHAR}
+              )  
+    </insert>
+    
+    <update id="updateUmsUserInfo" parameterType="umsUserVO">
+        UPDATE ${umsdb}.TB_UMS_USER 
+             SET         
+              USER_NM      = #{userNm       ,jdbcType=VARCHAR}
+			, USER_LV      = #{userLv       ,jdbcType=VARCHAR}
+			, DEPT         = #{dept         ,jdbcType=VARCHAR}
+			, COMPANY      = #{company      ,jdbcType=VARCHAR}
+			, EMAIL        = #{email        ,jdbcType=VARCHAR}
+			, TEL_NO1      = #{telNo1       ,jdbcType=VARCHAR}
+			, TEL_NO2      = #{telNo2       ,jdbcType=VARCHAR}
+			, CALLBACK_NO1 = #{callbackNo1  ,jdbcType=VARCHAR}
+			, CALLBACK_NO2 = #{callbackNo2  ,jdbcType=VARCHAR}
+			, CALLBACK_NO3 = #{callbackNo3  ,jdbcType=VARCHAR}
+			, CALLBACK_NO4 = #{callbackNo4  ,jdbcType=VARCHAR}
+			, QUE          = #{que          ,jdbcType=VARCHAR}
+			, ANS          = #{ans          ,jdbcType=VARCHAR}
+			, UPDT_DT      = #{updtDt       ,jdbcType=VARCHAR}
+			, UPDT_ID      = #{updtId       ,jdbcType=VARCHAR}  
+       WHERE    USER_ID = #{userId, jdbcType=VARCHAR} 
+       AND USER_PW = #{userPw, jdbcType=VARCHAR}
+    </update>
+    
+    
+    <!-- 로그인/로그아웃 이력-->
+	<insert id="insertUmsUserLog" parameterType="usrLogVO">
+        INSERT INTO ${umsdb}.UMS_LOG
+		(
+			 LOG_IP
+			,LOG_ID
+			,LOG_TYPE
+			,LOG_DATE
+		) VALUES
+		(
+			 #{logIp         ,jdbcType=VARCHAR}
+			,#{logId         ,jdbcType=VARCHAR}
+			,#{logType       ,jdbcType=VARCHAR}			
+			,now()
+		)
+    </insert>
+    
+    <!-- 로그인 시간 업데이트 -->
+    <update id="updateUmsUserLoginTime" parameterType="umsUserVO">
+            UPDATE 
+			${umsdb}.TB_UMS_USER
+		SET
+			LOGIN_DT = now()
+		WHERE 
+			USER_ID = #{userId, jdbcType=VARCHAR} 
+    </update>
+    
+    <!-- 비밀번호 변경 -->
+    <update id="updateUmsUserPw" parameterType="umsUserVO">
+        UPDATE 
+			${umsdb}.TB_UMS_USER
+		SET
+			 USER_PW  = #{userPw       ,jdbcType=VARCHAR}
+			,UPDT_DT  = #{updtDt       ,jdbcType=VARCHAR}
+			,LOGIN_DT = now()
+		WHERE 
+			USER_ID = #{userId, jdbcType=VARCHAR} 
+    </update>
+     
+    
+    <select id="selectUsrGrpList" parameterType="java.util.Map" resultMap="usrGrpResultMap">
+        select USER_ID
+			 , GRP_CD
+			 , GRP_NO
+			 , GRP_NM
+			 , NOTE
+			 , INST_DT
+			 , INST_ID
+			 , UPDT_DT
+			 , UPDT_ID
+        from ${umsdb}.TB_UMS_GRP
+        <include refid="usrGrpSearchConditions"/>
+        order by 1,2
+    </select>
+    
+    <select id="selectUsrGrpDmList" parameterType="java.util.Map" resultMap="usrGrpResultMap">
+        select A.USER_ID
+			 , A.GRP_CD
+			 , A.GRP_NO
+			 , A.GRP_NM
+			 , A.NOTE
+			 , A.INST_DT
+			 , A.INST_ID
+			 , A.UPDT_DT
+			 , A.UPDT_ID
+        from ${umsdb}.TB_UMS_GRP A
+		JOIN (  SELECT USER_ID
+		    	  FROM ${umsdb}.TB_UMS_USER A
+				 WHERE EXISTS (SELECT 'X' FROM ${umsdb}.TB_UMS_USER B
+								where A.COMPANY = B.COMPANY
+								  AND B.user_id = #{userId, jdbcType=VARCHAR}
+								  AND A.USER_LV = '40')		 ) B
+           ON 1=1
+		  AND A.USER_ID = B.USER_ID
+		  AND A.GRP_CD = '07'
+		  <include refid="usrGrpSearchConditions1"/>
+        order by 1,2
+    </select>
+
+    <select id="selectCodeList" parameterType="java.util.Map" resultMap="commCodeResultMap">
+        select CODE_GROUP
+			 , CODE
+			 , CODE_NAME
+			 , INST_DT
+			 , INST_ID
+			 , UPDT_DT
+			 , UPDT_ID
+        from ${umsdb}.TB_UMS_CODE
+        <include refid="commCodeSearchConditions"/>
+        order by 1,2
+    </select>
+    
+    <select id="selectCodeValAddCom" parameterType="java.util.Map" resultMap="commCodeResultMap">
+        select MAX(CODE_GROUP) CODE_GROUP
+             , MAX(CODE)+1 CODE
+        from ${umsdb}.TB_UMS_CODE
+        <include refid="commCodeSearchConditions"/>
+        AND CODE != '99'
+    </select>
+    <select id="selectCodeValAddDept" parameterType="java.util.Map" resultMap="commCodeResultMap">
+        select MAX(CODE_GROUP) CODE_GROUP
+             , MAX(CODE)+1 CODE
+        from ${umsdb}.TB_UMS_CODE
+        <include refid="commCodeSearchConditions"/>
+    </select>
+    <!-- 코드정보-->
+	<insert id="insertCodeInfo" parameterType="commCodeVO">
+	    INSERT INTO ${umsdb}.TB_UMS_CODE
+	           (   CODE_GROUP
+			      ,CODE
+			      ,CODE_NAME
+			      ,INST_DT
+			      ,INST_ID
+			      ,UPDT_DT
+			      ,UPDT_ID)
+	     VALUES
+	           (
+	               #{codeGroup      , jdbcType=VARCHAR}
+				 , #{code           , jdbcType=VARCHAR}
+				 , #{codeName       , jdbcType=VARCHAR}
+				 , #{instDt     , jdbcType=VARCHAR}
+				 , #{instId     , jdbcType=VARCHAR}
+				 , #{updtDt     , jdbcType=VARCHAR}
+				 , #{updtId     , jdbcType=VARCHAR}   
+				)
+    </insert>
+    
+    
+    <select id="selectUserIdCodeList" parameterType="java.util.Map" resultMap="commCodeResultMap">
+    select '99-99-99' CODE_GROUP
+          ,'ALL' CODE
+          ,'전체' CODE_NAME
+          ,'00000000000000' inst_dt
+	union all
+    select A.company+'-'+A.dept +'-'+A.user_lv CODE_GROUP
+          ,A.USER_ID CODE
+          ,A.USER_NM CODE_NAME
+          ,A.inst_dt 
+      from ${umsdb}.tb_ums_user A
+	  join (select company,dept,user_lv from ${umsdb}.tb_ums_user
+			 where user_id = #{userId, jdbcType=VARCHAR} 
+			   and user_lv > '10'
+			   and user_lv <![CDATA[ < ]]> '40'
+			   and user_lv!='99'
+			) B
+		ON A.company = B.company
+	   AND A.dept = B.dept
+	  where A.user_id != #{userId, jdbcType=VARCHAR} 
+	    and B.user_lv <![CDATA[ >= ]]> A.user_lv
+	    and A.conf_yn = 'Y'
+	 union all
+	 select A.company+'-'+A.dept +'-'+A.user_lv CODE_GROUP
+          ,A.USER_ID CODE
+          ,A.USER_NM CODE_NAME
+          ,A.inst_dt 
+      from ${umsdb}.tb_ums_user A
+	  join (select company,dept,user_lv from ${umsdb}.tb_ums_user
+			 where user_id = #{userId, jdbcType=VARCHAR} 
+			   and user_lv > '30'
+			   and user_lv!='99'
+			) B
+		ON A.company = B.company
+	  where A.user_id != #{userId, jdbcType=VARCHAR} 
+	    and B.user_lv >= A.user_lv
+	    and A.conf_yn = 'Y'
+	 union all
+	 select A.company+'-'+A.dept +'-'+A.user_lv CODE_GROUP
+          ,A.USER_ID CODE
+          ,A.USER_NM CODE_NAME
+          ,A.inst_dt
+	   from ${umsdb}.tb_ums_user A 
+	  where
+	    (case when '99' = (select user_lv from ${umsdb}.tb_ums_user
+			 where user_id = #{userId, jdbcType=VARCHAR} ) then #{userId, jdbcType=VARCHAR}  else user_id end ) = #{userId, jdbcType=VARCHAR} 
+		and conf_yn = 'Y'
+		order by 1 desc 
+	</select>
+    
+    <select id="selectApplUsrList"  parameterType="searchUmsUserVO" resultMap="selectApplUsrResultMap">
+        select *
+        from (
+        select (@row_number:= @row_number + 1) AS row_number
+	    	    , AA.*
+        from (	    
+		    SELECT A.USER_ID
+				,A.USER_NM
+				,A.USER_PW
+				,A.USER_LV
+				,${umsdb}.GETCODE('USER_LV', A.USER_LV) USER_LV_NM
+				,A.DEPT
+				,${umsdb}.GETCODE('DEPT_CD', A.DEPT) DEPT_NM
+				,A.COMPANY
+				,${umsdb}.GETCODE('COM_CD', A.COMPANY) COMPANY_NM
+				,A.EMAIL
+				,A.TEL_NO1
+				,A.TEL_NO2
+				,A.CALLBACK_NO1
+				,A.CALLBACK_NO2
+				,A.CALLBACK_NO3
+				,A.CALLBACK_NO4
+				,A.QUE
+				,A.ANS
+				,A.INST_DT
+				,A.INST_ID
+				,A.UPDT_DT
+				,A.UPDT_ID
+				,A.LOGIN_DT
+				,A.CONF_YN
+		      from ${umsdb}.tb_ums_user A
+			  join (select company,dept,user_lv from ${umsdb}.tb_ums_user
+					 where user_id =  #{userId, jdbcType=VARCHAR} 
+					   and user_lv>'10'
+					) B
+				ON A.company = B.company
+			   AND A.dept = B.dept
+			  where user_id !=  #{userId, jdbcType=VARCHAR}  
+			    and B.user_lv >= A.user_lv
+				and '10' <![CDATA[ < ]]> #{userLv, jdbcType=VARCHAR} 
+				and '40' <![CDATA[ > ]]> #{userLv, jdbcType=VARCHAR}
+				<if test="company != null and company != ''">
+		        AND A.company =  #{company, jdbcType=VARCHAR}
+		        </if>
+				<if test="searchType == '01'">
+		          <if test="searchName != null and searchName != ''">
+		                AND A.user_nm like  CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+		          </if>
+		      </if>
+		      <if test="searchType == '02'">
+		          <if test="searchName != null and searchName != ''">
+		                AND A.user_id like  CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+		          </if>
+		      </if>    
+		union all 
+		SELECT A.USER_ID
+				,A.USER_NM
+				,A.USER_PW
+				,A.USER_LV
+				,${umsdb}.GETCODE('USER_LV', A.USER_LV) USER_LV_NM
+				,A.DEPT
+				,${umsdb}.GETCODE('DEPT_CD', A.DEPT) DEPT_NM
+				,A.COMPANY
+				,${umsdb}.GETCODE('COM_CD', A.COMPANY) COMPANY_NM
+				,A.EMAIL
+				,A.TEL_NO1
+				,A.TEL_NO2
+				,A.CALLBACK_NO1
+				,A.CALLBACK_NO2
+				,A.CALLBACK_NO3
+				,A.CALLBACK_NO4
+				,A.QUE
+				,A.ANS
+				,A.INST_DT
+				,A.INST_ID
+				,A.UPDT_DT
+				,A.UPDT_ID
+				,A.LOGIN_DT
+				,A.CONF_YN
+		      from ${umsdb}.tb_ums_user A
+			  join (select company,dept,user_lv from ${umsdb}.tb_ums_user
+					 where user_id =  #{userId, jdbcType=VARCHAR} 
+					   and user_lv>'10'
+					) B
+				ON A.company = B.company 
+			  where user_id !=  #{userId, jdbcType=VARCHAR}  
+			    and B.user_lv >= A.user_lv
+				and '30' <![CDATA[ < ]]> #{userLv, jdbcType=VARCHAR} 
+				and '50' <![CDATA[ > ]]> #{userLv, jdbcType=VARCHAR}
+				<if test="company != null and company != ''">
+		        AND A.company =  #{company, jdbcType=VARCHAR}
+		        </if>
+				<if test="searchType == '01'">
+		          <if test="searchName != null and searchName != ''">
+		                AND A.user_nm like  CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+		          </if>
+		      </if> 
+		      <if test="searchType == '02'">
+		          <if test="searchName != null and searchName != ''">
+		                AND A.user_id like  CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+		          </if>
+		      </if>  
+		union all 
+		select   A.USER_ID
+				,A.USER_NM
+				,A.USER_PW
+				,A.USER_LV
+				,${umsdb}.GETCODE('USER_LV', A.USER_LV) USER_LV_NM
+				,A.DEPT
+				,${umsdb}.GETCODE('DEPT_CD', A.DEPT) DEPT_NM
+				,A.COMPANY
+				,${umsdb}.GETCODE('COM_CD', A.COMPANY) COMPANY_NM
+				,A.EMAIL
+				,A.TEL_NO1
+				,A.TEL_NO2
+				,A.CALLBACK_NO1
+				,A.CALLBACK_NO2
+				,A.CALLBACK_NO3
+				,A.CALLBACK_NO4
+				,A.QUE
+				,A.ANS
+				,A.INST_DT
+				,A.INST_ID
+				,A.UPDT_DT
+				,A.UPDT_ID
+				,A.LOGIN_DT
+				,A.CONF_YN
+		      from ${umsdb}.tb_ums_user A
+			  where '99' =  #{userLv, jdbcType=VARCHAR}
+			  <if test="company != null and company != ''">
+		        AND A.company =  #{company, jdbcType=VARCHAR}
+		        </if> 
+			  <if test="searchType == '01'">
+		          <if test="searchName != null and searchName != ''">
+		                AND A.user_nm like  CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+		          </if>
+		      </if> 
+		      <if test="searchType == '02'">
+		          <if test="searchName != null and searchName != ''">
+		                AND A.user_id like  CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+		          </if>
+		      </if> 
+			  ) AA	,(SELECT @row_number:=0) AS t
+		 order by AA.INST_DT
+		 ) AAA				 
+	     where ROW_NUMBER between #{firstRecordIndex, jdbcType=NUMERIC} + 1 and #{firstRecordIndex, jdbcType=NUMERIC} + #{recordCountPerPage, jdbcType=NUMERIC}
+	</select>
+
+    <select id="selectApplUsrListCount" parameterType="searchUmsUserVO" resultType="java.lang.Integer">
+        select count(*) as count
+        from (	    
+		   SELECT A.USER_ID
+				,A.USER_NM
+				,A.USER_PW
+				,A.USER_LV
+				,${umsdb}.GETCODE('USER_LV', A.USER_LV) USER_LV_NM
+				,A.DEPT
+				,${umsdb}.GETCODE('DEPT_CD', A.DEPT) DEPT_NM
+				,A.COMPANY
+				,${umsdb}.GETCODE('COM_CD', A.COMPANY) COMPANY_NM
+				,A.EMAIL
+				,A.TEL_NO1
+				,A.TEL_NO2
+				,A.CALLBACK_NO1
+				,A.CALLBACK_NO2
+				,A.CALLBACK_NO3
+				,A.CALLBACK_NO4
+				,A.QUE
+				,A.ANS
+				,A.INST_DT
+				,A.INST_ID
+				,A.UPDT_DT
+				,A.UPDT_ID
+				,A.LOGIN_DT
+				,A.CONF_YN
+		      from ${umsdb}.tb_ums_user A
+			  join (select company,dept,user_lv from ${umsdb}.tb_ums_user
+					 where user_id =  #{userId, jdbcType=VARCHAR} 
+					   and user_lv>'10'
+					) B
+				ON A.company = B.company
+			   AND A.dept = B.dept
+			  where user_id !=  #{userId, jdbcType=VARCHAR}  
+			    and B.user_lv >= A.user_lv
+				and '10' <![CDATA[ < ]]> #{userLv, jdbcType=VARCHAR} 
+				and '40' <![CDATA[ > ]]> #{userLv, jdbcType=VARCHAR}
+				<if test="company != null and company != ''">
+		        AND A.company =  #{company, jdbcType=VARCHAR}
+		        </if>
+				<if test="searchType == '01'">
+		          <if test="searchName != null and searchName != ''">
+		                AND A.user_nm like  CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+		          </if>
+		      </if> 
+		      <if test="searchType == '02'">
+		          <if test="searchName != null and searchName != ''">
+		                AND A.user_id like  CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+		          </if>
+		      </if> 
+		union all 
+		SELECT A.USER_ID
+				,A.USER_NM
+				,A.USER_PW
+				,A.USER_LV
+				,${umsdb}.GETCODE('USER_LV', A.USER_LV) USER_LV_NM
+				,A.DEPT
+				,${umsdb}.GETCODE('DEPT_CD', A.DEPT) DEPT_NM
+				,A.COMPANY
+				,${umsdb}.GETCODE('COM_CD', A.COMPANY) COMPANY_NM
+				,A.EMAIL
+				,A.TEL_NO1
+				,A.TEL_NO2
+				,A.CALLBACK_NO1
+				,A.CALLBACK_NO2
+				,A.CALLBACK_NO3
+				,A.CALLBACK_NO4
+				,A.QUE
+				,A.ANS
+				,A.INST_DT
+				,A.INST_ID
+				,A.UPDT_DT
+				,A.UPDT_ID
+				,A.LOGIN_DT
+				,A.CONF_YN
+		      from ${umsdb}.tb_ums_user A
+			  join (select company,dept,user_lv from ${umsdb}.tb_ums_user
+					 where user_id =  #{userId, jdbcType=VARCHAR} 
+					   and user_lv>'10'
+					) B
+				ON A.company = B.company 
+			  where user_id !=  #{userId, jdbcType=VARCHAR}  
+			    and B.user_lv >= A.user_lv
+				and '30' <![CDATA[ < ]]> #{userLv, jdbcType=VARCHAR} 
+				and '60' <![CDATA[ > ]]> #{userLv, jdbcType=VARCHAR}
+				<if test="company != null and company != ''">
+		        AND A.company =  #{company, jdbcType=VARCHAR}
+		        </if>
+				<if test="searchType == '01'">
+		          <if test="searchName != null and searchName != ''">
+		                AND A.user_nm like  CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+		          </if>
+		      </if> 
+		      <if test="searchType == '02'">
+		          <if test="searchName != null and searchName != ''">
+		                AND A.user_id like  CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+		          </if>
+		      </if> 
+		union all 
+		select   A.USER_ID
+				,A.USER_NM
+				,A.USER_PW
+				,A.USER_LV
+				,${umsdb}.GETCODE('USER_LV', A.USER_LV) USER_LV_NM
+				,A.DEPT
+				,${umsdb}.GETCODE('DEPT_CD', A.DEPT) DEPT_NM
+				,A.COMPANY
+				,${umsdb}.GETCODE('COM_CD', A.COMPANY) COMPANY_NM
+				,A.EMAIL
+				,A.TEL_NO1
+				,A.TEL_NO2
+				,A.CALLBACK_NO1
+				,A.CALLBACK_NO2
+				,A.CALLBACK_NO3
+				,A.CALLBACK_NO4
+				,A.QUE
+				,A.ANS
+				,A.INST_DT
+				,A.INST_ID
+				,A.UPDT_DT
+				,A.UPDT_ID
+				,A.LOGIN_DT
+				,A.CONF_YN
+		      from ${umsdb}.tb_ums_user A
+			  where '99' =  #{userLv, jdbcType=VARCHAR} 
+			  <if test="company != null and company != ''">
+		        AND A.company =  #{company, jdbcType=VARCHAR}
+		        </if>
+			  <if test="searchType == '01'">
+		          <if test="searchName != null and searchName != ''">
+		                AND A.user_nm like  CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+		          </if>
+		      </if>  
+		      <if test="searchType == '02'">
+		          <if test="searchName != null and searchName != ''">
+		                AND A.user_id like  CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+		          </if>
+		      </if> 
+			  ) AA				 
+	</select>
+	 
+    <!-- 가입승인 변경 -->
+    <update id="updateUmsUserAppl" parameterType="umsUserVO">
+        UPDATE 
+			${umsdb}.TB_UMS_USER
+		SET
+			 CONF_YN  = #{confYn       ,jdbcType=VARCHAR}
+			,USER_LV  = #{userLv       ,jdbcType=VARCHAR}
+			,UPDT_DT  = #{updtDt       ,jdbcType=VARCHAR}
+			,UPDT_ID  = #{updtId       ,jdbcType=VARCHAR}
+		WHERE 
+			USER_ID = #{userId, jdbcType=VARCHAR} 
+    </update>
+    
+    
+    <select id="selectSeekId" parameterType="umsUserVO" resultMap="umsUserResultMap">
+		SELECT
+			 user_id
+		FROM ${umsdb}.TB_UMS_USER
+		WHERE 1=1
+			AND USER_NM      = #{userNm       ,jdbcType=VARCHAR}
+			AND EMAIL        = #{email        ,jdbcType=VARCHAR} 
+	</select>
+	
+    <select id="selectSeekPw" parameterType="umsUserVO" resultMap="umsUserResultMap">
+		SELECT
+			 user_pw
+		FROM ${umsdb}.TB_UMS_USER
+		WHERE 1=1
+			AND USER_ID      = #{userId       ,jdbcType=VARCHAR}
+			AND USER_NM      = #{userNm       ,jdbcType=VARCHAR}
+			AND EMAIL        = #{email        ,jdbcType=VARCHAR}
+			AND QUE        = #{que          ,jdbcType=VARCHAR}
+			AND ANS        = #{ans          ,jdbcType=VARCHAR}
+	</select>
+	
+    <select id="selectCallbackList" parameterType="java.lang.String" resultMap="commCodeResultMap">
+		SELECT CALLBACK_NO AS CODE_NAME
+		  FROM ${umsdb}.TB_CALLBACK_INFO
+		 WHERE USER_ID = #{userId}
+		   AND STATUS = 'A'
+    </select>
+    
+    <select id="selectCallbackInfo" parameterType="callBackVO" resultMap="callBackMap">
+        SELECT
+        	 USER_ID
+			,CALLBACK_NO
+			,METHOD
+			,${umsdb}.GETCODE('APPL_ST', STATUS) STATUS
+			,STATUS STATUS_CD
+			,INST_DT
+			,UPDT_DT
+        FROM ${umsdb}.TB_CALLBACK_INFO
+        WHERE USER_ID = #{userId, jdbcType=VARCHAR} 
+          <if test="callbackNo != null and callbackNo != ''">
+          AND CALLBACK_NO = #{callbackNo, jdbcType=CHAR}
+          </if>
+        ORDER BY STATUS, CALLBACK_NO 
+    </select>
+    
+    <insert id="insertAuthInfo" parameterType="callBackVO">
+        INSERT INTO ${umsdb}.TB_AUTH_CODE_INFO
+        	(TEL_NO
+			,HP_NO
+			,AUTH_CODE
+			,INST_DT)
+		VALUES
+	        (#{callbackNo 	, jdbcType=CHAR}
+			,(SELECT TRIM(REPLACE(TEL_NO2,'-', '')) FROM ${umsdb}.TB_UMS_USER WHERE USER_ID = #{userId, jdbcType=VARCHAR})
+			,#{authCode   	, jdbcType=CHAR}
+			,#{instDt     	, jdbcType=CHAR})
+		ON DUPLICATE KEY
+		UPDATE AUTH_CODE =  #{authCode, jdbcType=CHAR}, 
+			   UPDT_DT 	 = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+	</insert>
+	
+    <delete id="deleteAuthInfo" parameterType="callBackVO">
+        DELETE FROM ${umsdb}.TB_AUTH_CODE_INFO 
+         WHERE TEL_NO 	 = #{callbackNo} 
+		   AND HP_NO 	 = (SELECT TRIM(REPLACE(TEL_NO2,'-', '')) FROM ${umsdb}.TB_UMS_USER WHERE USER_ID = #{userId, jdbcType=VARCHAR})
+		   AND AUTH_CODE = #{authCode}
+    </delete>
+	
+    <insert id="insertAuthSMS" parameterType="callBackVO">
+        INSERT INTO SDK_SMS_SEND
+           (
+            USER_ID
+           ,SCHEDULE_TYPE
+           ,SUBJECT
+           ,SMS_MSG
+           ,SEND_DATE
+           ,CALLBACK
+           ,DEST_TYPE
+           ,DEST_COUNT
+           ,DEST_INFO
+           )
+        VALUES
+        	(
+        	 'bcadmin'
+        	 ,0
+        	 ,''
+        	 ,'[모바일안내장] 휴대폰인증번호는 ${authCode} 입니다. 정확히 입력해주세요.'
+        	 ,DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+        	 ,'0220572578'
+        	 ,0
+        	 ,1
+        	 ,(SELECT CONCAT('^', TRIM(REPLACE(TEL_NO2,'-', ''))) FROM ${umsdb}.TB_UMS_USER WHERE USER_ID = #{userId, jdbcType=VARCHAR}) 
+        	)
+    </insert>
+    
+    <insert id="insertCallbackInfo" parameterType="callBackVO">
+        INSERT INTO ${umsdb}.TB_CALLBACK_INFO 
+			(USER_ID
+			,CALLBACK_NO
+			,INST_DT)
+		SELECT 
+			#{userId}
+			,TEL_NO
+			,DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+		 FROM ${umsdb}.TB_AUTH_CODE_INFO 
+		 WHERE TEL_NO 	 = #{callbackNo} 
+		   AND HP_NO 	 = (SELECT TRIM(REPLACE(TEL_NO2,'-', '')) FROM ${umsdb}.TB_UMS_USER WHERE USER_ID = #{userId, jdbcType=VARCHAR})
+		   AND AUTH_CODE = #{authCode}
+		
+		ON DUPLICATE KEY 
+		
+		UPDATE STATUS  = #{status, jdbcType=CHAR}, 
+			   UPDT_DT = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+    </insert>
+    
+    <update id="updateCallbackInfo" parameterType="callBackVO">
+        UPDATE ${umsdb}.TB_CALLBACK_INFO SET 
+        	STATUS = #{statusCd, jdbcType=CHAR}, 
+        	UPDT_DT = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+        WHERE USER_ID 		= #{userId}
+          AND CALLBACK_NO 	= #{callbackNo}
+    </update>
+    
+    <delete id="deleteCallbackInfo" parameterType="callBackVO">
+        DELETE FROM ${umsdb}.TB_CALLBACK_INFO
+         WHERE USER_ID 		= #{userId}
+           AND CALLBACK_NO 	= (SELECT TEL_NO 
+           						 FROM ${umsdb}.TB_AUTH_CODE_INFO 
+           						WHERE TEL_NO 	 = #{callbackNo} 
+           						  AND HP_NO 	 = (SELECT TRIM(REPLACE(TEL_NO2,'-', '')) FROM ${umsdb}.TB_UMS_USER WHERE USER_ID = #{userId})
+           						  AND AUTH_CODE  = #{authCode})
+    </delete>
+    
+    <insert id="insertCallbackInfoHis" parameterType="callBackVO">
+        INSERT INTO ${umsdb}.TB_CALLBACK_INFO_HIS
+        	(USER_ID
+        	,CALLBACK_NO
+        	,METHOD
+        	,STATUS
+        	,INST_DT)
+        SELECT 
+        	 USER_ID
+        	,CALLBACK_NO
+        	,METHOD
+        	,STATUS
+        	,DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+        FROM ${umsdb}.TB_CALLBACK_INFO
+        WHERE USER_ID 		= #{userId}
+          AND CALLBACK_NO 	= #{callbackNo}
+    </insert>
+    
+    <select id="selectGrpCallbackList" parameterType="searchUmsUserVO" resultMap="callBackMap">
+        select *
+        from (
+	        select (@row_number:= @row_number + 1) AS row_number
+		    	    , AA.*
+	        from (	
+		        SELECT 
+					 USER_ID 
+					,CALLBACK_NO
+					,METHOD
+					,${umsdb}.GETCODE('APPL_ST', STATUS) STATUS
+					,UPDT_DT
+					,INST_DT
+				 FROM ${umsdb}.TB_CALLBACK_INFO
+				WHERE USER_ID = #{userId, jdbcType=VARCHAR}
+				  AND STATUS IN
+				<foreach item="item" index="index" collection="status" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+				<if test="searchType == '01'">
+					<if test="searchName != null and searchName != ''">
+						AND CALLBACK_NO  = #{searchName, jdbcType=VARCHAR}
+					</if>
+				</if> 
+			) AA, (SELECT @row_number:=0) AS t
+			order by AA.INST_DT
+		) AAA				 
+	    where ROW_NUMBER between #{firstRecordIndex, jdbcType=NUMERIC} + 1 and #{firstRecordIndex, jdbcType=NUMERIC} + #{recordCountPerPage, jdbcType=NUMERIC}
+    </select>
+    
+    <select id="selectGrpCallbackListCount" parameterType="searchUmsUserVO" resultType="java.lang.Integer">
+        select count(*) as count
+        from (
+        	SELECT 
+				 USER_ID 
+				,CALLBACK_NO
+				,METHOD
+				,STATUS
+				,UPDT_DT
+				,INST_DT
+			 FROM ${umsdb}.TB_CALLBACK_INFO
+			WHERE USER_ID = #{userId, jdbcType=VARCHAR}
+			  AND STATUS IN
+			<foreach item="item" index="index" collection="status" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+			<if test="searchType == '01'">
+				<if test="searchName != null and searchName != ''">
+					AND CALLBACK_NO  = #{searchName, jdbcType=VARCHAR}
+				</if>
+			</if> 
+			) AA
+    </select>
+    
+    <select id="selectApplCallbackList" parameterType="searchUmsUserVO" resultMap="callBackMap">
+        select *
+        from (
+	        select (@row_number:= @row_number + 1) AS row_number
+		    	    , AA.*
+	        from (	
+		        SELECT 
+					 A.USER_ID 
+					,USER_NM
+					,METHOD
+					,${umsdb}.GETCODE('DEPT_CD', A.DEPT) DEPT
+					,${umsdb}.GETCODE('COM_CD', A.COMPANY) COMPANY
+					,CALLBACK_NO
+					,STATUS STATUS_CD
+					,${umsdb}.GETCODE('APPL_ST', STATUS) STATUS
+					,B.INST_DT
+				FROM
+					${umsdb}.TB_UMS_USER A,
+					${umsdb}.TB_CALLBACK_INFO B
+				WHERE A.USER_ID = B.USER_ID
+				  AND STATUS IN
+				<foreach item="item" index="index" collection="status" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+				<if test="company != null and company != ''">
+					AND A.company =  #{company, jdbcType=VARCHAR}
+				</if>
+				<if test="searchType == '01'">
+					<if test="searchName != null and searchName != ''">
+						AND A.user_nm like  CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+					</if>
+				</if> 
+				<if test="searchType == '02'">
+					<if test="searchName != null and searchName != ''">
+						AND A.user_id like  CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+					</if>
+				</if> 
+			) AA, (SELECT @row_number:=0) AS t
+			order by AA.INST_DT
+		) AAA				 
+	    where ROW_NUMBER between #{firstRecordIndex, jdbcType=NUMERIC} + 1 and #{firstRecordIndex, jdbcType=NUMERIC} + #{recordCountPerPage, jdbcType=NUMERIC}
+    </select>
+    
+    <select id="selectApplCallbackListCount" parameterType="searchUmsUserVO" resultType="java.lang.Integer">
+        select count(*) as count
+        from (
+        	SELECT 
+					 A.USER_ID 
+					,USER_NM
+					,METHOD
+					,DEPT
+					,COMPANY
+					,CALLBACK_NO
+					,STATUS
+					,B.INST_DT
+				FROM
+					${umsdb}.TB_UMS_USER A,
+					${umsdb}.TB_CALLBACK_INFO B
+				WHERE A.USER_ID = B.USER_ID
+				  AND STATUS IN
+				<foreach item="item" index="index" collection="status" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+				<if test="company != null and company != ''">
+					AND A.company =  #{company, jdbcType=VARCHAR}
+				</if>
+				<if test="searchType == '01'">
+					<if test="searchName != null and searchName != ''">
+						AND A.user_nm like  CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+					</if>
+				</if> 
+				<if test="searchType == '02'">
+					<if test="searchName != null and searchName != ''">
+						AND A.user_id like  CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+					</if>
+				</if> 	    
+			) AA
+    </select>
+    
+</mapper>

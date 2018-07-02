@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+
+    <!-- Appenders -->
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <param name="Target" value="System.out" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}][%-5p][%C{2}.%M()] %m%n" />
+        </layout>
+    </appender>
+    
+    <!-- local서버 구동 환결 설정 요  예시 -Dmediahub.home=/home/mediahub/ -->
+    <appender name="DEBUG_CONSOLE" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="C:/log/UMSServiceWeb/umslog.log" />
+        <param name="Encoding" value="EUC-KR" />
+        <param name="ImmediateFlush" value="true" />
+        <param name="Append" value="true" />
+        <param name="DatePattern" value="'.'yyyyMMdd" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                value="[%d{yyyy-MM-dd HH:mm:ss.SSS}][%-5p][%C{2}.%M()] %m%n" />
+        </layout>
+    </appender>
+    
+    <!-- Application Loggers -->
+    <logger name="com.bccns">
+        <level value="debug" />
+        <appender-ref ref="DEBUG_CONSOLE" />
+    </logger>
+    
+    <!-- 3rdparty Loggers -->
+    <logger name="org.springframework" additivity="false">
+        <level value="debug" />
+        <appender-ref ref="DEBUG_CONSOLE" />
+    </logger>
+             
+    <logger name="jdbc.BaseJdbcLogger" additivity="false">
+        <level value="debug" /> 
+        <appender-ref ref="DEBUG_CONSOLE" />
+    </logger>
+
+    <logger name="java.sql" additivity="false">
+        <level value="debug" /> 
+        <appender-ref ref="DEBUG_CONSOLE" />
+    </logger>
+    
+    <!-- Root Logger -->
+    <root>
+        <priority value="debug" />
+        <appender-ref ref="DEBUG_CONSOLE" />
+    </root>
+    
+</log4j:configuration>

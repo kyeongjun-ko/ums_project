@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.com//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bccns.umsserviceweb.mgr.dao.MsgBoxDAO">
+	<!-- http://mybatis.github.io/mybatis-3/ko/sqlmap-xml.html 참조 -->
+	<!-- result map 에  type 은 typeAliases 에 정의한 type, id 는 sql 에서 resultMap 에 사용할 값임. -->
+	<resultMap type="msgBoxVO" id="msgBoxResultMap">
+        <result property="userId" column="user_id"/>
+        <result property="rowNumber" column="row_number"/>
+        <result property="codeName" column="code_name"/>
+		<result property="grpCd" column="grp_cd"/>
+		<result property="grpNm" column="grp_nm"/>
+		<result property="grpNo" column="grp_no"/>
+		<result property="msgNo" column="msg_no"/>
+		<result property="subject" column="subject"/>
+		<result property="contents1" column="contents1"/>
+		<result property="contents1Temp" column="contents1_temp"/>
+		<result property="contents2" column="contents2"/>
+		<result property="contents3" column="contents3"/>
+		<result property="contents4" column="contents4"/>
+		<result property="contents5" column="contents5"/>
+		<result property="contents6" column="contents6"/>
+		<result property="contents7" column="contents7"/>
+		<result property="contents8" column="contents8"/>
+		<result property="contents9" column="contents9"/>
+		<result property="contents10" column="contents10"/>
+		<result property="instDt" column="inst_dt"/>
+		<result property="instId" column="inst_id"/>
+		<result property="updtDt" column="updt_dt"/>
+		<result property="updtId" column="updt_id"/>
+    </resultMap>
+	
+	<sql id="searchConditions">
+        <where>
+          <if test="userId != null and userId != ''">
+                AND user_id = #{userId, jdbcType=VARCHAR}
+          </if>
+          <if test="grpCd != null and grpCd != ''">
+                AND grp_cd = #{grpCd, jdbcType=VARCHAR}
+          </if>
+          <if test="grpNo != null and grpNo != ''">
+                AND grp_no = #{grpNo, jdbcType=VARCHAR}
+          </if>
+          <if test="msgNo != null and msgNo != ''">
+                AND msg_no = #{msgNo, jdbcType=VARCHAR}
+          </if>
+          <if test="subject != null and subject != ''">
+                AND subject like CONCAT('%',#{subject, jdbcType=VARCHAR} ,'%')
+          </if> 
+        </where>
+    </sql>  
+    <sql id="searchConditions1">
+        <where>
+          <if test="userId != null and userId != ''">
+                AND user_id = #{userId, jdbcType=VARCHAR}
+          </if>
+          <if test="grpCd != null and grpCd != ''">
+                AND grp_cd = #{grpCd, jdbcType=VARCHAR}
+          </if>
+          <if test="grpNo != null and grpNo != ''">
+                AND grp_no = #{grpNo, jdbcType=VARCHAR}
+          </if>
+          <if test="msgNo != null and msgNo != ''">
+                AND msg_no = #{msgNo, jdbcType=VARCHAR}
+          </if>
+          
+          <if test="searchType == '01'">
+	          <if test="searchName != null and searchName != ''">
+	                AND subject like CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+	          </if>
+	      </if>
+        </where>
+    </sql>  
+    
+    <sql id="searchConditions2">
+        <where>
+          <if test="grpCd != null and grpCd != ''">
+                AND A.grp_cd = #{grpCd, jdbcType=VARCHAR}
+          </if>
+          <if test="grpNo != null and grpNo != ''">
+                AND A.grp_no = #{grpNo, jdbcType=VARCHAR}
+          </if>
+          <if test="msgNo != null and msgNo != ''">
+                AND A.msg_no = #{msgNo, jdbcType=VARCHAR}
+          </if>
+          
+          <if test="searchType == '01'">
+	          <if test="searchName != null and searchName != ''">
+	                AND A.subject like CONCAT('%',#{searchName, jdbcType=VARCHAR} ,'%')
+	          </if>
+	      </if>
+        </where>
+    </sql> 
+	 
+    <sql id="joinConditions1">
+    	<if test="userlv == '10' or userlv == '20' or userlv == '30'">
+	      JOIN (SELECT GRP_CD, GRP_NO, MSG_NO FROM ${umsdb}.TB_UMS_RIGHT B
+						JOIN ${umsdb}.TB_UMS_USER C
+						ON 1=1 
+						AND B.DEPT = C.DEPT
+						AND B.COMPANY = C.COMPANY
+						AND C.USER_ID  = #{userId, jdbcType=VARCHAR}
+					    AND #{yyyymmdd, jdbcType=VARCHAR} BETWEEN B.RT_STRT_DT AND B.RT_END_DT
+					  GROUP BY GRP_CD, GRP_NO, MSG_NO) B
+	    </if> 
+	    <if test="userlv == '40' or userlv == '50'">
+        JOIN (SELECT GRP_CD, GRP_NO, MSG_NO FROM ${umsdb}.TB_UMS_RIGHT B
+						JOIN ${umsdb}.TB_UMS_USER C
+						ON 1=1 
+						AND B.COMPANY = C.COMPANY
+						AND C.USER_ID  = #{userId, jdbcType=VARCHAR}
+					    AND #{yyyymmdd, jdbcType=VARCHAR} BETWEEN B.RT_STRT_DT AND B.RT_END_DT
+					  GROUP BY GRP_CD, GRP_NO, MSG_NO) B
+	    </if>
+	    <if test="userlv == '99'">
+	      Where 1=1 
+	    </if>
+	</sql>
+	        
+	<select id="selectMsgBoxList" parameterType="SearchMsgBoxVO" resultMap="msgBoxResultMap">
+       select *
+        from (	    
+		    SELECT (@row_number:= @row_number + 1) AS row_number
+		         , USER_ID
+				 , GRP_CD
+				 , GRP_NO
+				 , MSG_NO
+				 , SUBJECT
+				 , CONTENTS1
+				 , (case when SUBJECT = '' OR  SUBJECT is null then '제목없음' else SUBJECT END) CONTENTS1_TEMP
+				 , CONTENTS2
+				 , CONTENTS3
+				 , CONTENTS4
+				 , CONTENTS5
+				 , CONTENTS6
+				 , CONTENTS7
+				 , CONTENTS8
+				 , CONTENTS9
+				 , CONTENTS10
+				 , INST_DT
+				 , INST_ID
+				 , UPDT_DT
+				 , UPDT_ID
+			  FROM ${umsdb}.TB_UMS_MSG ,(SELECT @row_number:=0) AS t 
+			  <include refid="searchConditions1"/>
+			  order by MSG_NO asc
+	          ) A
+	     where ROW_NUMBER between #{firstRecordIndex, jdbcType=NUMERIC} + 1 and #{firstRecordIndex, jdbcType=NUMERIC} + #{recordCountPerPage, jdbcType=NUMERIC}
+    </select>
+    
+	<select id="selectMsgBoxListCount" parameterType="SearchMsgBoxVO" resultType="java.lang.Integer">
+        SELECT  count(MSG_NO) as count
+          FROM  ${umsdb}.TB_UMS_MSG
+		  <include refid="searchConditions1"/>
+    </select>
+	<insert id="insertMsgBox" parameterType="msgBoxVO">
+        INSERT INTO ${umsdb}.TB_UMS_MSG
+           (   USER_ID
+			 , GRP_CD
+			 , GRP_NO
+			 , MSG_NO
+			 , SUBJECT
+			 , CONTENTS1
+			 , CONTENTS2
+			 , CONTENTS3
+			 , CONTENTS4
+			 , CONTENTS5
+			 , CONTENTS6
+			 , CONTENTS7
+			 , CONTENTS8
+			 , CONTENTS9
+			 , CONTENTS10
+			 , INST_DT
+			 , INST_ID
+			 , UPDT_DT
+			 , UPDT_ID)
+     VALUES
+           (
+               #{userId     , jdbcType=VARCHAR} 
+			 , #{grpCd      , jdbcType=VARCHAR}
+			 , #{grpNo      , jdbcType=VARCHAR}
+			 , ${umsdb}.nextval('TB_UMS_MSG.MSG_NO')
+			 , #{subject    , jdbcType=VARCHAR}
+			 , #{contents1  , jdbcType=VARCHAR}
+			 , #{contents2  , jdbcType=VARCHAR}
+			 , #{contents3  , jdbcType=VARCHAR}
+			 , #{contents4  , jdbcType=VARCHAR}
+			 , #{contents5  , jdbcType=VARCHAR}
+			 , #{contents6  , jdbcType=VARCHAR}
+			 , #{contents7  , jdbcType=VARCHAR}
+			 , #{contents8  , jdbcType=VARCHAR}
+			 , #{contents9  , jdbcType=VARCHAR}
+			 , #{contents10 , jdbcType=VARCHAR}
+			 , #{instDt     , jdbcType=VARCHAR}
+			 , #{instId     , jdbcType=VARCHAR}
+			 , #{updtDt     , jdbcType=VARCHAR}
+			 , #{updtId     , jdbcType=VARCHAR}   
+			)
+    </insert>
+    
+	<update id="updateMsgBox" parameterType="msgBoxVO">
+        UPDATE ${umsdb}.TB_UMS_MSG 
+             SET         
+               SUBJECT      = #{subject    , jdbcType=VARCHAR}
+			 , CONTENTS1    = #{contents1  , jdbcType=VARCHAR}
+			 , CONTENTS2    = #{contents2  , jdbcType=VARCHAR}
+			 , CONTENTS3    = #{contents3  , jdbcType=VARCHAR}
+			 , CONTENTS4    = #{contents4  , jdbcType=VARCHAR}
+			 , CONTENTS5    = #{contents5  , jdbcType=VARCHAR}
+			 , CONTENTS6    = #{contents6  , jdbcType=VARCHAR}
+			 , CONTENTS7    = #{contents7  , jdbcType=VARCHAR}
+			 , CONTENTS8    = #{contents8  , jdbcType=VARCHAR}
+			 , CONTENTS9    = #{contents9  , jdbcType=VARCHAR}
+			 , CONTENTS10   = #{contents10  , jdbcType=VARCHAR}
+			 , UPDT_DT      = #{updtDt     , jdbcType=VARCHAR}
+			 , UPDT_ID      = #{updtId     , jdbcType=VARCHAR}  
+       WHERE    USER_ID = #{userId, jdbcType=VARCHAR}
+			AND GRP_CD  = #{grpCd, jdbcType=VARCHAR}
+			AND GRP_NO  = #{grpNo, jdbcType=VARCHAR}
+			AND MSG_NO  = #{msgNo, jdbcType=VARCHAR}
+    </update>
+    
+	
+	<update id="updateMsgBoxSimple" parameterType="msgBoxVO">
+        UPDATE ${umsdb}.TB_UMS_MSG 
+             SET         
+               SUBJECT      = #{subject    , jdbcType=VARCHAR}
+			 , CONTENTS1    = #{contents1  , jdbcType=VARCHAR} 
+			 , UPDT_DT      = #{updtDt     , jdbcType=VARCHAR}
+			 , UPDT_ID      = #{updtId     , jdbcType=VARCHAR}  
+       WHERE    USER_ID = #{userId, jdbcType=VARCHAR}
+			AND GRP_CD  = #{grpCd, jdbcType=VARCHAR}
+			AND GRP_NO  = #{grpNo, jdbcType=VARCHAR}
+			AND MSG_NO  = #{msgNo, jdbcType=VARCHAR}
+    </update>
+	
+    <delete id="deleteMsgBox" parameterType="msgBoxVO">
+        DELETE FROM ${umsdb}.TB_UMS_MSG
+        WHERE   USER_ID = #{userId, jdbcType=VARCHAR}
+			AND GRP_CD  = #{grpCd, jdbcType=VARCHAR}
+			AND GRP_NO  = #{grpNo, jdbcType=VARCHAR}
+			AND MSG_NO  = #{msgNo, jdbcType=VARCHAR}
+    </delete>
+    
+    <select id="selectChngMsgBoxList" parameterType="SearchMsgBoxVO" resultMap="msgBoxResultMap">
+      SELECT *
+      FROM (	    
+		SELECT (@row_number:= @row_number + 1) AS row_number
+				         , USER_ID
+						 , CODE_NAME
+						 , GRP_NM
+						 , GRP_CD
+						 , GRP_NO
+						 , MSG_NO
+						 , (case when SUBJECT = '' OR  SUBJECT is null then '제목없음' else SUBJECT END) SUBJECT
+						 , CONTENTS1
+						 , replace(substring(CONTENTS1,1,20),';',',') CONTENTS1_TEMP
+						 , CONTENTS2
+						 , CONTENTS3
+						 , CONTENTS4
+						 , CONTENTS5
+						 , CONTENTS6
+						 , CONTENTS7
+						 , CONTENTS8
+						 , CONTENTS9
+						 , CONTENTS10
+						 , INST_DT
+						 , INST_ID
+						 , UPDT_DT
+						 , UPDT_ID
+		FROM(
+		SELECT A.*,C.GRP_NM ,B.CODE_NAME
+			FROM ${umsdb}.TB_UMS_MSG A
+				left join 
+				${umsdb}.TB_UMS_CODE B on A.grp_cd = B.code and B.code_group = 'GRP_CD'
+				left join 
+				${umsdb}.TB_UMS_GRP C on A.user_id = C.user_id and A.grp_no = C.grp_no and A.grp_cd = C.grp_cd
+		) A,(SELECT @row_number:=0) AS t
+		<include refid="searchConditions1"/>
+		order by MSG_NO asc
+	  ) AA
+	  where ROW_NUMBER between #{firstRecordIndex, jdbcType=NUMERIC} + 1 and #{firstRecordIndex, jdbcType=NUMERIC} + #{recordCountPerPage, jdbcType=NUMERIC}
+    </select>
+    
+	<select id="selectChngMsgBoxListCount" parameterType="SearchMsgBoxVO" resultType="java.lang.Integer">
+        SELECT  count(MSG_NO) as count
+        FROM (	    
+		SELECT   USER_ID
+						 , CODE_NAME
+						 , GRP_NM
+						 , GRP_CD
+						 , GRP_NO
+						 , MSG_NO
+						 , SUBJECT
+						 , CONTENTS1
+						 , substring(CONTENTS1,1,20) CONTENTS1_TEMP
+						 , CONTENTS2
+						 , CONTENTS3
+						 , CONTENTS4
+						 , CONTENTS5
+						 , CONTENTS6
+						 , CONTENTS7
+						 , CONTENTS8
+						 , CONTENTS9
+						 , CONTENTS10
+						 , INST_DT
+						 , INST_ID
+						 , UPDT_DT
+						 , UPDT_ID
+		FROM(
+		SELECT A.*,C.GRP_NM ,B.CODE_NAME
+			FROM ${umsdb}.TB_UMS_MSG A
+				left join 
+				${umsdb}.TB_UMS_CODE B on A.grp_cd = B.code and B.code_group = 'GRP_CD'
+				left join 
+				${umsdb}.TB_UMS_GRP C on A.user_id = C.user_id and A.grp_no = C.grp_no and A.grp_cd = C.grp_cd
+		) A
+		<include refid="searchConditions1"/>
+	  ) AA
+    </select>
+    
+	
+	<select id="selectMsgBox" parameterType="SearchMsgBoxVO" resultMap="msgBoxResultMap">
+      SELECT *
+      FROM (	    
+		SELECT 
+		(@row_number:= @row_number + 1) AS row_number
+				         , USER_ID
+						 , CODE_NAME
+						 , GRP_NM
+						 , GRP_CD
+						 , GRP_NO
+						 , MSG_NO
+						 , SUBJECT
+						 , CONTENTS1
+						 , (case when SUBJECT = '' OR  SUBJECT is null then replace(substring(CONTENTS1,1,20),';',',') else SUBJECT END) CONTENTS1_TEMP
+						 , CONTENTS2
+						 , CONTENTS3
+						 , CONTENTS4
+						 , CONTENTS5
+						 , CONTENTS6
+						 , CONTENTS7
+						 , CONTENTS8
+						 , CONTENTS9
+						 , CONTENTS10
+						 , INST_DT
+						 , INST_ID
+						 , UPDT_DT
+						 , UPDT_ID
+		FROM(
+		SELECT A.*,C.GRP_NM ,B.CODE_NAME
+			FROM ${umsdb}.TB_UMS_MSG A
+				left join 
+				${umsdb}.TB_UMS_CODE B on A.grp_cd = B.code and B.code_group = 'GRP_CD'
+				left join 
+				${umsdb}.TB_UMS_GRP C on A.user_id = C.user_id and  A.grp_no = C.grp_no and A.grp_cd = C.grp_cd
+		) A,(SELECT @row_number:=0) AS t
+		<include refid="searchConditions1"/>
+	  order by MSG_NO asc) AA
+    </select>
+    
+	
+	<select id="selectMsgBoxDmList" parameterType="SearchMsgBoxVO" resultMap="msgBoxResultMap">
+       select *
+        from (	    
+		    SELECT (@row_number:= @row_number + 1) AS row_number
+		         , A.USER_ID
+				 , A.GRP_CD
+				 , A.GRP_NO
+				 , A.MSG_NO
+				 , A.SUBJECT
+				 , A.CONTENTS1
+				 , (case when A.SUBJECT = '' OR  A.SUBJECT is null then '제목없음' else A.SUBJECT END) CONTENTS1_TEMP
+				 , A.CONTENTS2
+				 , A.CONTENTS3
+				 , A.CONTENTS4
+				 , A.CONTENTS5
+				 , A.CONTENTS6
+				 , A.CONTENTS7
+				 , A.CONTENTS8
+				 , A.CONTENTS9
+				 , A.CONTENTS10
+				 , A.INST_DT
+				 , A.INST_ID
+				 , A.UPDT_DT
+				 , A.UPDT_ID
+			  FROM ${umsdb}.TB_UMS_MSG A
+			  <include refid="joinConditions1"/>
+				 ON A.GRP_CD = B.GRP_CD
+				AND A.GRP_NO = B.GRP_NO
+				AND A.MSG_NO = B.MSG_NO
+			    AND A.grp_cd =  '07'
+			    ,(SELECT @row_number:=0) AS t
+			  <include refid="searchConditions2"/>
+	          order by A.MSG_NO asc) A
+	     where ROW_NUMBER between #{firstRecordIndex, jdbcType=NUMERIC} + 1 and #{firstRecordIndex, jdbcType=NUMERIC} + #{recordCountPerPage, jdbcType=NUMERIC}
+    </select>
+    
+	<select id="selectMsgBoxDmListCount" parameterType="SearchMsgBoxVO" resultType="java.lang.Integer">
+        SELECT  count(A.MSG_NO) as count
+          FROM  ${umsdb}.TB_UMS_MSG A
+		  <include refid="joinConditions1"/>
+			 ON A.GRP_CD = B.GRP_CD
+			AND A.GRP_NO = B.GRP_NO
+			AND A.MSG_NO = B.MSG_NO
+			AND A.grp_cd =  '07'
+		  <include refid="searchConditions2"/>
+    </select>
+    
+	<select id="selectDmContents" parameterType="SearchMsgBoxVO" resultMap="msgBoxResultMap" >
+        SELECT CONTENTS1
+			 , CONTENTS2
+			 , CONTENTS3
+			 , CONTENTS4
+			 , CONTENTS5
+			 , CONTENTS6
+			 , CONTENTS7
+			 , CONTENTS8
+			 , CONTENTS9
+			 , CONTENTS10
+		FROM ${umsdb}.TB_UMS_DMDATA
+		WHERE GRP_NO  = #{grpNo, jdbcType=VARCHAR}
+		  AND MSG_NO  = #{msgNo, jdbcType=VARCHAR}
+		  AND MSG_ID  = #{msgId, jdbcType=VARCHAR}
+    </select>
+</mapper>

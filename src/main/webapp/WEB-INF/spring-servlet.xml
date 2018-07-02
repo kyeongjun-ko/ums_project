@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+                http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+   	         	http://www.springframework.org/schema/beans 
+   	         	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<!-- Annotation 기반의 Configuration을 사용하기 위해 사용할 component 의 기본 package를 설정하고, 
+		사용할 Annotation을 지정한다. @Controller 만 대상으로 한다. -->
+	<context:component-scan base-package="com.bccns"
+		use-default-filters="false">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+	
+	
+	<context:annotation-config />
+
+	<!-- @MVC 스타일의 컨트롤러에서 자주 사용되는 validator, conversionService, messageConverter를 
+		자동으로 등록해주는 간편 빈 설정용 태그. 자세한 설명은 다음의 링크에서 확인할 수 있다. (http://toby.epril.com/?p=989, 
+		http://mikyungnet.tistory.com/28) 
+	<mvc:annotation-driven>-->
+	<mvc:annotation-driven /> 
+
+	
+	<!-- 서버 환경 별로 가져가야하는 프로젝트이 기본 config 를 load 하여 @Value("${entry.key}") public 
+		String code; 처럼 사용하기 위한 설정. scan 되는 component와 spring-config.xml 에 설정된 bean들에서 
+		사용할 수 있다. -->
+	<context:property-placeholder
+		location="classpath:/config/applicationConfig.xml" />
+	<context:annotation-config />
+
+	<!-- Spring 이 처리할 수 있는 요청을 제외한 요청 경로, 즉 HTML이나 CSS, 이미지 파일 같은 static 파일은 
+		Servlet Container에서 처리하도록 설정하는 부분. 주로, RESTful 웹서비스를 개발할 때 URL Mapping 이 
+		static file path와 겹칠 경우 사용한다. 자세한 설명은 다음의 링크에서 확인할 수 있다. http://toby.epril.com/?p=1107 
+		http://whiteship.me/?p=12760 -->
+	<mvc:default-servlet-handler />
+
+    <bean
+        class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <ref bean="jsonConverter" />
+				<ref bean="xmlConverter" />
+            </list>
+        </property>
+        <property name="order" value="0" />
+    </bean>
+
+    <bean
+        class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerExceptionResolver">
+        <property name="messageConverters" ref="xmlConverter" />
+        <property name="order" value="1" />
+    </bean>
+
+    <!-- Json Converter -->
+	<bean id="jsonConverter"
+		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+		<property name="supportedMediaTypes" value="application/json;charset=UTF-8" />
+	</bean>
+
+	<!-- Xml Converter -->
+	<bean id="xmlConverter"
+		class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter">
+		<property name="supportedMediaTypes" value="application/xml;carset=UTF-8" />
+	</bean>
+
+	<!-- ViewResolver -->
+	<!-- Spring Controller에서 요청 처리 완료 후 JSP 를 View 로 사용하기 위한 View Resolver 설정. -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/view" />
+		<property name="suffix" value=".jsp" />
+		<property name="order" value="3" />
+	</bean>
+
+	<bean
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="order" value="2" />
+		<property name="defaultErrorView" value="/common/error/defaultError" />
+		<property name="exceptionMappings">
+			<props>
+			    <prop key="java.lang.NullPointException">/common/error/defaultError</prop>
+				<prop key="BusinessLogicException">/common/error/defaultError</prop>
+				<prop key="RuntimeException">/common/error/defaultError</prop>
+				<prop key="TypeMismatchException">/common/error/defaultError</prop>
+				<prop key="NoSuchRequestHandlingMethodException">common/error/defaultError</prop>
+			</props>
+		</property>
+			
+	</bean>
+	
+    <!-- 아래 ExcelCutomView 처럼 사용자정의 BeanView 를 사용하기 위한 Resolver -->
+    <bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+        <property name="order" value="1" />
+    </bean>
+	
+	<!-- <bean class="com.bccns.umsserviceweb.web.view.ExcelCustomView" name="excelDownload"/>
+	--> 
+	<bean class="com.bccns.umsserviceweb.web.view.RsltDetBottomListExcelDownloadView" name="rsltDetBottomListExcelDownloadView" />
+
+	
+	<!--  
+	<mvc:resources mapping="/image21/**" location="C:/upload/image/" />
+	<mvc:resources mapping="/file21/**" location="C:/upload/file/" />
+
+	 jsp 에서 spel 를 사용시 <spring:eval expression="@applicationProperties" 
+		var="appProp" scope="request" /> <c:out value="${appProp['pj.code']}"/>
+	<bean id="applicationProperties"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="singleton" value="true" />
+		<property name="properties">
+			<props>
+				<prop key="project.code">dev</prop>
+			</props>
+		</property>
+	</bean> -->
+
+	<!-- Locale Change -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+            <mvc:mapping path="/**" />
+            <bean id="loginCheckInterceptor"
+                class="com.bccns.umsserviceweb.common.interceptor.LoginCheckInterceptor" />
+        </mvc:interceptor>
+        <mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+	            <property name="paramName" value="lang"/>
+	        </bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+	<bean id="localeResolver"
+		class="com.bccns.umsserviceweb.common.i18n.SimpleSessionLocaleResolver">
+		<property name="defaultLocale" value="ko_KR" />
+		<property name="supportedLocale" value="en_US,ko_KR" />
+	</bean>
+<!-- Pagination -->
+    <bean id="imageRenderer" class="com.bccns.umsserviceweb.common.pagination.ImagePaginationRenderer" />
+    <bean id="textRenderer" class="com.bccns.umsserviceweb.common.pagination.DefaultPaginationRenderer" />
+    <bean id="paginationManager" class="com.bccns.umsserviceweb.common.pagination.DefaultPaginationManager">
+        <property name="rendererType">
+            <map>
+                <entry key="image" value-ref="imageRenderer" />
+                <entry key="text" value-ref="textRenderer" />
+            </map>
+        </property>
+    </bean>
+</beans>

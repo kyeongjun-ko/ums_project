@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+
+    <comment>local Default Configuration</comment>
+
+    <!-- ======================================== -->
+    <!-- JDBC Configuration -->
+    <!-- ======================================== -->
+    <entry key="jdbc.driverClassName">com.microsoft.sqlserver.jdbc.SQLServerDriver</entry>
+    <entry key="jdbc.url">jdbc:sqlserver://10.10.1.49:1433;DatabaseName=KT_UMS_LIVE_TEST</entry>
+    <entry key="jdbc.user">sa</entry>
+    <entry key="jdbc.password"><![CDATA[sa49_@)%&!@#$]]></entry>
+    
+    
+    <entry key="jdbc.driverClassName_kt">com.mysql.jdbc.Driver</entry>
+    <entry key="jdbc.url_kt">jdbc:mysql://10.10.1.44:3606/kt_ums_live_d</entry>
+    <entry key="jdbc.user_kt">root</entry>
+    <entry key="jdbc.password_kt"><![CDATA[bc2678]]></entry>
+    
+    <entry key="jdbc.driverClassName_ums">com.mysql.jdbc.Driver</entry>
+    <entry key="jdbc.url_ums">jdbc:mysql://10.10.1.44:3606/umsdb</entry>
+    <entry key="jdbc.user_ums">root</entry>
+    <entry key="jdbc.password_ums"><![CDATA[bc2678]]></entry>
+    
+    <entry key="jdbc.driverClassName_71">com.mysql.jdbc.Driver</entry>
+    <entry key="jdbc.url_71">jdbc:mysql://10.10.1.44:3606/push</entry>
+    <entry key="jdbc.user_71">root</entry>
+    <entry key="jdbc.password_71"><![CDATA[bc2678]]></entry>
+      
+    <!-- login -->
+    <entry key="login.excludeUrls">/main,/Images/,/images/,/fa/,/css/,/js/,/login,/loginRegist,/getRegUsr,/regUsrProc,/seeKIdPw,/logout,/seeKIdProc,/seeKPwProc,/api/,/valIdProcAjax,/getTestSession,/validSession,/simpleView1,/simpleView2,/simpleView3,/upload/image/,/upload/,/srv/noticeDetailPopup,/SD,/SF,/SDO,/smartDmWeb/,/smartFaxWeb/</entry>
+ 
+    <!-- SSO  211.216.53.13 -->
+    <entry key="SSO.serviceID">56f3f050lw</entry>
+    <entry key="SSO.domain">/</entry>
+    <entry key="SSO.registURL">/loginRegist</entry>
+    
+    <!-- Pagination 설정 : 페이징에 대한 기본 설정 -->    
+    <entry key="property.pagination.pageindex">1</entry>    
+    <entry key="property.pagination.pageunit">10</entry>
+    <entry key="property.pagination.pagesize">10</entry>
+    <entry key="property.pagination.firstindex">1</entry>
+    <entry key="property.pagination.lastindex">1</entry>
+    <entry key="property.pagination.recordcountperpage">10</entry>
+    <entry key="property.pagination.recordcountperpage2">12</entry>
+    <entry key="property.pagination.recordcountperpageorderhis">3</entry>
+    
+    <!-- sms send default value -->
+    <!--SEND 전송 처리 상태 0:메시지 입력 1:Agent 처리 시작 (Fetch) 2:서버 전송 중 3:발송 완료 (Row 삭제) -1:실패-->
+    <entry key="property.sms.scheduletype.new">0</entry> <!--즉시전송-->
+    <entry key="property.sms.scheduletype.reserve">1</entry>  <!--예약전송-->
+    <entry key="property.sms.desttype.text">0</entry>
+    <entry key="property.sms.destcount">0</entry> <!-- 수신자목록개수(max:100) -->
+    <entry key="property.sms.sendstatus">0</entry><!--SEND 전송 처리 상태 -->
+    <entry key="property.sms.sendcount">0</entry><!--서버로 전송 실패 시 재전송하는 회수-->
+    <entry key="property.sms.sendresult">0</entry><!--전송결과 서버 ACK값-->
+    <entry key="property.sms.sendmaxcnt">100</entry><!--수신자목록최대개수-->
+    
+    <!-- mms send default value -->
+    <entry key="property.mms.scheduletype.new">0</entry>
+    <entry key="property.mms.scheduletype.reserve">1</entry>
+    <entry key="property.mms.destcount">0</entry> <!-- 수신자목록개수(max:100) -->
+    <entry key="property.mms.contentcount">0</entry><!-- 전송할컨텐츠개수 -->
+    <entry key="property.mms.sendstatus">0</entry><!--SEND 전송 처리 상태-->
+    <entry key="property.mms.sendcount">0</entry><!--서버로 전송 실패 시 재전송하는 회수-->
+    <entry key="property.mms.sendresult">0</entry><!--전송결과 서버 ACK값-->
+    <entry key="property.mms.msgtype">0</entry><!--일반 TEXT : 0, HTML 지원: 1-->
+    
+    <!-- grp_cd -->
+    <entry key="property.code.grpcd.sms">01</entry>
+    <entry key="property.code.grpcd.lms">02</entry>
+    <entry key="property.code.grpcd.mms">03</entry>
+    <entry key="property.code.grpcd.fms">04</entry>
+    <entry key="property.code.grpcd.vms">05</entry>
+    <entry key="property.code.grpcd.vqr">06</entry>
+    <entry key="property.code.grpcd.sdm">07</entry>
+    <entry key="property.code.grpcd.sfx">08</entry>
+    <entry key="property.code.grpcd.adr">10</entry>
+    <entry key="property.code.grpcd.pms">11</entry>
+    
+    
+    <entry key="property.file.upload.image.size">300000</entry>
+    <entry key="property.file.upload.file.size">300000</entry>
+    
+    <entry key="property.file.upload.image">/share/image/</entry>
+    <entry key="property.file.view.image">/fileupload/image/</entry>
+    <entry key="property.file.view.file">/fileupload/file/</entry>
+    <entry key="property.file.upload.file">/share/file/</entry>
+    
+    <entry key="property.push.API_KEY">AIzaSyDz8Eg3LTliZqroIhewxkAlwKeEy4tpx1w</entry>
+    <entry key="property.push.view.image">https://ums.sendall.co.kr:444</entry>
+    
+</properties>

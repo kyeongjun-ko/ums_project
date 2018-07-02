@@ -1,0 +1,59 @@
+a {color: #666}
+a:hover {text-decoration: none;color: #1560ab}
+.badge {background: #999;}
+/* 메뉴 */
+.site-gnb .nav .dropdown-menu li:first-child {border-top: 5px solid #1560ab;}
+/* 버튼 */
+.btn-primary {background: #1560ab;border:1px solid #1560ab;}
+.btn-second {background: #666;border:0; color:#fff;}
+.btn-third{background-color: #f5f5f5;border:1px solid #ddd}
+.loginbox.login .userid{color:#1560ab;}
+.sidemenu li.on a{background-color: #1560ab; color:#fff;}
+.sidemenu li a i{color: #fff;}
+.tits h1{color:#1560ab}
+.tits hr{background-color: #1560ab;}
+.tits .brc i{color:#1560ab}
+/*스마트폰 글자 색*/
+.mbox .mob .mbody .mfoot{color: #003366;}
+.mbox .mob .mbody .mfoot .mtype.sms{background-color: #e3ebf4;}
+.mbox .mob .mbody .mfoot .mtype.lms{background-color: #1560ab;color:#fff; text-shadow: 0 3px 3px rgba(0,0,0,0.3);}
+.mbox .mob .mbody .mfoot .mtype.vms{background-color: #654a87;color:#fff;text-shadow: 0 3px 3px rgba(0,0,0,0.3);}
+.mbox .mob .mbody .mfoot .mtype.mms{background: url('./../images/mms.png') no-repeat center center;color:#fff;text-shadow: 0 3px 3px rgba(0,0,0,0.3);}
+.mbox .mob .mbody .mfoot .mtype.sdm{background: url('./../images/sdm.png') no-repeat center center;color:#fff;text-shadow: 0 3px 3px rgba(0,0,0,0.3);}
+.mbox .mob .mbody .mfoot .mtype.sfx{background: url('./../images/sfx.png') no-repeat center center;color:#fff;text-shadow: 0 3px 3px rgba(0,0,0,0.3);}
+/*스마트폰 placeholder */
+.mbox .mob .mbody textarea::-webkit-input-placeholder { color:#003366; }
+.mbox .mob .mbody textarea::-moz-placeholder { color:#003366; } /* firefox 19+ */
+.mbox .mob .mbody textarea:-ms-input-placeholder { color:#003366; } /* ie */
+.mbox .mob .mbody textarea:-moz-placeholder { color:#003366; }
+/*수신자 수*/
+.rcvsum{color:#1560ab;}
+/*이용안내 리스트*/
+.oguide .li-txt h2{color:#1560ab;}
+.oguide > ul > li i{color:#1560ab;border:3px solid #1560ab;}
+/*모바일안내장이란?*/
+.defi .panel-body strong{color:#1560ab;}
+.tits.col-md-12{border-bottom:2px solid #1560ab;}
+/*페이지네이션*/
+.pagination .active a{color:#1560ab; }
+/*mms*/
+.mms .uploader h1{color:#003366;}
+/*팝업*/
+.popup .inputs ul li{color:#1560ab;}
+.popup.excelpop .example strong{color:#cc0000;}
+.popup.qinfo .panel-body > ul > li > strong{color:#1560ab;}
+/*설문조사*/
+.inv .questions .pbody02 .counting{color:#003366;}
+/*fms*/
+.fms .fp01 .panel-body .counting{color: #1560ab;}
+/*테이블형식*/
+.tform .dtable th{background-color: #5b8fc4;color:#fff;}
+.tform .dtable th.odd{background-color: #457EB8;} 
+.rsvdetail .tcon .schbar h4{font-size: 16px;color:#1560ab;}
+.dlist .dl-horizontal{border-left:5px solid #5b8fc4;}
+.dlist dl{background-color: #eef4f9;border-bottom:2px solid #fff;}
+.dlist dt{color:#5b8fc4;}
+/*타이틀 바*/
+.tits:before {background: #1560AB;}
+/*아이콘*/
+.tits .hbg i.odd{color:#BCCEDF;}

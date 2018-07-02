@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<decorators>
+    <!-- Any urls that are excluded will never be decorated by Sitemesh --> 
+    <excludes> 
+        <pattern>/excelDownload</pattern>
+        <pattern>/showMessage</pattern>
+        <pattern>/css/*</pattern>
+        <pattern>/js/*</pattern>
+        <pattern>/images/*</pattern>
+    </excludes>
+    
+    
+    <!-- 기본 -->
+    <decorator name="main" page="/WEB-INF/view/sitemesh/mainLayer.jsp">
+        <pattern>/*</pattern>
+    </decorator>
+    
+    <!-- 
+    <decorator name="main" page="/WEB-INF/view/common/main.jsp">
+        <pattern>/sitemesh/*</pattern>
+    </decorator>
+    
+    <decorator name="main" page="/WEB-INF/view/common/main.jsp">
+        <pattern>/home</pattern>
+    </decorator>
+     -->
+     
+    <decorator name="_top" page="/WEB-INF/view/common/header.jsp" />
+    <decorator name="_bottom" page="/WEB-INF/view/common/footer.jsp" />
+    <decorator name="_left" page="/WEB-INF/view/common/left.jsp" />
+
+
+</decorators>

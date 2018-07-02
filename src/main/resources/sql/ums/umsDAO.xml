@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.com//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bccns.umsserviceweb.ums.dao.UmsDAO">
+	<!-- http://mybatis.github.io/mybatis-3/ko/sqlmap-xml.html 참조 -->
+	<!-- result map 에  type 은 typeAliases 에 정의한 type, id 는 sql 에서 resultMap 에 사용할 값임. -->
+	
+	<insert id="insertSms" parameterType="smsVo">
+        INSERT INTO SDK_SMS_SEND
+           (USER_ID
+           ,SCHEDULE_TYPE
+           ,SUBJECT
+           ,SMS_MSG
+           ,CALLBACK_URL
+           ,NOW_DATE
+           ,SEND_DATE
+           ,CALLBACK
+           ,DEST_TYPE
+           ,DEST_COUNT
+           ,DEST_INFO
+           ,KT_OFFICE_CODE
+           ,CDR_ID
+           ,RESERVED1
+           ,RESERVED2
+           ,RESERVED3
+           ,RESERVED4
+           ,RESERVED5
+           ,SEND_STATUS
+           ,SEND_COUNT
+           ,SEND_RESULT
+           ,SEND_PROC_TIME
+           ,STD_ID)
+     VALUES
+           (
+             #{userId        , jdbcType=VARCHAR}
+			,#{scheduleType  , jdbcType=VARCHAR}
+			,#{subject       , jdbcType=VARCHAR}
+			,#{smsMsg        , jdbcType=VARCHAR}
+			,#{callbackURL   , jdbcType=VARCHAR}
+			,#{nowDate       , jdbcType=VARCHAR}
+			,#{sendDate      , jdbcType=VARCHAR}
+			,#{callback      , jdbcType=VARCHAR}
+			,#{destType      , jdbcType=VARCHAR}
+			,#{destCount     , jdbcType=VARCHAR}
+			,#{destInfo      , jdbcType=VARCHAR}
+			,#{ktOfficeCode  , jdbcType=VARCHAR}
+			,#{cdrId         , jdbcType=VARCHAR}
+			,#{reserved1     , jdbcType=VARCHAR}
+			,#{reserved2     , jdbcType=VARCHAR}
+			,#{reserved3     , jdbcType=VARCHAR}
+			,#{reserved4     , jdbcType=VARCHAR}
+			,#{reserved5     , jdbcType=VARCHAR}
+			,#{sendStatus    , jdbcType=VARCHAR}
+			,#{sendCount     , jdbcType=VARCHAR}
+			,#{sendResult    , jdbcType=VARCHAR}
+			,#{sendProcTime  , jdbcType=VARCHAR}
+			,#{stdId         , jdbcType=VARCHAR}
+			)
+    </insert>
+    <insert id="insertLms" parameterType="smsVo">
+         INSERT INTO SDK_MMS_SEND
+           (USER_ID
+           ,SCHEDULE_TYPE
+           ,SUBJECT
+           ,NOW_DATE
+           ,SEND_DATE
+           ,CALLBACK
+           ,DEST_COUNT
+           ,DEST_INFO
+           ,MMS_MSG
+           ,CONTENT_COUNT
+           ,SEND_STATUS
+           ,SEND_COUNT
+           ,SEND_RESULT
+           ,SEND_PROC_TIME
+           ,MSG_TYPE
+           ,STD_ID)
+     VALUES
+           (
+              #{userId          , jdbcType=VARCHAR}
+			 ,#{scheduleType    , jdbcType=VARCHAR}
+			 ,#{subject         , jdbcType=VARCHAR}
+			 ,#{nowDate         , jdbcType=VARCHAR}
+			 ,#{sendDate        , jdbcType=VARCHAR}
+			 ,#{callback        , jdbcType=VARCHAR}
+			 ,#{destCount       , jdbcType=VARCHAR}
+			 ,#{destInfo        , jdbcType=VARCHAR}
+			 ,#{smsMsg          , jdbcType=VARCHAR}
+			 ,0
+			 ,#{sendStatus      , jdbcType=VARCHAR}
+			 ,#{sendCount       , jdbcType=VARCHAR}
+			 ,#{sendResult      , jdbcType=VARCHAR}
+			 ,#{sendProcTime    , jdbcType=VARCHAR}
+			 ,0
+			 ,#{stdId           , jdbcType=VARCHAR}
+			)
+        
+    </insert>
+	
+	<insert id="insertMms" parameterType="mmsVo">
+        INSERT INTO SDK_MMS_SEND
+           (USER_ID
+           ,SCHEDULE_TYPE
+           ,SUBJECT
+           ,NOW_DATE
+           ,SEND_DATE
+           ,CALLBACK
+           ,DEST_COUNT
+           ,DEST_INFO
+           ,MMS_MSG
+           ,CONTENT_COUNT
+           ,CONTENT_DATA
+           ,KT_OFFICE_CODE
+           ,CDR_ID
+           ,RESERVED1
+           ,RESERVED2
+           ,RESERVED3
+           ,RESERVED4
+           ,RESERVED5
+           ,SEND_STATUS
+           ,SEND_COUNT
+           ,SEND_RESULT
+           ,SEND_PROC_TIME
+           ,MSG_TYPE
+           ,STD_ID)
+     VALUES
+           (
+              #{userId          , jdbcType=VARCHAR}
+			 ,#{scheduleType    , jdbcType=VARCHAR}
+			 ,#{subject         , jdbcType=VARCHAR}
+			 ,#{nowDate         , jdbcType=VARCHAR}
+			 ,#{sendDate        , jdbcType=VARCHAR}
+			 ,#{callback        , jdbcType=VARCHAR}
+			 ,#{destCount       , jdbcType=VARCHAR}
+			 ,#{destInfo        , jdbcType=VARCHAR}
+			 ,#{mmsMsg          , jdbcType=VARCHAR}
+			 ,#{contentCount    , jdbcType=VARCHAR}
+			 ,#{contentData     , jdbcType=VARCHAR}
+			 ,#{ktOfficeCode    , jdbcType=VARCHAR}
+			 ,#{cdrId           , jdbcType=VARCHAR}
+			 ,#{reserved1       , jdbcType=VARCHAR}
+			 ,#{reserved2       , jdbcType=VARCHAR}
+			 ,#{reserved3       , jdbcType=VARCHAR}
+			 ,#{reserved4       , jdbcType=VARCHAR}
+			 ,#{reserved5       , jdbcType=VARCHAR}
+			 ,#{sendStatus      , jdbcType=VARCHAR}
+			 ,#{sendCount       , jdbcType=VARCHAR}
+			 ,#{sendResult      , jdbcType=VARCHAR}
+			 ,#{sendProcTime    , jdbcType=VARCHAR}
+			 ,#{msgType         , jdbcType=VARCHAR}
+			 ,#{stdId           , jdbcType=VARCHAR}
+			)
+    </insert>
+    
+	<insert id="insertVms" parameterType="vmsVo">
+        INSERT INTO SDK_VMS_SEND
+           (  USER_ID
+			 ,MSG_SUBTYPE
+			 ,SCHEDULE_TYPE
+			 ,DEST_TYPE
+			 ,MENT_TYPE
+			 ,VOICE_TYPE
+			 ,SUBJECT
+			 ,NOW_DATE
+			 ,SEND_DATE
+			 ,CALLBACK
+			 ,REPLY_TYPE
+			 ,REPLY_COUNT
+			 ,COUNSELOR_DTMF
+			 ,COUNSELOR_NUMBER
+			 ,RELISTEN_COUNT
+			 ,KT_OFFICE_CODE
+			 ,CDR_ID
+			 ,SMSPLUS_MSG
+			 ,HEADER_MSG
+			 ,TAIL_MSG
+			 ,TTS_MSG
+			 ,DEST_COUNT
+			 ,DEST_INFO
+			 ,ATTACH_FILE
+			 ,RESERVED1
+			 ,RESERVED2
+			 ,RESERVED3
+			 ,RESERVED4
+			 ,RESERVED5
+			 ,SEND_STATUS
+			 ,SEND_COUNT
+			 ,SEND_RESULT
+			 ,SEND_PROC_TIME
+			 ,STD_ID)
+     VALUES
+           (
+              #{userId           , jdbcType=VARCHAR}
+			 ,#{msgSubtype       , jdbcType=VARCHAR}
+			 ,#{scheduleType     , jdbcType=VARCHAR}
+			 ,#{destType         , jdbcType=VARCHAR}
+			 ,#{mentType         , jdbcType=VARCHAR}
+			 ,#{voiceType        , jdbcType=VARCHAR}
+			 ,#{subject          , jdbcType=VARCHAR}
+			 ,#{nowDate          , jdbcType=VARCHAR}
+			 ,#{sendDate         , jdbcType=VARCHAR}
+			 ,#{callback         , jdbcType=VARCHAR}
+			 ,#{replyType        , jdbcType=VARCHAR}
+			 ,#{replyCount       , jdbcType=VARCHAR}
+			 ,#{counselorDtmf    , jdbcType=VARCHAR}
+			 ,#{counselorNumber  , jdbcType=VARCHAR}
+			 ,#{relistenCount    , jdbcType=VARCHAR}
+			 ,#{ktOfficeCode     , jdbcType=VARCHAR}
+			 ,#{cdrId            , jdbcType=VARCHAR}
+			 ,#{smsplusMsg       , jdbcType=VARCHAR}
+			 ,#{headerMsg        , jdbcType=VARCHAR}
+			 ,#{tailMsg          , jdbcType=VARCHAR}
+			 ,#{ttsMsg           , jdbcType=VARCHAR}
+			 ,#{destCount        , jdbcType=VARCHAR}
+			 ,#{destInfo         , jdbcType=VARCHAR}
+			 ,#{attachFile       , jdbcType=VARCHAR}
+			 ,#{reserved1        , jdbcType=VARCHAR}
+			 ,#{reserved2        , jdbcType=VARCHAR}
+			 ,#{reserved3        , jdbcType=VARCHAR}
+			 ,#{reserved4        , jdbcType=VARCHAR}
+			 ,#{reserved5        , jdbcType=VARCHAR}
+			 ,#{sendStatus       , jdbcType=VARCHAR}
+			 ,#{sendCount        , jdbcType=VARCHAR}
+			 ,#{sendResult       , jdbcType=VARCHAR}
+			 ,#{sendProcTime     , jdbcType=VARCHAR}
+			 ,#{stdId            , jdbcType=VARCHAR}
+			)
+    </insert>
+    
+	<insert id="insertFms" parameterType="fmsVo">
+        INSERT INTO SDK_FMS_SEND
+           (  USER_ID
+			 ,MSG_SUBTYPE
+			 ,SCHEDULE_TYPE
+			 ,DEST_TYPE
+			 ,SUBJECT
+			 ,NOW_DATE
+			 ,SEND_DATE
+			 ,CALLBACK
+			 ,KT_OFFICE_CODE
+			 ,CDR_ID
+			 ,DEST_COUNT
+			 ,DEST_INFO
+			 ,ATTACH_FILE
+			 ,RESERVED1
+			 ,RESERVED2
+			 ,RESERVED3
+			 ,RESERVED4
+			 ,RESERVED5
+			 ,SEND_STATUS
+			 ,SEND_COUNT
+			 ,SEND_RESULT
+			 ,SEND_PROC_TIME
+			 ,STD_ID)
+     VALUES
+           (
+              #{userId          , jdbcType=VARCHAR}
+			 ,#{msgSubtype      , jdbcType=VARCHAR}
+			 ,#{scheduleType    , jdbcType=VARCHAR}
+			 ,#{destType        , jdbcType=VARCHAR}
+			 ,#{subject         , jdbcType=VARCHAR}
+			 ,#{nowDate         , jdbcType=VARCHAR}
+			 ,#{sendDate        , jdbcType=VARCHAR}
+			 ,#{callback        , jdbcType=VARCHAR}
+			 ,#{ktOfficeCode    , jdbcType=VARCHAR}
+			 ,#{cdrId           , jdbcType=VARCHAR}
+			 ,#{destCount       , jdbcType=VARCHAR}
+			 ,#{destInfo        , jdbcType=VARCHAR}
+			 ,#{attachFile      , jdbcType=VARCHAR}
+			 ,#{reserved1       , jdbcType=VARCHAR}
+			 ,#{reserved2       , jdbcType=VARCHAR}
+			 ,#{reserved3       , jdbcType=VARCHAR}
+			 ,#{reserved4       , jdbcType=VARCHAR}
+			 ,#{reserved5       , jdbcType=VARCHAR}
+			 ,#{sendStatus      , jdbcType=VARCHAR}
+			 ,#{sendCount       , jdbcType=VARCHAR}
+			 ,#{sendResult      , jdbcType=VARCHAR}
+			 ,#{sendProcTime    , jdbcType=VARCHAR}
+			 ,#{stdId           , jdbcType=VARCHAR}    
+			)
+
+    </insert>
+    
+	<insert id="insertAddrExcel" parameterType="umsExcelVO">
+        INSERT INTO ${umsdb}.TB_UMS_EXCEL
+           ( USER_ID
+            ,EXCEL_CD
+            ,SEQ
+			,CONTENTS1
+			,CONTENTS2
+			,CONTENTS3
+			,CONTENTS4
+			,CONTENTS5
+			,CONTENTS6
+			,CONTENTS7
+			,CONTENTS8
+			,CONTENTS9
+			,CONTENTS10
+			,INST_DT
+			,INST_ID
+			,UPDT_DT
+			,UPDT_ID)
+     VALUES
+           ( #{userId     ,jdbcType=VARCHAR}
+            ,#{excelCd    ,jdbcType=VARCHAR}
+            ,${umsdb}.nextval('TB_UMS_EXCEL.SEQ')
+			,#{contents1  ,jdbcType=VARCHAR}
+			,#{contents2  ,jdbcType=VARCHAR}
+			,#{contents3  ,jdbcType=VARCHAR}
+			,#{contents4  ,jdbcType=VARCHAR}
+			,#{contents5  ,jdbcType=VARCHAR}
+			,#{contents6  ,jdbcType=VARCHAR}
+			,#{contents7  ,jdbcType=VARCHAR}
+			,#{contents8  ,jdbcType=VARCHAR}
+			,#{contents9  ,jdbcType=VARCHAR}
+			,#{contents10 ,jdbcType=VARCHAR}
+			,DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+			,#{instId     ,jdbcType=VARCHAR}
+			,DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+			,#{updtId     ,jdbcType=VARCHAR}
+			)
+
+    </insert>
+	 
+	<update id="updateSmsSmartDM" parameterType="smsVO">
+        UPDATE SDK_SMS_REPORT 
+          <set>         
+          <if test="reserved3 != null and reserved3 != ''">
+               RESERVED3    = #{reserved3  , jdbcType=VARCHAR}
+          </if>
+          <if test="reserved4 != null and reserved4 != ''">
+             , RESERVED4    = #{reserved4  , jdbcType=VARCHAR}
+          </if>
+          <if test="reserved5 != null and reserved5 != ''">
+             , RESERVED5    = #{reserved5  , jdbcType=VARCHAR}
+          </if>
+          </set>
+       WHERE   RESERVED2    = #{reserved2  , jdbcType=VARCHAR} 
+       <if test="reserved3 == '1'">
+           AND RESERVED3 = '0'
+       </if>
+       <if test="reserved3 == '2'">
+           AND RESERVED3 = '1'
+       </if>
+    </update>
+    
+	<update id="updateMmsSmartDM" parameterType="mmsVO">
+        UPDATE SDK_MMS_REPORT 
+          <set>         
+          <if test="reserved3 != null and reserved3 != ''">
+               RESERVED3    = #{reserved3  , jdbcType=VARCHAR}
+          </if>
+          <if test="reserved4 != null and reserved4 != ''">
+             , RESERVED4    = #{reserved4  , jdbcType=VARCHAR}
+          </if>
+          <if test="reserved5 != null and reserved5 != ''">
+             , RESERVED5    = #{reserved5  , jdbcType=VARCHAR}
+          </if>
+          </set>
+       WHERE   RESERVED2    = #{reserved2  , jdbcType=VARCHAR}
+       <if test="reserved3 == '1'">
+           AND RESERVED3 = '0'
+       </if>
+       <if test="reserved3 == '2'">
+           AND RESERVED3 = '1'
+       </if>
+    </update>
+    
+	
+	<insert id="insertSmartDmMsgRight" parameterType="smsVo">
+        INSERT INTO ${umsdb}.TB_UMS_RIGHT
+           ( GRP_CD
+			,GRP_NO
+			,MSG_NO
+			,RIGHT_NO
+			,RT_STRT_DT
+			,RT_END_DT
+			,DEPT
+			,COMPANY
+			,USER_ID
+			,INST_DT
+			,INST_ID
+			)
+     VALUES
+           (
+             #{grpCd        , jdbcType=VARCHAR}
+			,#{grpNo        , jdbcType=VARCHAR}
+			,#{msgNo        , jdbcType=VARCHAR}
+			,${umsdb}.nextval('TB_UMS_RIGHT.RIGHT_NO')
+			,#{rtStrtDt     , jdbcType=VARCHAR}
+			,#{rtEndDt      , jdbcType=VARCHAR}
+			,#{dept         , jdbcType=VARCHAR}
+			,#{company      , jdbcType=VARCHAR}
+			,#{userId       , jdbcType=VARCHAR}
+			,DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+			,#{instId       , jdbcType=VARCHAR}
+			)
+
+    </insert>
+	
+</mapper>

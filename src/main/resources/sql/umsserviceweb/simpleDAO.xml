@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.com//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bccns.umsserviceweb.api.dao.SimpleDAO">
+	<!-- http://mybatis.github.io/mybatis-3/ko/sqlmap-xml.html 참조 -->
+	<!-- result map 에  type 은 typeAliases 에 정의한 type, id 는 sql 에서 resultMap 에 사용할 값임. -->
+	<resultMap type="simpleVO" id="simpleVO">
+		<result property="id" column="id" />
+		<result property="title" column="title" />
+        <result property="content" column="content" />
+	</resultMap>
+
+	<select id="getSimple" parameterType="String" resultMap="simpleVO">
+		SELECT    ID, 
+		          TITLE, 
+		          CONTENT
+		  FROM    MEMO
+		 WHERE    1=1
+		   AND    ID = #{id}
+	</select>
+</mapper>

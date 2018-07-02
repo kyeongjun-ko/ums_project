@@ -1,0 +1,535 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.bluechip.ums</groupId>
+	<artifactId>UMSServiceWeb</artifactId>
+	<version>0.0.1</version>
+	<packaging>war</packaging>
+	<properties>
+		<java-version>1.6</java-version>
+		<ver.spring>3.2.0.RELEASE</ver.spring>
+		<org.aspectj-version>1.6.10</org.aspectj-version>
+		<org.slf4j-version>1.6.6</org.slf4j-version>
+		<ver.mybatis>3.2.2</ver.mybatis>
+		<ver.mybatis-spring>1.1.1</ver.mybatis-spring>
+		<ver.json-lib>2.3</ver.json-lib>
+		<ver.json>1.5.4</ver.json>
+		<ver.hibernate-validator>4.2.0.Final</ver.hibernate-validator>
+		<ver.commons-net>2.2</ver.commons-net>
+		<ver.commons-codec>1.5</ver.commons-codec>
+		<ver.commons-dbcp>1.4</ver.commons-dbcp>
+		<ver.commons-fileupload>1.2.2</ver.commons-fileupload>
+		<ver.commons-io>2.0</ver.commons-io>
+		<ver.commons-httpclient>3.1</ver.commons-httpclient>
+		<ver.cglib>2.2.2</ver.cglib>
+		<ver.poi>3.9</ver.poi>
+		<tomcat.version>7.0.50</tomcat.version>
+		<deploy.target.dir>webapp/WEB-INF/lib</deploy.target.dir>
+		<basedir>C:/devEnv/workspace1/UMSServiceWeb</basedir>
+		<lib.dir>lib</lib.dir>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
+
+	<dependencies>
+		<!-- Spring Framework -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${ver.spring}</version>
+            <exclusions>
+                <!-- Exclude Commons Logging in favor of SLF4j -->
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                 </exclusion>
+                 <exclusion>
+		             <groupId>javax.servlet</groupId>
+		             <artifactId>com.springsource.javax.servlet</artifactId>
+		         </exclusion>	                
+            </exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-expression</artifactId>
+			<version>${ver.spring}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${ver.spring}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${ver.spring}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${ver.spring}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${ver.spring}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${ver.spring}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${ver.spring}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${ver.spring}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-oxm</artifactId>
+			<version>${ver.spring}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${ver.spring}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${ver.spring}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${ver.spring}</version>
+		</dependency> 
+
+		<!-- AspectJ -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>${org.aspectj-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>${org.aspectj-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>aopalliance</groupId>
+			<artifactId>aopalliance</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<!-- MyBatis -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>${ver.mybatis}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+			<version>${ver.mybatis-spring}</version>
+		</dependency>
+
+		<!-- Apache Commons -->
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+			<version>${ver.commons-net}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>${ver.commons-codec}</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>${ver.commons-dbcp}</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>${ver.commons-fileupload}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${ver.commons-io}</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>${ver.commons-httpclient}</version>
+			<type>jar</type>
+		</dependency>
+
+		<!-- json -->
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-asl</artifactId>
+			<version>1.9.0</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.0</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>opensymphony</groupId>
+			<artifactId>sitemesh</artifactId>
+			<version>2.4.2</version>
+			<type>jar</type>
+		</dependency>
+
+		<!-- Validator -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${ver.hibernate-validator}</version>
+		</dependency>
+
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${org.slf4j-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${org.slf4j-version}</version>
+            <!-- <scope>runtime</scope> -->
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${org.slf4j-version}</version>
+			<!-- <scope>runtime</scope> -->
+		</dependency>
+
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.mail</groupId>
+					<artifactId>mail</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.jms</groupId>
+					<artifactId>jms</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jdmk</groupId>
+					<artifactId>jmxtools</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jmx</groupId>
+					<artifactId>jmxri</artifactId>
+				</exclusion>
+			</exclusions>
+			<!-- <scope>runtime</scope>-->
+		</dependency>
+
+		<!-- @Inject -->
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+			<version>1</version>
+		</dependency>
+
+		<!-- Etc -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.1</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>${ver.cglib}</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>${ver.poi}</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>ooxml-schemas</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.9</version>
+		</dependency>
+
+		<!-- Servlet -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.2</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+
+		<!-- Test -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.7</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.9.5</version>
+		</dependency>
+		<dependency>
+	         <groupId>org.apache.tomcat.maven</groupId>
+	         <artifactId>tomcat7-maven-plugin</artifactId>
+	         <version>2.2</version>
+	         <type>maven-plugin</type>
+	         <scope>provided</scope>
+	     </dependency>
+	     
+		<dependency>
+		  <groupId>org.apache.tomcat</groupId>
+		  <artifactId>tomcat-catalina</artifactId>
+		  <version>7.0.47</version>
+		  <scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+		
+		<dependency>
+	        <groupId>net.sf.json-lib</groupId>
+	        <artifactId>json-lib</artifactId>
+	        <version>2.4</version>
+	        <classifier>jdk15</classifier> 
+	    </dependency>
+ 
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.6.0</version>
+		</dependency>
+				
+		<dependency>
+			<groupId>org.springframework.retry</groupId>
+			<artifactId>spring-retry</artifactId>
+			<version>1.0.2.RELEASE</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.batch</groupId>
+			<artifactId>spring-batch-infrastructure</artifactId>
+			<version>2.2.0.RELEASE</version>
+		</dependency>
+				
+		<dependency>
+			<groupId>org.springframework.batch</groupId>
+			<artifactId>spring-batch-core</artifactId>
+			<version>2.2.0.RELEASE</version>
+		</dependency>
+					
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.25</version>
+		</dependency>
+		
+		
+		<dependency>
+			<groupId>com.ganyo</groupId>
+			<artifactId>gcm-server</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+				
+					
+	</dependencies>
+	<pluginRepositories>
+	    <pluginRepository>
+	        <id>apache.snapshots</id>
+	        <name>Apache Snapshots</name>
+	        <url>http://repository.apache.org/content/groups/snapshots-group/</url>
+	        <releases>
+	            <enabled>false</enabled>
+	        </releases>
+	        <snapshots>
+	            <enabled>true</enabled>
+	        </snapshots>
+	    </pluginRepository>
+	</pluginRepositories>
+	
+	<build> 
+
+        <finalName>UMSServiceWeb</finalName>
+	    <pluginManagement>
+		<plugins>
+		    <plugin>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <version>2.9</version>
+                <configuration>
+                    <additionalProjectnatures>
+                        <projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
+                    </additionalProjectnatures>
+                    <additionalBuildcommands>
+                        <buildcommand>org.springframework.ide.eclipse.core.springbuilder</buildcommand>
+                    </additionalBuildcommands>
+                    <downloadSources>true</downloadSources>
+                    <downloadJavadocs>true</downloadJavadocs>
+                </configuration>
+            </plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<!-- <warSourceDirectory>webapp</warSourceDirectory> -->
+					<warsourcedirectory>src/main/webapp</warsourcedirectory>
+                    <webxml>src/main/webapp/WEB-INF/web.xml</webxml>
+					
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+			<plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>tomcat-maven-plugin</artifactId>
+                <version>1.1</version>
+                <configuration>
+                    <url>http://211.216.53.13:18080/manager/text</url>
+                    <path>/UMSServiceWeb</path>
+                    <username>admin</username>
+                    <password>admin</password>
+                </configuration>
+            </plugin>
+			<plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+	          <artifactId>tomcat7-maven-plugin</artifactId>
+	          <version>2.2</version>
+                <configuration>
+                    <url>http://211.216.53.13:18080/manager</url>
+                    <server>tomcatserver</server>
+                    <path>/</path>
+                    <username>admin</username>
+                    <password>admin</password>
+                    <failOnError>false</failOnError>
+                    <contextFile></contextFile>   
+                </configuration>
+            </plugin>
+            
+             
+	        <!-- package 실행할때 프로젝트 디펜던시들을 특정폴더로 복사해주게 설정  -->
+	        <plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-dependency-plugin</artifactId>
+	            <version>2.4</version>
+	            <executions>
+	                <execution>
+	                    <id>copy-dependencies</id>
+	                    <phase>package</phase>
+	                    <goals>
+	                        <goal>copy-dependencies</goal>
+	                    </goals>
+	                </execution>
+	            </executions>
+	            <configuration>
+	                <outputDirectory>${deploy.target.dir}</outputDirectory>
+	                <overWriteIfNewer>true</overWriteIfNewer>
+	                <overWriteSnapshots>false</overWriteSnapshots>
+	                <overWriteReleases>true</overWriteReleases>
+	            </configuration>	           
+	        </plugin>	        
+		</plugins>
+		</pluginManagement>
+		
+	    <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/resources-${env}</directory>
+            </resource>
+        </resources>
+	    
+	</build>
+	
+	<profiles>
+        <!-- Local server -->
+        <profile>
+            <id>local</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <env>local</env>
+            </properties>
+        </profile>
+        <!-- Development server -->
+        <profile>
+            <id>dev</id>
+            <properties>
+                <env>dev</env>
+            </properties>
+        </profile>
+        <!-- real server -->
+        <profile>
+            <id>prod</id>
+            <properties>
+                <env>prod</env>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod2</id>
+            <properties>
+                <env>prod2</env>
+            </properties>
+        </profile>
+    </profiles>
+	
+	
+</project>

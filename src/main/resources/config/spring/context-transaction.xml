@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created by ADHUB 표준화팀 -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+				http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+				http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource_kt" />
+	</bean>
+	
+	<bean id="txManager_71"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource71" />
+	</bean>
+	<!-- transaction propagation 설정 tip
+    - MADATORY
+      : 반드시 트랜잭션 내에서 메소드가 실행되야 함
+      : 트랜잭션이 없는 경우에는 예외 발생
+
+    - NESTED
+      : 트랜잭션에 있는 경우, 기존 트랜잭션 내의 nested transaction 형태로 메소드 실행
+      : nested transaction 자체적으로 commit, rollback 가능
+      : 트랜잭션이 없는 경우, PROPAGATION_REQUIRED 속성으로 행동
+
+    - NEVER
+      : 트랜잭션 컨텍스트가 없이 실행되야 함
+      : 트랜잭션이 있으면 예외 발생
+
+    - NOT_SUPPORTED
+      : 트랜잭션이 없이 메소드 실행
+      : 기존의 트랜잭션이 있는 경우에는 이 트랜잭션을 호출된 메소드가 끝날때까지 잠시 보류
+      : JTATransactionManager를 사용하는 경우에는, TransactionManager가 필요
+
+    - REQUIRED
+      : 트랜잭션 컨텍스트 내에서 메소드가 실행되야 함
+      : 기존 트랜잭션이 있는 경우, 기존 트랜잭션 내에서 실행
+      : 기존 트랜잭션이 없는 경우, 새로운 트랜잭션 생성
+
+    - REQUIRES_NEW
+      : 호출되는 메소드는 자신 만의 트랜잭션을 가지고 실행
+      : 기존의 트랜잭션들은 보류됨
+      : JTATransactionManager를 사용하는 경우에는, TransactionManager가 필요
+
+    - SUPPORTS
+      : 새로운 트랜잭션을 필요로 하지는 않지만, 기존의 트랜잭션이 있는 경우에는 트랜잭션 내에서 실행    
+     -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="get*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="*" propagation="REQUIRED" rollback-for="Exception" />
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config>
+		<aop:pointcut id="requiredTx" expression="execution(* com.bccns..service.*ServiceImpl.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="requiredTx" />
+	</aop:config>
+	
+	<tx:advice id="txAdvice_71" transaction-manager="txManager_71">
+		<tx:attributes>
+			<tx:method name="get*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="*" propagation="REQUIRED" rollback-for="Exception" />
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config>
+		<aop:pointcut id="requiredTx_71" expression="execution(* com.bccns..service.*ServiceImpl_71.*(..))" />
+		<aop:advisor advice-ref="txAdvice_71" pointcut-ref="requiredTx_71" />
+	</aop:config>
+
+</beans>
