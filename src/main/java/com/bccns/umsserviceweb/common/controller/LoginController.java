@@ -190,7 +190,7 @@ public class LoginController extends DefaultAPIController {
 				} else {
 					log.debug("LOGIN: {} Success!");
 					model.addAttribute("msg", "로그인되었습니다.");
-					return "redirect:" + returnURL;
+					return "redirect:/" + returnURL;
 				}
 			} else {
 				log.debug("LOGIN: {} fail!");
