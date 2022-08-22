@@ -9,7 +9,7 @@
 			</div>
 			<div class="col-md-10">
 				<div class="site-info">
-					<i class="fa fa-map-marker"></i> [140-160] 서울시 용산구 남영동 120-2 수빌딩 7층 
+					<i class="fa fa-map-marker"></i> [04321] 서울특별시 용산구 한강대로 273 블루칩씨앤에스 2층
 					<i class="fa fa-phone-square"></i> 02-2057-2678　
 					<i class="fa fa-fax"></i> 02-2057-1580　
 					<i class="fa fa-envelope"></i> admin@bluechipcns.com

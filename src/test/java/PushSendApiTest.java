@@ -84,11 +84,11 @@ public class PushSendApiTest {
 //            method..Entity = reqEntity;
             		
             reqHeader.setSvcId("PUSH0200");
-            reqBody.setPhoneNo("01088982075");
+            reqBody.setPhoneNo("01049402371");
             reqBody.setApiKey("AIzaSyDz8Eg3LTliZqroIhewxkAlwKeEy4tpx1w");
             reqBody.setMessage("test send msg");
             reqBody.setTitle("test");
-            reqBody.setSender("01067323629");
+            reqBody.setSender("01049402371");
             
             reqVO.setHeader(reqHeader);
             //reqVO.setReqBodyPUSH0200VO(reqBody);
@@ -97,7 +97,7 @@ public class PushSendApiTest {
             StringRequestEntity request = new StringRequestEntity(reqVO.toJsonStr(), "application/json", "UTF-8");
             method.setRequestEntity(request);
             
-//            method.setRequestEntity(reqEntity);
+            method.setRequestEntity(reqEntity);
             
             System.out.println("reqVO : "+reqVO.toString());
             System.out.println("req toJsonStr : "+reqVO.toJsonStr());

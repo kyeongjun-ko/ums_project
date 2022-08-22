@@ -56,8 +56,8 @@ public class SimpleServiceTest {
 	@Test
 	public void StringTest1() throws Exception {
 		HttpServletRequest request = null;
-		String strttmp = "010 한ㄴ맣ㄹ 한ㄴ맣ㄹ629 gjdskg 한ㄴ맣ㄹㄴ아? | ";
-		String reqStr = "{'header':{'clientId':'bluechip','clientPw':'bluec213213123123123123123123123123123123hip'},'body':{'requestId':'11111','telNo':'"+strttmp+"'}}";
+		String strttmp = "0010-4940-2371";
+		String reqStr = "{'header':{'clientId':'bluechip','clientPw':'Jesusdfm!2'},'body':{'requestId':'11111','telNo':'"+strttmp+"'}}";
 		//PDSResponseVO vo = new TestClient(request).request(reqStr);
 		//System.out.println(str1);
 		

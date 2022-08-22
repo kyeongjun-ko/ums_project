@@ -80,6 +80,14 @@
 		<%if(asiana){ %>
 		<nav class="site-gnb" role="navigation">
 			<ul class="nav nav-pills nav-justified">
+				<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="서비스소개">서비스소개</a>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="<%=request.getContextPath()%>/srv/simpleView1" title="모바일안내장이란?">모바일안내장이란?</a></li>
+						<li><a href="<%=request.getContextPath()%>/srv/simpleView2" title="이용안내">이용안내</a></li>
+						<li><a href="<%=request.getContextPath()%>/srv/simpleView3" title="이용신청">이용신청</a></li>
+					</ul>
+				</li>
 				<li>
 					<a href="<%=request.getContextPath()%>/ums/sms"  class="dropdown-toggle" data-toggle="dropdown" title="메시지발송">메시지발송</a>
 					<ul class="dropdown-menu" role="menu">
@@ -129,13 +137,11 @@
 						
 					</ul>
 				</li>
-				<li class="dropdown">
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="서비스소개">서비스소개</a>
+				<li>
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="고객센터">고객센터</a>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="<%=request.getContextPath()%>/srv/simpleView1" title="모바일안내장이란?">모바일안내장이란?</a></li>
-						<li><a href="<%=request.getContextPath()%>/srv/simpleView2" title="이용안내">이용안내</a></li>
-						<li><a href="<%=request.getContextPath()%>/srv/simpleView3" title="이용신청">이용신청</a></li>
 						<li><a href="<%=request.getContextPath()%>/srv/noticeList" title="공지사항">공지사항</a></li>
+						<li><a href="<%=request.getContextPath()%>/" title="공지사항">1:1 Q&A</a></li>
 					</ul>
 				</li>
 			</ul>
@@ -145,6 +151,15 @@
 		
 		<nav class="site-gnb" role="navigation">
 			<ul class="nav nav-pills nav-justified">
+				<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="서비스소개">서비스소개</a>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="<%=request.getContextPath()%>/srv/simpleView1" title="모바일안내장이란?">모바일안내장이란?</a></li>
+						<li><a href="<%=request.getContextPath()%>/srv/simpleView2" title="이용안내">이용안내</a></li>
+						<li><a href="<%=request.getContextPath()%>/srv/simpleView3" title="이용신청">이용신청</a></li>
+						<li><a href="<%=request.getContextPath()%>/srv/noticeList" title="공지사항">공지사항</a></li>
+					</ul>
+				</li>
 				<li>
 					<a href="<%=request.getContextPath()%>/ums/sms"  class="dropdown-toggle" data-toggle="dropdown" title="메시지발송">메시지발송</a>
 					<ul class="dropdown-menu" role="menu">
@@ -215,15 +230,14 @@
 						<%} %>
 					</ul>
 				</li>
-				<li class="dropdown">
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="서비스소개">서비스소개</a>
+				<li>
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="고객센터">고객센터</a>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="<%=request.getContextPath()%>/srv/simpleView1" title="모바일안내장이란?">모바일안내장이란?</a></li>
-						<li><a href="<%=request.getContextPath()%>/srv/simpleView2" title="이용안내">이용안내</a></li>
-						<li><a href="<%=request.getContextPath()%>/srv/simpleView3" title="이용신청">이용신청</a></li>
 						<li><a href="<%=request.getContextPath()%>/srv/noticeList" title="공지사항">공지사항</a></li>
+						<li><a href="<%=request.getContextPath()%>/" title="공지사항">1:1 Q&A</a></li>
 					</ul>
 				</li>
+				
 			</ul>
 		</nav>
 		
