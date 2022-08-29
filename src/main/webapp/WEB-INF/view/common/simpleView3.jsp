@@ -16,14 +16,14 @@
 				<i class="fa fa-building"></i>
 				<div class="li-txt">
 					<h2>기업형 UMS서비스 이용신청 문의</h2>
-					<strong>000-0000-0000</strong>
+					<strong>010</strong>
 				</div>
 			</li>
 			<li class="li02">
 				<i class="fa fa-mobile"></i>
 				<div class="li-txt">
 					<h2>모바일 안내장 회원가입 문의</h2>
-					<strong>000-0000-0000</strong>
+					<strong>070-7730-3519</strong>
 				</div>
 			</li>
 		</ul>

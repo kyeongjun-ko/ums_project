@@ -14,32 +14,12 @@
 		asiana = com.equals("05") ? true : false;
 	}
 	if (ulv == null) ulv = "00";
-	
 %>
-
-<style>
-	@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200&display=swap');
-	#kj_hover3{
-		text-decoration:none !important;
-		line-height:40px !important;
-	}
-	#kj_hover3:after{
-		border-bottom:solid 2px black !important;
-		width:70px !important;
-		content:'' !important; 
-		transform:scaleX(0) !important;
-		transition:transform 250ms ease-in-out !important;
-	}
-	#kj_hover3:hover:after{
-		transform : scaleX(1) !important;
-	}
-</style>
-		
 <div class="site-header row">
-	<div class="col-md-3">
-		<%if(mUrl.equals("https://airbusan2.sendall.co.kr:444") || mUrl.equals("https://airbusan.sendall.co.kr:444")
-			|| mUrl.equals("https://airbusan2.sendall.co.kr:443") || mUrl.equals("https://airbusan.sendall.co.kr:443")){%>
-	<a href="/" title="모바일 안내 UMS 서비스" class="site-logo" width=130 height=50><span class="symbol">
+	<div class="col-md-3"><%
+	if(mUrl.equals("https://airbusan2.sendall.co.kr:444") || mUrl.equals("https://airbusan.sendall.co.kr:444")
+			|| mUrl.equals("https://airbusan2.sendall.co.kr:443") || mUrl.equals("https://airbusan.sendall.co.kr:443"))
+	{%><a href="/" title="모바일 안내 UMS 서비스" class="site-logo" width=130 height=50><span class="symbol">
 	<img src="/images/airbusan.jpg" alt="에어부산 모바일 안내 UMS 서비스"> </span>
 		
 		<!-- <span class="type">
@@ -56,14 +36,18 @@
 		<%} else if(mUrl.equals("https://asiana2.sendall.co.kr:444") || mUrl.equals("https://asiana.sendall.co.kr:444")
 				|| mUrl.equals("https://asiana2.sendall.co.kr:443") || mUrl.equals("https://asiana.sendall.co.kr:443")){ %>
 		<a href="/" title="모바일 안내 UMS 서비스" class="site-logo" width=130 height=50>
-			<span class="symbol" >
+			<span class="symbol">
 				<img src="/images/asiana.gif" alt="아시아나 모바일 안내 UMS 서비스" >
 			</span> 
 		</a>
 		<%} else { %>
 		<a href="/" title="모바일 안내 UMS 서비스" class="site-logo">
-			<span class="symbol" style="align-content:center; margin-left:20px; ">
-				<img src="/images/ums_logo.png" alt="모바일 안내 UMS 서비스" style="width: auto; height: auto; max-width:20rem; max-height:7rem;">
+			<span class="symbol">
+				<img src="/images/logo.png" alt="모바일 안내 UMS 서비스" >
+			</span>
+			<span class="type">
+				<em><b>UMS</b> SERVICE</em>
+				<strong>모바일안내장</strong>
 			</span>
 		</a>
 		<%} %>

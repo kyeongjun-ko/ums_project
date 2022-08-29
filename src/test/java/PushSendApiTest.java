@@ -76,12 +76,11 @@ public class PushSendApiTest {
             MultipartEntity reqEntity = new MultipartEntity(null);
             
             reqEntity.addPart("myFile", bin);
-            
-           // post.setEntity(reqEntity);
+            // post.setEntity(reqEntity);
             
             httpClient = new HttpClient(connMgr);
             method = new PostMethod(this.serverUrl + this.apiName);
-//            method..Entity = reqEntity;
+            // method..Entity = reqEntity;
             		
             reqHeader.setSvcId("PUSH0200");
             reqBody.setPhoneNo("01049402371");
@@ -97,7 +96,7 @@ public class PushSendApiTest {
             StringRequestEntity request = new StringRequestEntity(reqVO.toJsonStr(), "application/json", "UTF-8");
             method.setRequestEntity(request);
             
-            method.setRequestEntity(reqEntity);
+//            method.setRequestEntity(reqEntity);
             
             System.out.println("reqVO : "+reqVO.toString());
             System.out.println("req toJsonStr : "+reqVO.toJsonStr());

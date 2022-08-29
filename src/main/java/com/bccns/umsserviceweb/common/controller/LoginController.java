@@ -1176,10 +1176,13 @@ public class LoginController extends DefaultAPIController {
 			UnsupportedEncodingException, NoSuchAlgorithmException,
 			NoSuchPaddingException, InvalidAlgorithmParameterException,
 			IllegalBlockSizeException, BadPaddingException {
-		System.out.println(CryptUtils.AES_Decode("LaqlyBck+rHl7WGsO/JxCA=="));
-		System.out.println(AESCipherHdUtil.getInstance().AES_Encode("qwer"));
-		System.out.println(AESCipherHdUtil.getInstance().AES_Encode("01027338908"));
-		System.out.println(AESCipherHdUtil.getInstance().AES_Encode("010-2733-8908"));
+		System.out.println(CryptUtils.AES_Decode("iIGdxpO04/5zp3lt9Z/H9i01Ge3tC35kEQhK+dVRpGg="));
+		System.out.println(CryptUtils.AES_Decode("iIGdxpO04/5zp3lt9Z/H9i01Ge3tC35kEQhK+dVRpGg="));
+		System.out.println(CryptUtils.AES_Decode("iIGdxpO04/5zp3lt9Z/H9i01Ge3tC35kEQhK+dVRpGg="));
+		System.out.println(CryptUtils.AES_Decode("iIGdxpO04/5zp3lt9Z/H9i01Ge3tC35kEQhK+dVRpGg="));
+		System.out.println(CryptUtils.AES_Decode("iIGdxpO04/5zp3lt9Z/H9i01Ge3tC35kEQhK+dVRpGg="));
+		System.out.println(CryptUtils.AES_Decode("iIGdxpO04/5zp3lt9Z/H9i01Ge3tC35kEQhK+dVRpGg="));
+		System.out.println(CryptUtils.AES_Decode("iIGdxpO04/5zp3lt9Z/H9i01Ge3tC35kEQhK+dVRpGg="));
 	}
 
 }
